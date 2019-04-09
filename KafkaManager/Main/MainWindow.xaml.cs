@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using Manager;
+
 namespace Main
 {
     /// <summary>
@@ -23,6 +25,13 @@ namespace Main
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            DigiLogKafka myDigiLogKafka = new DigiLogKafka();
+
+            myDigiLogKafka.Main();
         }
     }
 }

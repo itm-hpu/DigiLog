@@ -8,5 +8,6 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Label Content="Hello Kafka World!"/>
+        <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,27,0,0" Click="Button_Click"/>
     </Grid>
 </Window>
