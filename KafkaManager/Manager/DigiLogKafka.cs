@@ -9,7 +9,7 @@ namespace Manager
 {
     public class DigiLogKafka
     {
-
+        //Hi hello!
         public void Main()
         {
             var config = new Dictionary<string, object>
