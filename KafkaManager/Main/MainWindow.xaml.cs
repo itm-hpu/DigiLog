@@ -25,13 +25,38 @@ namespace Main
         public MainWindow()
         {
             InitializeComponent();
+            txtKafkaPServer.Text = "PLAINTEXT://kafkabroker.northeurope.cloudapp.azure.com:9092";
+            txtKafkaPTopic.Text = "Testtopic11";
+
+            if (chbKafkaSetting.IsChecked == true)
+            {
+                txtKafkaCServer.Text = txtKafkaPServer.Text;
+                txtKafkaCTopic.Text = txtKafkaPTopic.Text;
+
+                txtKafkaCServer.IsEnabled = false;
+                txtKafkaCTopic.IsEnabled = false;
+
+            }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ChbKafkaSetting_Click(object sender, RoutedEventArgs e)
         {
-            DigiLogKafka myDigiLogKafka = new DigiLogKafka();
+            if (chbKafkaSetting.IsChecked == true)
+            {
+                txtKafkaCServer.Text = txtKafkaPServer.Text;
+                txtKafkaCTopic.Text = txtKafkaPTopic.Text;
 
-            myDigiLogKafka.Main();
+                txtKafkaCServer.IsEnabled = false;
+                txtKafkaCTopic.IsEnabled = false;
+            }
+            else if (chbKafkaSetting.IsChecked == false)
+            {
+                txtKafkaCServer.IsEnabled = true;
+                txtKafkaCTopic.IsEnabled = true;
+                txtKafkaCServer.Text = "";
+                txtKafkaCTopic.Text = "";
+
+            }
         }
     }
 }
