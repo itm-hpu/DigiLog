@@ -29,7 +29,11 @@ namespace KafkaConsumerClient
         private  void GetMessageData()
         {
             ////Sample Code Link https://www.codeguru.com/csharp/.net/producer-and-consumer-for-kafka-in-.net-an-exploration.html
-            var options = new KafkaOptions(new Uri("PLAINTEXT://kafkabroker.northeurope.cloudapp.azure.com:9092"));
+
+            string kafkaAddress = txtKafkaAddress.Text;
+            string topicName = txtTopicName.Text;
+
+            var options = new KafkaOptions(new Uri(kafkaAddress));
             var router = new BrokerRouter(options);
 
             OffsetPosition[] offsetPositions = new OffsetPosition[]
@@ -40,7 +44,8 @@ namespace KafkaConsumerClient
                      PartitionId = 0
                    }
               };
-         var consumer = new KafkaNet.Consumer(new ConsumerOptions("Testtopic11", new BrokerRouter(options)), offsetPositions);
+
+            var consumer = new KafkaNet.Consumer(new ConsumerOptions(topicName, new BrokerRouter(options)), offsetPositions);
 
             try
             {
@@ -57,6 +62,8 @@ namespace KafkaConsumerClient
                     //Console.WriteLine("Response: P{0},O{1} : {2}",
                     //   message.Meta.PartitionId, message.Meta.Offset,
                     //   Encoding.UTF8.GetString(message.Value));
+
+                    toolStripStatusLabel1.Text = "The messages were received successfully.";
                 }
             }
             catch (ThreadAbortException ex)

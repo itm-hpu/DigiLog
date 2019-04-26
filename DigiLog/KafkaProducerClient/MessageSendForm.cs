@@ -35,13 +35,18 @@ namespace KafkaProducerClient
         {
             try
             {
-                var options = new KafkaOptions(new Uri("PLAINTEXT://kafkabroker.northeurope.cloudapp.azure.com:9092"));
+                string kafkaAddress = txtKafkaAddress.Text;
+                string topicName = txtTopicName.Text;
+
+                var options = new KafkaOptions(new Uri(kafkaAddress));
                 var router = new BrokerRouter(options);
 
                 var client = new Producer(router);
-                client.SendMessageAsync("Testtopic11", new[] { new KafkaNet.Protocol.Message(send_Messages.Text) }).Wait();
+                client.SendMessageAsync(topicName, new[] { new KafkaNet.Protocol.Message(send_Messages.Text) }).Wait();
                 send_Messages.Clear();
-              
+
+                toolStripStatusLabel1.Text = "The message was successfully sent.";
+
             }
             catch (Exception ex)
             {
