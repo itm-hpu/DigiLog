@@ -43,7 +43,7 @@
             // MassegeSend_Button
             // 
             this.MassegeSend_Button.Location = new System.Drawing.Point(356, 254);
-            this.MassegeSend_Button.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MassegeSend_Button.Margin = new System.Windows.Forms.Padding(2);
             this.MassegeSend_Button.Name = "MassegeSend_Button";
             this.MassegeSend_Button.Size = new System.Drawing.Size(138, 27);
             this.MassegeSend_Button.TabIndex = 0;
@@ -54,7 +54,7 @@
             // send_Messages
             // 
             this.send_Messages.Location = new System.Drawing.Point(37, 34);
-            this.send_Messages.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.send_Messages.Margin = new System.Windows.Forms.Padding(2);
             this.send_Messages.Multiline = true;
             this.send_Messages.Name = "send_Messages";
             this.send_Messages.Size = new System.Drawing.Size(457, 130);
@@ -66,7 +66,7 @@
             this.txtKafkaAddress.Name = "txtKafkaAddress";
             this.txtKafkaAddress.Size = new System.Drawing.Size(376, 20);
             this.txtKafkaAddress.TabIndex = 9;
-            this.txtKafkaAddress.Text = "PLAINTEXT://kafkabroker.northeurope.cloudapp.azure.com:9092";
+            this.txtKafkaAddress.Text = "http://localhost:9092";
             // 
             // label3
             // 
@@ -98,7 +98,7 @@
             this.txtTopicName.Name = "txtTopicName";
             this.txtTopicName.Size = new System.Drawing.Size(376, 20);
             this.txtTopicName.TabIndex = 6;
-            this.txtTopicName.Text = "Testtopic11";
+            this.txtTopicName.Text = "test";
             // 
             // label1
             // 
@@ -140,7 +140,7 @@
             this.Controls.Add(this.txtTopicName);
             this.Controls.Add(this.send_Messages);
             this.Controls.Add(this.MassegeSend_Button);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MessageSendForm";
             this.Text = "Message Send Form";
             this.statusStrip1.ResumeLayout(false);

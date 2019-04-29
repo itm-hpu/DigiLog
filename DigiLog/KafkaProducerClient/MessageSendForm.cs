@@ -38,6 +38,9 @@ namespace KafkaProducerClient
                 string kafkaAddress = txtKafkaAddress.Text;
                 string topicName = txtTopicName.Text;
 
+                //PLAINTEXT://kafkabroker.northeurope.cloudapp.azure.com:9092
+                //Testtopic11
+
                 var options = new KafkaOptions(new Uri(kafkaAddress));
                 var router = new BrokerRouter(options);
 

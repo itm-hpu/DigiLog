@@ -23,26 +23,28 @@ namespace KafkaConsumerClient
             TextBox.CheckForIllegalCrossThreadCalls = false;
             t = new Thread(() => { GetMessageData(); });
             t.Start();
-
         }
 
-        private  void GetMessageData()
+        private void GetMessageData()
         {
             ////Sample Code Link https://www.codeguru.com/csharp/.net/producer-and-consumer-for-kafka-in-.net-an-exploration.html
 
             string kafkaAddress = txtKafkaAddress.Text;
             string topicName = txtTopicName.Text;
 
-            var options = new KafkaOptions(new Uri(kafkaAddress));
+            //PLAINTEXT://kafkabroker.northeurope.cloudapp.azure.com:9092
+            //Testtopic11
+
+            var options = new KafkaOptions(new Uri(kafkaAddress), new Uri(kafkaAddress));
             var router = new BrokerRouter(options);
 
             OffsetPosition[] offsetPositions = new OffsetPosition[]
               {
                 new OffsetPosition()
-                   {
-                     Offset = 44,
-                     PartitionId = 0
-                   }
+                {
+                    Offset = 10,
+                    PartitionId = 0
+                }
               };
 
             var consumer = new KafkaNet.Consumer(new ConsumerOptions(topicName, new BrokerRouter(options)), offsetPositions);
@@ -52,7 +54,7 @@ namespace KafkaConsumerClient
                 //Consume returns a blocking IEnumerable (ie: never ending stream)
                 foreach (var message in consumer.Consume())
                 {
-                      if (Message.Text.Length > 0)
+                    if (Message.Text.Length > 0)
                     {
                         Message.AppendText(Environment.NewLine);
                     }
@@ -68,13 +70,12 @@ namespace KafkaConsumerClient
             }
             catch (ThreadAbortException ex)
             {
-                
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Concat(ex.InnerException,ex.Message));
-
-            }         
+                MessageBox.Show(string.Concat(ex.InnerException, ex.Message));
+            }
 
         }
 

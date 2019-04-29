@@ -70,7 +70,7 @@
             this.txtTopicName.Name = "txtTopicName";
             this.txtTopicName.Size = new System.Drawing.Size(376, 20);
             this.txtTopicName.TabIndex = 2;
-            this.txtTopicName.Text = "Testtopic11";
+            this.txtTopicName.Text = "test";
             // 
             // label2
             // 
@@ -102,7 +102,7 @@
             this.txtKafkaAddress.Name = "txtKafkaAddress";
             this.txtKafkaAddress.Size = new System.Drawing.Size(376, 20);
             this.txtKafkaAddress.TabIndex = 5;
-            this.txtKafkaAddress.Text = "PLAINTEXT://kafkabroker.northeurope.cloudapp.azure.com:9092";
+            this.txtKafkaAddress.Text = "http://localhost:9092";
             // 
             // statusStrip1
             // 
