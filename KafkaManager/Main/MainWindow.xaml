@@ -43,7 +43,7 @@
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" Content="Messages" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
-                        <TextBox Grid.Row="1" x:Name="txtMessage" Margin="3"/>
+                        <TextBox Grid.Row="1" x:Name="txtMessage" Margin="3" Text="Test message"/>
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -103,7 +103,7 @@
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" Content="Messages" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
-                        <TextBox Grid.Row="1" x:Name="txtSMessage" IsEnabled="False" Margin="3"/>
+                        <TextBox Grid.Row="1" x:Name="txtSMessage" IsEnabled="False" Margin="3" Text="[2019-04-29 09:00:00 AM] Test message&#10;[2019-04-29 08:59:59 AM] Hello Kafka &#10;[2019-04-29 08:57:55 AM] Hello World"/>
                     </Grid>
                 </Grid>
             </TabItem>
