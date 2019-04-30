@@ -49,7 +49,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="150"/>
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="btnSend" Grid.Column="1" Margin="3" Content="Send Messages" />
+                            <Button x:Name="btnSend" Grid.Column="1" Margin="3" Content="Send Messages" Click="BtnSend_Click" />
                         </Grid>
                     </Grid>
 
@@ -72,7 +72,7 @@
                             <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
                         <CheckBox x:Name="chbKafkaSetting" Content="Same as Producer" IsChecked="True"  VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="0,8" Click="ChbKafkaSetting_Click"/>
-                        <Button x:Name="btnStart" Grid.Column="2" Content="Start" Margin="3"/>
+                        <Button x:Name="btnStart" Grid.Column="2" Content="Start" Margin="3" Click="BtnStart_Click"/>
                         <Button x:Name="btnStop" Grid.Column="3" Content="Stop" Margin="3"/>
                         <Button x:Name="btnClear" Grid.Column="4" Content="Clear" Margin="3"/>
                         <Button x:Name="btnExport" Grid.Column="5" Content="Export" Margin="3"/>
