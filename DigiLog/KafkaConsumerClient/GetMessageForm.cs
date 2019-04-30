@@ -35,35 +35,21 @@ namespace KafkaConsumerClient
             //PLAINTEXT://kafkabroker.northeurope.cloudapp.azure.com:9092
             //Testtopic11
 
-            var options = new KafkaOptions(new Uri(kafkaAddress), new Uri(kafkaAddress));
+            var options = new KafkaOptions(new Uri(kafkaAddress));
             var router = new BrokerRouter(options);
 
-            OffsetPosition[] offsetPositions = new OffsetPosition[]
-              {
-                new OffsetPosition()
-                {
-                    Offset = 10,
-                    PartitionId = 0
-                }
-              };
-
-            var consumer = new KafkaNet.Consumer(new ConsumerOptions(topicName, new BrokerRouter(options)), offsetPositions);
+            var consumer = new Consumer(new ConsumerOptions(topicName, router));
 
             try
             {
                 //Consume returns a blocking IEnumerable (ie: never ending stream)
                 foreach (var message in consumer.Consume())
                 {
-                    if (Message.Text.Length > 0)
+                    if (txtMessage.Text.Length > 0)
                     {
-                        Message.AppendText(Environment.NewLine);
+                        txtMessage.AppendText(Environment.NewLine);
                     }
-
-                    Message.AppendText(Encoding.UTF8.GetString(message.Value));
-
-                    //Console.WriteLine("Response: P{0},O{1} : {2}",
-                    //   message.Meta.PartitionId, message.Meta.Offset,
-                    //   Encoding.UTF8.GetString(message.Value));
+                    txtMessage.AppendText("[" + DateTime.Now + "] " + Encoding.UTF8.GetString(message.Value));
 
                     toolStripStatusLabel1.Text = "The messages were received successfully.";
                 }

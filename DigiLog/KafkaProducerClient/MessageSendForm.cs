@@ -45,8 +45,8 @@ namespace KafkaProducerClient
                 var router = new BrokerRouter(options);
 
                 var client = new Producer(router);
-                client.SendMessageAsync(topicName, new[] { new KafkaNet.Protocol.Message(send_Messages.Text) }).Wait();
-                send_Messages.Clear();
+                client.SendMessageAsync(topicName, new[] { new KafkaNet.Protocol.Message(txtMessages.Text + " " + DateTime.Now) }).Wait();
+                txtMessages.Clear();
 
                 toolStripStatusLabel1.Text = "The message was successfully sent.";
 
