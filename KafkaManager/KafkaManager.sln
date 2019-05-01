@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "Main\Main.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigiLogKafka", "DigiLogKafka\DigiLogKafka.csproj", "{984EC8C7-A9A6-4C69-950E-9042EA54752B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainForm", "MainForm\MainForm.csproj", "{5FB384D8-ACB4-442A-8276-D3D0650D8C71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{984EC8C7-A9A6-4C69-950E-9042EA54752B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{984EC8C7-A9A6-4C69-950E-9042EA54752B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{984EC8C7-A9A6-4C69-950E-9042EA54752B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FB384D8-ACB4-442A-8276-D3D0650D8C71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FB384D8-ACB4-442A-8276-D3D0650D8C71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FB384D8-ACB4-442A-8276-D3D0650D8C71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FB384D8-ACB4-442A-8276-D3D0650D8C71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
