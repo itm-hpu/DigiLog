@@ -103,5 +103,10 @@ namespace MainForm
         {
             this.Close();
         }
+
+        private void btnGetData_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

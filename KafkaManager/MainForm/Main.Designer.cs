@@ -52,16 +52,27 @@
             this.chbConsumer = new System.Windows.Forms.CheckBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtToolTip = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tabGetData = new System.Windows.Forms.TabPage();
+            this.txtGetData = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtURL = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.btnGetDataEnd = new System.Windows.Forms.Button();
+            this.btnGetDataExport = new System.Windows.Forms.Button();
+            this.btnGetDataClear = new System.Windows.Forms.Button();
+            this.btnGetData = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabProducer.SuspendLayout();
             this.tabConsumer.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.tabGetData.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabMain
             // 
             this.tabMain.Controls.Add(this.tabProducer);
             this.tabMain.Controls.Add(this.tabConsumer);
+            this.tabMain.Controls.Add(this.tabGetData);
             this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabMain.Location = new System.Drawing.Point(0, 0);
             this.tabMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -317,6 +328,102 @@
             this.txtToolTip.Size = new System.Drawing.Size(48, 17);
             this.txtToolTip.Text = "DigiLog";
             // 
+            // tabGetData
+            // 
+            this.tabGetData.Controls.Add(this.btnGetDataEnd);
+            this.tabGetData.Controls.Add(this.btnGetDataExport);
+            this.tabGetData.Controls.Add(this.btnGetDataClear);
+            this.tabGetData.Controls.Add(this.btnGetData);
+            this.tabGetData.Controls.Add(this.txtGetData);
+            this.tabGetData.Controls.Add(this.label7);
+            this.tabGetData.Controls.Add(this.txtURL);
+            this.tabGetData.Controls.Add(this.label8);
+            this.tabGetData.Location = new System.Drawing.Point(4, 22);
+            this.tabGetData.Name = "tabGetData";
+            this.tabGetData.Size = new System.Drawing.Size(764, 416);
+            this.tabGetData.TabIndex = 2;
+            this.tabGetData.Text = "Get data";
+            this.tabGetData.UseVisualStyleBackColor = true;
+            // 
+            // txtGetData
+            // 
+            this.txtGetData.Location = new System.Drawing.Point(21, 125);
+            this.txtGetData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtGetData.Multiline = true;
+            this.txtGetData.Name = "txtGetData";
+            this.txtGetData.ReadOnly = true;
+            this.txtGetData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtGetData.Size = new System.Drawing.Size(726, 232);
+            this.txtGetData.TabIndex = 20;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(18, 101);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(65, 12);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "Messages";
+            // 
+            // txtURL
+            // 
+            this.txtURL.Location = new System.Drawing.Point(112, 60);
+            this.txtURL.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtURL.Name = "txtURL";
+            this.txtURL.Size = new System.Drawing.Size(635, 21);
+            this.txtURL.TabIndex = 18;
+            this.txtURL.Text = "http://130.237.77.240:54159/api/values";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(18, 63);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(61, 12);
+            this.label8.TabIndex = 17;
+            this.label8.Text = "URL (Get)";
+            // 
+            // btnGetDataEnd
+            // 
+            this.btnGetDataEnd.Location = new System.Drawing.Point(689, 18);
+            this.btnGetDataEnd.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnGetDataEnd.Name = "btnGetDataEnd";
+            this.btnGetDataEnd.Size = new System.Drawing.Size(58, 22);
+            this.btnGetDataEnd.TabIndex = 24;
+            this.btnGetDataEnd.Text = "End";
+            this.btnGetDataEnd.UseVisualStyleBackColor = true;
+            // 
+            // btnGetDataExport
+            // 
+            this.btnGetDataExport.Location = new System.Drawing.Point(625, 18);
+            this.btnGetDataExport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnGetDataExport.Name = "btnGetDataExport";
+            this.btnGetDataExport.Size = new System.Drawing.Size(58, 22);
+            this.btnGetDataExport.TabIndex = 23;
+            this.btnGetDataExport.Text = "Export";
+            this.btnGetDataExport.UseVisualStyleBackColor = true;
+            // 
+            // btnGetDataClear
+            // 
+            this.btnGetDataClear.Location = new System.Drawing.Point(561, 18);
+            this.btnGetDataClear.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnGetDataClear.Name = "btnGetDataClear";
+            this.btnGetDataClear.Size = new System.Drawing.Size(58, 22);
+            this.btnGetDataClear.TabIndex = 22;
+            this.btnGetDataClear.Text = "Clear";
+            this.btnGetDataClear.UseVisualStyleBackColor = true;
+            // 
+            // btnGetData
+            // 
+            this.btnGetData.Location = new System.Drawing.Point(497, 18);
+            this.btnGetData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnGetData.Name = "btnGetData";
+            this.btnGetData.Size = new System.Drawing.Size(58, 22);
+            this.btnGetData.TabIndex = 21;
+            this.btnGetData.Text = "Get";
+            this.btnGetData.UseVisualStyleBackColor = true;
+            this.btnGetData.Click += new System.EventHandler(this.btnGetData_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -335,6 +442,8 @@
             this.tabConsumer.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.tabGetData.ResumeLayout(false);
+            this.tabGetData.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -366,6 +475,15 @@
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Button btnEnd;
+        private System.Windows.Forms.TabPage tabGetData;
+        private System.Windows.Forms.Button btnGetDataEnd;
+        private System.Windows.Forms.Button btnGetDataExport;
+        private System.Windows.Forms.Button btnGetDataClear;
+        private System.Windows.Forms.Button btnGetData;
+        private System.Windows.Forms.TextBox txtGetData;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox txtURL;
+        private System.Windows.Forms.Label label8;
     }
 }
 
