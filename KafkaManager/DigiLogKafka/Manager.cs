@@ -26,7 +26,7 @@ namespace DigiLogKafka
                 var router = new BrokerRouter(options);
                 var client = new Producer(router);
 
-                client.SendMessageAsync(topicName, new[] { new KafkaNet.Protocol.Message(message + ", " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) }).Wait();
+                client.SendMessageAsync(topicName, new[] { new KafkaNet.Protocol.Message(message + ", " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffffff")) }).Wait();
             }
             catch (Exception ex)
             {

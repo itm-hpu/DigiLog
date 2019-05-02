@@ -74,7 +74,7 @@ namespace MainForm
                     {
                         txtCMessage.AppendText(Environment.NewLine);
                     }
-                    txtCMessage.AppendText(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + ", " + Encoding.UTF8.GetString(message.Value));                    
+                    txtCMessage.AppendText(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffffff") + ", " + Encoding.UTF8.GetString(message.Value));                    
                 }
             });
             tConsumer.Start();
