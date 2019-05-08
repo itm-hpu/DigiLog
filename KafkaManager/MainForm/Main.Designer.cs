@@ -62,11 +62,18 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtToolTip = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabRTLS = new System.Windows.Forms.TabPage();
+            this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
+            this.pieChart2 = new LiveCharts.WinForms.PieChart();
+            this.pieChart1 = new LiveCharts.WinForms.PieChart();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabProducer.SuspendLayout();
             this.tabConsumer.SuspendLayout();
             this.tabAPITest.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.tabRTLS.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabMain
@@ -428,12 +435,72 @@
             // 
             // tabRTLS
             // 
+            this.tabRTLS.Controls.Add(this.button1);
+            this.tabRTLS.Controls.Add(this.button2);
+            this.tabRTLS.Controls.Add(this.button3);
+            this.tabRTLS.Controls.Add(this.pieChart1);
+            this.tabRTLS.Controls.Add(this.pieChart2);
+            this.tabRTLS.Controls.Add(this.cartesianChart1);
             this.tabRTLS.Location = new System.Drawing.Point(4, 22);
             this.tabRTLS.Name = "tabRTLS";
             this.tabRTLS.Size = new System.Drawing.Size(654, 453);
             this.tabRTLS.TabIndex = 3;
             this.tabRTLS.Text = "RTLS";
             this.tabRTLS.UseVisualStyleBackColor = true;
+            // 
+            // cartesianChart1
+            // 
+            this.cartesianChart1.Location = new System.Drawing.Point(8, 211);
+            this.cartesianChart1.Name = "cartesianChart1";
+            this.cartesianChart1.Size = new System.Drawing.Size(625, 221);
+            this.cartesianChart1.TabIndex = 0;
+            this.cartesianChart1.Text = "cartesianChart1";
+            // 
+            // pieChart2
+            // 
+            this.pieChart2.Location = new System.Drawing.Point(8, 14);
+            this.pieChart2.Name = "pieChart2";
+            this.pieChart2.Size = new System.Drawing.Size(226, 191);
+            this.pieChart2.TabIndex = 2;
+            this.pieChart2.Text = "pieChart2";
+            // 
+            // pieChart1
+            // 
+            this.pieChart1.Location = new System.Drawing.Point(240, 14);
+            this.pieChart1.Name = "pieChart1";
+            this.pieChart1.Size = new System.Drawing.Size(226, 191);
+            this.pieChart1.TabIndex = 3;
+            this.pieChart1.Text = "pieChart1";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(583, 14);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(50, 24);
+            this.button1.TabIndex = 27;
+            this.button1.Text = "End";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(528, 14);
+            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(50, 24);
+            this.button2.TabIndex = 26;
+            this.button2.Text = "Export";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(473, 14);
+            this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(50, 24);
+            this.button3.TabIndex = 25;
+            this.button3.Text = "Reload";
+            this.button3.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
@@ -455,6 +522,7 @@
             this.tabAPITest.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.tabRTLS.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -496,6 +564,12 @@
         private System.Windows.Forms.TextBox txtURL;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TabPage tabRTLS;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private LiveCharts.WinForms.PieChart pieChart1;
+        private LiveCharts.WinForms.PieChart pieChart2;
+        private LiveCharts.WinForms.CartesianChart cartesianChart1;
     }
 }
 
