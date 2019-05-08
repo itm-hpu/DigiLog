@@ -59,21 +59,21 @@
             this.label7 = new System.Windows.Forms.Label();
             this.txtURL = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.txtToolTip = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabRTLS = new System.Windows.Forms.TabPage();
-            this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
-            this.pieChart2 = new LiveCharts.WinForms.PieChart();
-            this.pieChart1 = new LiveCharts.WinForms.PieChart();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.pieChart1 = new LiveCharts.WinForms.PieChart();
+            this.pieChart2 = new LiveCharts.WinForms.PieChart();
+            this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.txtToolTip = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabMain.SuspendLayout();
             this.tabProducer.SuspendLayout();
             this.tabConsumer.SuspendLayout();
             this.tabAPITest.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
             this.tabRTLS.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabMain
@@ -345,6 +345,7 @@
             this.btnGetDataEnd.TabIndex = 24;
             this.btnGetDataEnd.Text = "End";
             this.btnGetDataEnd.UseVisualStyleBackColor = true;
+            this.btnGetDataEnd.Click += new System.EventHandler(this.btnGetDataEnd_Click);
             // 
             // btnGetDataExport
             // 
@@ -355,6 +356,7 @@
             this.btnGetDataExport.TabIndex = 23;
             this.btnGetDataExport.Text = "Export";
             this.btnGetDataExport.UseVisualStyleBackColor = true;
+            this.btnGetDataExport.Click += new System.EventHandler(this.btnGetDataExport_Click);
             // 
             // btnGetDataClear
             // 
@@ -365,6 +367,7 @@
             this.btnGetDataClear.TabIndex = 22;
             this.btnGetDataClear.Text = "Clear";
             this.btnGetDataClear.UseVisualStyleBackColor = true;
+            this.btnGetDataClear.Click += new System.EventHandler(this.btnGetDataClear_Click);
             // 
             // btnGetData
             // 
@@ -415,24 +418,6 @@
             this.label8.TabIndex = 17;
             this.label8.Text = "URL (Get)";
             // 
-            // statusStrip1
-            // 
-            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.txtToolTip});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 457);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(662, 22);
-            this.statusStrip1.TabIndex = 1;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // txtToolTip
-            // 
-            this.txtToolTip.Name = "txtToolTip";
-            this.txtToolTip.Size = new System.Drawing.Size(48, 17);
-            this.txtToolTip.Text = "DigiLog";
-            // 
             // tabRTLS
             // 
             this.tabRTLS.Controls.Add(this.button1);
@@ -447,30 +432,6 @@
             this.tabRTLS.TabIndex = 3;
             this.tabRTLS.Text = "RTLS";
             this.tabRTLS.UseVisualStyleBackColor = true;
-            // 
-            // cartesianChart1
-            // 
-            this.cartesianChart1.Location = new System.Drawing.Point(8, 211);
-            this.cartesianChart1.Name = "cartesianChart1";
-            this.cartesianChart1.Size = new System.Drawing.Size(625, 221);
-            this.cartesianChart1.TabIndex = 0;
-            this.cartesianChart1.Text = "cartesianChart1";
-            // 
-            // pieChart2
-            // 
-            this.pieChart2.Location = new System.Drawing.Point(8, 14);
-            this.pieChart2.Name = "pieChart2";
-            this.pieChart2.Size = new System.Drawing.Size(226, 191);
-            this.pieChart2.TabIndex = 2;
-            this.pieChart2.Text = "pieChart2";
-            // 
-            // pieChart1
-            // 
-            this.pieChart1.Location = new System.Drawing.Point(240, 14);
-            this.pieChart1.Name = "pieChart1";
-            this.pieChart1.Size = new System.Drawing.Size(226, 191);
-            this.pieChart1.TabIndex = 3;
-            this.pieChart1.Text = "pieChart1";
             // 
             // button1
             // 
@@ -502,6 +463,48 @@
             this.button3.Text = "Reload";
             this.button3.UseVisualStyleBackColor = true;
             // 
+            // pieChart1
+            // 
+            this.pieChart1.Location = new System.Drawing.Point(240, 14);
+            this.pieChart1.Name = "pieChart1";
+            this.pieChart1.Size = new System.Drawing.Size(226, 191);
+            this.pieChart1.TabIndex = 3;
+            this.pieChart1.Text = "pieChart1";
+            // 
+            // pieChart2
+            // 
+            this.pieChart2.Location = new System.Drawing.Point(8, 14);
+            this.pieChart2.Name = "pieChart2";
+            this.pieChart2.Size = new System.Drawing.Size(226, 191);
+            this.pieChart2.TabIndex = 2;
+            this.pieChart2.Text = "pieChart2";
+            // 
+            // cartesianChart1
+            // 
+            this.cartesianChart1.Location = new System.Drawing.Point(8, 211);
+            this.cartesianChart1.Name = "cartesianChart1";
+            this.cartesianChart1.Size = new System.Drawing.Size(625, 221);
+            this.cartesianChart1.TabIndex = 0;
+            this.cartesianChart1.Text = "cartesianChart1";
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.txtToolTip});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 457);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(662, 22);
+            this.statusStrip1.TabIndex = 1;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // txtToolTip
+            // 
+            this.txtToolTip.Name = "txtToolTip";
+            this.txtToolTip.Size = new System.Drawing.Size(48, 17);
+            this.txtToolTip.Text = "DigiLog";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -520,9 +523,9 @@
             this.tabConsumer.PerformLayout();
             this.tabAPITest.ResumeLayout(false);
             this.tabAPITest.PerformLayout();
+            this.tabRTLS.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.tabRTLS.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

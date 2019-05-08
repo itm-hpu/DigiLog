@@ -18,6 +18,9 @@ using DigiLogKafka;
 using LiveCharts;
 using LiveCharts.Wpf;
 
+using System.Net.Http;
+
+
 namespace MainForm
 {
     public partial class Main : Form
@@ -115,7 +118,7 @@ namespace MainForm
 
             pieChart1.LegendLocation = LegendLocation.Bottom;
 
-            
+
             pieChart2.Series = new SeriesCollection
             {
                 new PieSeries
@@ -155,13 +158,13 @@ namespace MainForm
         private void CartesianChart1OnDataClick(object sender, ChartPoint chartPoint)
         {
             MessageBox.Show("You clicked (" + chartPoint.X + "," + chartPoint.Y + ")");
-        }    
+        }
 
-    private void btnSend_Click(object sender, EventArgs e)
+        private void btnSend_Click(object sender, EventArgs e)
         {
             Manager mMnanager = new Manager();
 
-            Thread t = new Thread(() => { mMnanager.SendMessage(txtPServer.Text,txtPTopic.Text,txtPMessage.Text); });
+            Thread t = new Thread(() => { mMnanager.SendMessage(txtPServer.Text, txtPTopic.Text, txtPMessage.Text); });
             t.Start();
         }
 
@@ -193,8 +196,8 @@ namespace MainForm
         private void btnStart_Click(object sender, EventArgs e)
         {
             Manager mMnanager = new Manager();
-            
-            tConsumer = new Thread(() => 
+
+            tConsumer = new Thread(() =>
             {
                 IEnumerable<KafkaNet.Protocol.Message> messages = mMnanager.GetMessage(txtCServer.Text, txtCTopic.Text);
 
@@ -204,7 +207,7 @@ namespace MainForm
                     {
                         txtCMessage.AppendText(Environment.NewLine);
                     }
-                    txtCMessage.AppendText(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffffff") + ", " + Encoding.UTF8.GetString(message.Value));                    
+                    txtCMessage.AppendText(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffffff") + ", " + Encoding.UTF8.GetString(message.Value));
                 }
             });
             tConsumer.Start();
@@ -236,10 +239,58 @@ namespace MainForm
 
         private void btnGetData_Click(object sender, EventArgs e)
         {
+            string apiURL = txtURL.Text;
 
+            GetAsync(apiURL);
         }
 
+        public async Task GetAsync(string uri)
+        {
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync(uri);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                txtGetData.Text = content;
+
+                //Shweta's Parsing code
+                List<string> nameList = new List<string>();
 
 
+
+                for (int i = 0; i < nameList.Count; i++)
+                {
+                    MessageBox.Show(nameList[i]);
+                }
+                //
+            }     
+        }
+
+        private void btnGetDataClear_Click(object sender, EventArgs e)
+        {
+            txtGetData.Text = "";
+        }
+
+        private void btnGetDataEnd_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnGetDataExport_Click(object sender, EventArgs e)
+        {
+            List<string> nameList = new List<string>();
+
+            nameList.Add("Masoud");
+            nameList.Add("Jake");
+            nameList.Add("Shweta");
+            nameList.Add("Magnus");
+            nameList.Add("Jannicke");
+
+            for (int i=0; i < nameList.Count; i++)
+            {
+                MessageBox.Show(nameList[i]);
+            }
+        }
     }
 }
