@@ -19,7 +19,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 
 using System.Net.Http;
-
+using Newtonsoft.Json;
 
 namespace MainForm
 {
@@ -247,24 +247,26 @@ namespace MainForm
         public async Task GetAsync(string uri)
         {
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync(uri);
 
-            if (response.IsSuccessStatusCode)
+            try
             {
-                string content = await response.Content.ReadAsStringAsync();
-                txtGetData.Text = content;
+                var response = await httpClient.GetAsync(uri);
 
-                //Shweta's Parsing code
-                List<string> nameList = new List<string>();
-
-
-
-                for (int i = 0; i < nameList.Count; i++)
+                if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show(nameList[i]);
+                    string content = await response.Content.ReadAsStringAsync();
+                    //Shweta's Parsing code
+                    var messageModel = JsonConvert.DeserializeObject<List<dynamic>>(content);
+                    foreach (var item in messageModel)
+                    {
+                        txtGetData.Text +=  item+"\r\n";
+                    }                   
                 }
-                //
-            }     
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void btnGetDataClear_Click(object sender, EventArgs e)
