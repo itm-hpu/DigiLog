@@ -294,5 +294,68 @@ namespace MainForm
                 MessageBox.Show(nameList[i]);
             }
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            cartesianChart1.AxisX.Clear();
+            cartesianChart1.AxisY.Clear();
+            cartesianChart1.Series.Clear();
+
+
+            GetAsyncPoints("http://130.237.77.240:54159/api/values/0",0);//PointListX
+            GetAsyncPoints("http://130.237.77.240:54159/api/values/1",1);//PointListY
+            GetAsyncPoints("http://130.237.77.240:54159/api/values/2",2);//PointListZ
+        }
+
+        public async Task GetAsyncPoints(string uri, int index)
+        {
+            var httpClient = new HttpClient();
+
+            try
+            {
+                var response = await httpClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    //Shweta's Parsing code
+                    var messageModel = JsonConvert.DeserializeObject<List<dynamic>>(content);
+
+                    ChartValues<double> temp = new ChartValues<double>();
+
+                    foreach (var item in messageModel)
+                    {
+                        temp.Add(Convert.ToDouble(item));
+                    }
+
+                    System.Windows.Media.Brush color = null;
+
+                    if (index == 0)
+                    {
+                        color = System.Windows.Media.Brushes.Red;
+                    }
+                    else if (index == 1)
+                    {
+                        color = System.Windows.Media.Brushes.Blue;
+                    }
+                    else
+                    {
+                        color = System.Windows.Media.Brushes.Green;
+                    }
+
+                    //Chart
+                    cartesianChart1.Series.Add(new LineSeries
+                    {
+                        Values = temp,
+                        PointForeground = color
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
     }
 }

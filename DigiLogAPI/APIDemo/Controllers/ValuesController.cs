@@ -9,16 +9,48 @@ namespace APIDemo.Controllers
 {
     public class ValuesController : ApiController
     {
+        List<string> PointListX;
+        List<string> PointListY;
+        List<string> PointListZ;
+
         // GET api/values
         public IEnumerable<string> Get()
         {
-            return new string[] { "Masoud", "Jake" , "Shweta","Magnus","Jannicke","Hello" };
+            return new string[] { "Masoud", "Jake" , "Shweta","Magnus","Jannicke","Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello" };
+        }
+
+        void SetPointList()
+        {
+            PointListX = new List<string>();
+            PointListY = new List<string>();
+            PointListZ = new List<string>();
+
+            for (int i = 0; i < 100; i++)
+            {
+                double x = 0.0;
+                double y = 10.0;
+                double z = 0.0;
+
+                PointListX.Add((x + i * i * 0.1).ToString());
+                PointListY.Add((y - i * 0.1).ToString());
+                PointListZ.Add((z).ToString());
+            }
         }
 
         // GET api/values/5
-        public string Get(int id)
+        public IEnumerable<string> Get(int id)
         {
-            return "value";
+            //id=0 -> PointListX
+            //id=1 -> PointListY
+            //id=2 -> PointListZ
+
+            SetPointList();
+
+            if (id == 0) return PointListX;
+            else if (id == 1) return PointListY;
+            else if (id == 2) return PointListZ;
+            else return PointListX;
+
         }
 
         // POST api/values
