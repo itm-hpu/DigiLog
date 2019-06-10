@@ -19,6 +19,11 @@ namespace APIDemo.Controllers
             return new string[] { "Masoud", "Jake" , "Shweta","Magnus","Jannicke","Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello" };
         }
 
+        public string Welcome()
+        {
+            return "Hej hej!";
+        }
+
         void SetPointList()
         {
             PointListX = new List<string>();

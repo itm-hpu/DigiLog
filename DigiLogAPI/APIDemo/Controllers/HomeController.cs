@@ -10,7 +10,7 @@ namespace APIDemo.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            ViewBag.Title = "DigiLog";
 
             return View();
         }
