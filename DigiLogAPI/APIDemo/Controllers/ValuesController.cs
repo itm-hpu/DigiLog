@@ -12,7 +12,8 @@ namespace APIDemo.Controllers
         List<string> PointListX;
         List<string> PointListY;
         List<string> PointListZ;
-
+        static List<string> tempMessageStorage = new List<string>();
+        
         // GET api/values
         public IEnumerable<string> Get()
         {
@@ -59,8 +60,11 @@ namespace APIDemo.Controllers
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
+        [HttpPost]
+        [Route("PostMessage")]
+        public void PostMessage(string message)
         {
+            tempMessageStorage.Add(message);
         }
 
         // PUT api/values/5
