@@ -12,12 +12,35 @@ namespace APIDemo.Controllers
         List<string> PointListX;
         List<string> PointListY;
         List<string> PointListZ;
-        static List<string> tempMessageStorage = new List<string>();
+        static List<string> MessageStorage = new List<string>();
+        static int NumberOfRequest = 0;
         
         // GET api/values
         public IEnumerable<string> Get()
         {
-            return new string[] { "Masoud", "Jake" , "Shweta","Magnus","Jannicke","Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello" };
+            if (NumberOfRequest == 0) InitializeList();
+
+            string[] returnValues = new string[MessageStorage.Count];
+            for (int i = 0; i < MessageStorage.Count; i++)
+            {
+                returnValues[i] = MessageStorage[i];
+            }
+
+            return returnValues;
+        }
+
+        public void InitializeList()
+        {            
+
+            MessageStorage.Add("Masoud");
+            MessageStorage.Add("Jake");
+            MessageStorage.Add("Shweta");
+            MessageStorage.Add("Magnus");
+            MessageStorage.Add("Jannicke");
+            MessageStorage.Add("Hello");
+
+            NumberOfRequest++;
+
         }
 
         public string Welcome()
@@ -64,7 +87,7 @@ namespace APIDemo.Controllers
         [Route("PostMessage")]
         public void PostMessage(string message)
         {
-            tempMessageStorage.Add(message);
+            MessageStorage.Add(message);
         }
 
         // PUT api/values/5
@@ -75,6 +98,16 @@ namespace APIDemo.Controllers
         // DELETE api/values/5
         public void Delete(int id)
         {
+            try
+            {
+                MessageStorage.RemoveAt(id);
+            }
+            catch 
+            {
+
+            }
+
+            
         }
     }
 }
