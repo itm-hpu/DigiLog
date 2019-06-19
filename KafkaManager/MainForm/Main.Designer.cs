@@ -68,6 +68,7 @@
             this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtToolTip = new System.Windows.Forms.ToolStripStatusLabel();
+            this.btnSendfromAPI = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabProducer.SuspendLayout();
             this.tabConsumer.SuspendLayout();
@@ -92,6 +93,7 @@
             // 
             // tabProducer
             // 
+            this.tabProducer.Controls.Add(this.btnSendfromAPI);
             this.tabProducer.Controls.Add(this.btnSend);
             this.tabProducer.Controls.Add(this.txtPMessage);
             this.tabProducer.Controls.Add(this.label3);
@@ -144,7 +146,7 @@
             this.txtPTopic.Name = "txtPTopic";
             this.txtPTopic.Size = new System.Drawing.Size(545, 20);
             this.txtPTopic.TabIndex = 3;
-            this.txtPTopic.Text = "test";
+            this.txtPTopic.Text = "test2";
             // 
             // txtPServer
             // 
@@ -506,6 +508,17 @@
             this.txtToolTip.Size = new System.Drawing.Size(48, 17);
             this.txtToolTip.Text = "DigiLog";
             // 
+            // btnSendfromAPI
+            // 
+            this.btnSendfromAPI.Location = new System.Drawing.Point(380, 394);
+            this.btnSendfromAPI.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnSendfromAPI.Name = "btnSendfromAPI";
+            this.btnSendfromAPI.Size = new System.Drawing.Size(143, 30);
+            this.btnSendfromAPI.TabIndex = 7;
+            this.btnSendfromAPI.Text = "Send message from API";
+            this.btnSendfromAPI.UseVisualStyleBackColor = true;
+            this.btnSendfromAPI.Click += new System.EventHandler(this.btnSendfromAPI_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -574,6 +587,7 @@
         private LiveCharts.WinForms.PieChart pieChart1;
         private LiveCharts.WinForms.PieChart pieChart2;
         private LiveCharts.WinForms.CartesianChart cartesianChart1;
+        private System.Windows.Forms.Button btnSendfromAPI;
     }
 }
 

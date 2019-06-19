@@ -210,6 +210,7 @@ namespace MainForm
                     txtCMessage.AppendText(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffffff") + ", " + Encoding.UTF8.GetString(message.Value));
                 }
             });
+            tConsumer.Name = "Consumer";
             tConsumer.Start();
         }
 
@@ -241,10 +242,10 @@ namespace MainForm
         {
             string apiURL = txtURL.Text;
 
-            GetAsync(apiURL);
+            GetAsyncAndShow(apiURL);
         }
 
-        public async Task GetAsync(string uri)
+        public async Task GetAsyncAndShow(string uri)
         {
             var httpClient = new HttpClient();
 
@@ -349,6 +350,44 @@ namespace MainForm
                         Values = temp,
                         PointForeground = color
                     });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnSendfromAPI_Click(object sender, EventArgs e)
+        {
+            string apiURL = txtURL.Text;
+
+            GetAsyncAndSend(apiURL);
+        }
+
+        public async Task GetAsyncAndSend(string uri)
+        {
+            var httpClient = new HttpClient();
+
+            try
+            {
+                var response = await httpClient.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    //Shweta's Parsing code
+                    var messageModel = JsonConvert.DeserializeObject<List<dynamic>>(content);
+                    string returnValue = "";
+                    foreach (var item in messageModel)
+                    {
+                        returnValue += item + ", ";
+                    }
+                    Manager mMnanager = new Manager();
+
+                    Thread t = new Thread(() => { mMnanager.SendMessage(txtPServer.Text, txtPTopic.Text, returnValue); });
+                    t.Start();
+
                 }
             }
             catch (Exception ex)
