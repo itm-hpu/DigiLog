@@ -10,7 +10,6 @@ using KafkaNet.Protocol;
 using System.Windows.Forms;
 using System.IO;
 
-
 namespace DigiLogKafka
 {
     public class Manager
