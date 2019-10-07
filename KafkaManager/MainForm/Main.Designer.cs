@@ -30,6 +30,7 @@
         {
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabProducer = new System.Windows.Forms.TabPage();
+            this.btnSendfromAPI = new System.Windows.Forms.Button();
             this.btnSend = new System.Windows.Forms.Button();
             this.txtPMessage = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -68,7 +69,6 @@
             this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtToolTip = new System.Windows.Forms.ToolStripStatusLabel();
-            this.btnSendfromAPI = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabProducer.SuspendLayout();
             this.tabConsumer.SuspendLayout();
@@ -109,6 +109,17 @@
             this.tabProducer.TabIndex = 0;
             this.tabProducer.Text = "Producer";
             this.tabProducer.UseVisualStyleBackColor = true;
+            // 
+            // btnSendfromAPI
+            // 
+            this.btnSendfromAPI.Location = new System.Drawing.Point(380, 394);
+            this.btnSendfromAPI.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnSendfromAPI.Name = "btnSendfromAPI";
+            this.btnSendfromAPI.Size = new System.Drawing.Size(143, 30);
+            this.btnSendfromAPI.TabIndex = 7;
+            this.btnSendfromAPI.Text = "Send message from API";
+            this.btnSendfromAPI.UseVisualStyleBackColor = true;
+            this.btnSendfromAPI.Click += new System.EventHandler(this.btnSendfromAPI_Click);
             // 
             // btnSend
             // 
@@ -388,7 +399,6 @@
             this.txtGetData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtGetData.Multiline = true;
             this.txtGetData.Name = "txtGetData";
-            this.txtGetData.ReadOnly = true;
             this.txtGetData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtGetData.Size = new System.Drawing.Size(623, 251);
             this.txtGetData.TabIndex = 20;
@@ -416,9 +426,9 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(15, 68);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(55, 13);
+            this.label8.Size = new System.Drawing.Size(29, 13);
             this.label8.TabIndex = 17;
-            this.label8.Text = "URL (Get)";
+            this.label8.Text = "URL";
             // 
             // tabRTLS
             // 
@@ -507,17 +517,6 @@
             this.txtToolTip.Name = "txtToolTip";
             this.txtToolTip.Size = new System.Drawing.Size(48, 17);
             this.txtToolTip.Text = "DigiLog";
-            // 
-            // btnSendfromAPI
-            // 
-            this.btnSendfromAPI.Location = new System.Drawing.Point(380, 394);
-            this.btnSendfromAPI.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btnSendfromAPI.Name = "btnSendfromAPI";
-            this.btnSendfromAPI.Size = new System.Drawing.Size(143, 30);
-            this.btnSendfromAPI.TabIndex = 7;
-            this.btnSendfromAPI.Text = "Send message from API";
-            this.btnSendfromAPI.UseVisualStyleBackColor = true;
-            this.btnSendfromAPI.Click += new System.EventHandler(this.btnSendfromAPI_Click);
             // 
             // Main
             // 
