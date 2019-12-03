@@ -256,12 +256,16 @@ namespace MainForm
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
+
+                    txtGetData.Text = content;
+
+                    /*
                     //Shweta's Parsing code
                     var messageModel = JsonConvert.DeserializeObject<List<dynamic>>(content);
                     foreach (var item in messageModel)
                     {
                         txtGetData.Text +=  item+"\r\n";
-                    }                   
+                    }*/                   
                 }
             }
             catch(Exception ex)
