@@ -1,0 +1,20 @@
+﻿<Window x:Class="SubFormforAPI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SubFormforAPI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="732" Width="815">
+    <Grid>
+        <TextBox x:Name="txtMiRAddress" HorizontalAlignment="Left" Height="40" TextWrapping="Wrap" Text="MiR200" VerticalAlignment="Top" Width="244" Margin="285,10,0,0"/>
+        <TextBox x:Name="txtRTLSAddress" HorizontalAlignment="Left" Height="40" TextWrapping="Wrap" Text="RTLS" VerticalAlignment="Top" Width="245" Margin="10,10,0,0"/>
+        <Button x:Name="btnGetAddress" Content="Get address" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="542,10,0,0" Height="40" Click="BtnGetAddress_Click"/>
+        <Button x:Name="btnGetData" Content="Get data" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="633,10,0,0" Height="40" Click="BtnGetData_Click"/>
+        <RadioButton x:Name="rdbRTLS" Content="RTLS" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="723,15,0,0" IsChecked="True"/>
+        <RadioButton x:Name="rdbMir200" Content="MiR200" HorizontalAlignment="Left" Margin="723,35,0,0" VerticalAlignment="Top" IsChecked="True"/>
+        <TextBox x:Name="txtResults" HorizontalAlignment="Left" Height="310" Margin="9,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="698" VerticalScrollBarVisibility="Auto"/>
+        <Canvas x:Name="myCanvas" HorizontalAlignment="Left" Height="305" VerticalAlignment="Top" Width="698" Margin="10,386,0,0" Background="#FFD6D6D6"/>
+
+    </Grid>
+</Window>

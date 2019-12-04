@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigiLogKafka", "DigiLogKafk
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainForm", "MainForm\MainForm.csproj", "{5FB384D8-ACB4-442A-8276-D3D0650D8C71}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubFormforAPI", "SubFormforAPI\SubFormforAPI.csproj", "{FED71E3E-D9AE-4FBA-8238-B64A3A9E9EE6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5FB384D8-ACB4-442A-8276-D3D0650D8C71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FB384D8-ACB4-442A-8276-D3D0650D8C71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FB384D8-ACB4-442A-8276-D3D0650D8C71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FED71E3E-D9AE-4FBA-8238-B64A3A9E9EE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FED71E3E-D9AE-4FBA-8238-B64A3A9E9EE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FED71E3E-D9AE-4FBA-8238-B64A3A9E9EE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FED71E3E-D9AE-4FBA-8238-B64A3A9E9EE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
