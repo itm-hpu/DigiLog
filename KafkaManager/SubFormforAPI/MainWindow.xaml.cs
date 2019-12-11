@@ -24,6 +24,8 @@ namespace SubFormforAPI
     /// </summary>
     public partial class MainWindow : Window
     {
+        string result = "";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -34,7 +36,7 @@ namespace SubFormforAPI
             //Initial settings
 
             string RTLSAddress = "https://smartfactory.hd-wireless.com/objects/00000001/pos";
-            string MiRAddress = "http://130.237.5.170/api/v2.0.0/status";
+            string MiRAddress = "http://130.237.5.148/api/v2.0.0/status";
 
             txtRTLSAddress.Text = RTLSAddress;
             txtMiRAddress.Text = MiRAddress;
@@ -55,19 +57,24 @@ namespace SubFormforAPI
 
         public async Task GetAsyncAndShow(string uri)
         {
+
+            double[] tempValue = new double[3];            
+
             using (WebClient wc = new WebClient())
             {
                 string json = wc.DownloadString(uri);
-                JObject jobj = JObject.Parse(json);
-                //object temp = jobj["position"];
-                
-
+                /*JObject jobj = JObject.Parse(json);
                 txtResults.Text = "Battery percentage: " + jobj["battery_percentage"].ToString() + "\n" +
-                    "Position: " + jobj["position"].ToString();                   
-                
+                    "Position: " + jobj["position"].ToString();*/
+                    
+                tempValue = ReadJson(json, "position");
+                result = result + tempValue[0].ToString() + "," + tempValue[1].ToString() + ", " + tempValue[2].ToString() + ", " + System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.fff") + "\n"; 
+
             }
 
-            int dotSize = 10;
+            txtResults.Text = result;
+
+            int dotSize = 5;
 
             Ellipse currentDot = new Ellipse();
             currentDot.Stroke = new SolidColorBrush(Colors.Green);
@@ -76,9 +83,35 @@ namespace SubFormforAPI
             currentDot.Height = dotSize;
             currentDot.Width = dotSize;
             currentDot.Fill = new SolidColorBrush(Colors.Green);
-            currentDot.Margin = new Thickness(100, 200, 0, 0); // Sets the position.
+            currentDot.Margin = new Thickness(tempValue[1]*30.0, tempValue[2]*30.0, 0, 0); // Sets the position.
             myCanvas.Children.Add(currentDot);
 
+        }
+
+        public double[] ReadJson(string jsonStr, string keyNameParent)
+        {
+            JObject json = JObject.Parse(jsonStr);
+            double Orientation = 0.0;
+            double XValue= 0.0;
+            double YValue = 0.0;           
+
+            double[] returnValue = new double[3];
+
+            foreach (var data in json[keyNameParent])
+            {
+                JProperty jProperty = data.ToObject<JProperty>();
+
+                if (jProperty.Name == "orientation") Orientation = Convert.ToDouble(jProperty.Value);
+                else if (jProperty.Name == "x") XValue = Convert.ToDouble(jProperty.Value);
+                else if (jProperty.Name == "y") YValue = Convert.ToDouble(jProperty.Value);                
+
+            }
+
+            returnValue[0] = Orientation;
+            returnValue[1] = XValue;
+            returnValue[2] = YValue;
+
+            return returnValue;
         }
     }
 }
