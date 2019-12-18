@@ -13,8 +13,13 @@
         <Button x:Name="btnGetData" Content="Get data" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="633,10,0,0" Height="40" Click="BtnGetData_Click"/>
         <RadioButton x:Name="rdbRTLS" Content="RTLS" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="723,15,0,0" IsChecked="True"/>
         <RadioButton x:Name="rdbMir200" Content="MiR200" HorizontalAlignment="Left" Margin="723,35,0,0" VerticalAlignment="Top" IsChecked="True"/>
-        <TextBox x:Name="txtResults" HorizontalAlignment="Left" Height="310" Margin="9,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="698" VerticalScrollBarVisibility="Auto"/>
+        <TextBox x:Name="txtResults" HorizontalAlignment="Left" Height="272" Margin="9,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="698" VerticalScrollBarVisibility="Auto"/>
         <Canvas x:Name="myCanvas" HorizontalAlignment="Left" Height="570" VerticalAlignment="Top" Width="698" Margin="10,386,0,0" Background="#FFD6D6D6"/>
+        <TextBlock HorizontalAlignment="Left" Margin="542,58,0,0" TextWrapping="Wrap" Text="Total #" VerticalAlignment="Top" Width="75"/>
+        <TextBlock HorizontalAlignment="Left" Margin="542,82,0,0" TextWrapping="Wrap" Text="Interval (s)" VerticalAlignment="Top" Width="75"/>
+        <TextBox x:Name="txtTotalIteration" HorizontalAlignment="Left" Height="23" Margin="608,55,0,0" TextWrapping="Wrap" Text="30" VerticalAlignment="Top" Width="100"/>
+        <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Height="23" Margin="608,81,0,0" TextWrapping="Wrap" Text="0.5" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="btnSingleData" Content="Get single data" HorizontalAlignment="Left" VerticalAlignment="Top" Width="129" Margin="400,58,0,0" Height="40" Click="BtnSingleData_Click"/>
 
     </Grid>
 </Window>
