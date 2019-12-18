@@ -134,6 +134,7 @@ namespace SubFormforAPI
                 int dotSize = 5;
 
                 Ellipse currentDot = new Ellipse();
+            
 
                 Color c = new Color();
                 c = Rainbow(Convert.ToSingle(0.5));
@@ -215,5 +216,6 @@ namespace SubFormforAPI
 
             GetAsyncAndShow(apiURL);
         }
+        
     }
 }
