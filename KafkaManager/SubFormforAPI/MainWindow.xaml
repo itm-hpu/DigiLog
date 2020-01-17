@@ -20,6 +20,7 @@
         <TextBox x:Name="txtTotalIteration" HorizontalAlignment="Left" Height="23" Margin="608,55,0,0" TextWrapping="Wrap" Text="30" VerticalAlignment="Top" Width="100"/>
         <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Height="23" Margin="608,81,0,0" TextWrapping="Wrap" Text="0.5" VerticalAlignment="Top" Width="100"/>
         <Button x:Name="btnSingleData" Content="Get single data" HorizontalAlignment="Left" VerticalAlignment="Top" Width="129" Margin="400,58,0,0" Height="40" Click="BtnSingleData_Click"/>
+        <Button x:Name="btnRefresh" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Top" Width="84" Margin="713,386,0,0" Height="23" Click="BtnRefresh_Click"/>
 
     </Grid>
 </Window>

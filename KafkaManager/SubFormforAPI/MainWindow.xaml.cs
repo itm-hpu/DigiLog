@@ -36,7 +36,7 @@ namespace SubFormforAPI
             //Initial settings
 
             string RTLSAddress = "https://smartfactory.hd-wireless.com/objects/00000001/pos";
-            string MiRAddress = "http://130.237.5.148/api/v2.0.0/status";
+            string MiRAddress = "http://130.237.5.103/api/v2.0.0/status";
 
             txtRTLSAddress.Text = RTLSAddress;
             txtMiRAddress.Text = MiRAddress;
@@ -216,6 +216,10 @@ namespace SubFormforAPI
 
             GetAsyncAndShow(apiURL);
         }
-        
+
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            myCanvas.Children.Clear();
+        }
     }
 }
