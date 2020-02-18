@@ -36,7 +36,7 @@ namespace SubFormforAPI
             //Initial settings
 
             string RTLSAddress = "https://smartfactory.hd-wireless.com/objects/00000001/pos";
-            string MiRAddress = "http://130.237.5.108/api/v2.0.0/status";
+            string MiRAddress = "http://130.237.2.110/api/v2.0.0/status";
 
 
             txtRTLSAddress.Text = RTLSAddress;
