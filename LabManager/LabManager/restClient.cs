@@ -126,6 +126,8 @@ namespace LabManager
             {
                 response = (HttpWebResponse)request.GetResponse();
 
+                var statuscode = response.StatusCode;
+
                 //Proecess the resppnse stream... (could be JSON, XML or HTML etc..._
                 using (Stream responseStream = response.GetResponseStream())
                 {
@@ -139,7 +141,7 @@ namespace LabManager
                         }
                     }
                 }
-            }
+           }
             catch (Exception ex)
             {
                 strResponseValue = "{\"errorMessages\":[\"" + ex.Message.ToString() + "\"],\"errors\":{}}";
@@ -170,12 +172,12 @@ namespace LabManager
 
             Xvalue = (double)json.SelectToken("X");
             Yvalue = (double)json.SelectToken("Y");
-            Zvalue = (double)json.SelectToken("Z");
+            Zvalue = (double)json.SelectToken("Z"); 
 
             returnValue[0] = Xvalue;
             returnValue[1] = Yvalue;
             returnValue[2] = Zvalue;
-
+            
             return returnValue;
         }
     }
