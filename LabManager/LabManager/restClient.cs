@@ -35,11 +35,11 @@ namespace LabManager
             httpMethod = httpVerb.GET;
         }
 
-        public double[] makeAGVRequest()
+        public string[] makeAGVRequest()
         {
             string strResponseValue = string.Empty;
             string result = string.Empty;
-            double[] tempResult = new double[3];
+            string[] tempResult = new string[3];
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(AGVaddress);
 
@@ -81,22 +81,22 @@ namespace LabManager
             return tempResult;
         }
 
-        public double[] ReadAGVJson(string jsonStr, string keyNameParent)
+        public string[] ReadAGVJson(string jsonStr, string keyNameParent)
         {
             JObject json = JObject.Parse(jsonStr);
-            double Orientation = 0.0;
-            double XValue = 0.0;
-            double YValue = 0.0;
+            string Orientation = "";
+            string XValue = "";
+            string YValue = "";
 
-            double[] returnValue = new double[3];
+            string[] returnValue = new string[3];
 
             foreach (var data in json[keyNameParent])
             {
                 JProperty jProperty = data.ToObject<JProperty>();
 
-                if (jProperty.Name == "orientation") Orientation = Convert.ToDouble(jProperty.Value);
-                else if (jProperty.Name == "x") XValue = Convert.ToDouble(jProperty.Value);
-                else if (jProperty.Name == "y") YValue = Convert.ToDouble(jProperty.Value);
+                if (jProperty.Name == "orientation") Orientation = jProperty.Value.ToString();
+                else if (jProperty.Name == "x") XValue = jProperty.Value.ToString();
+                else if (jProperty.Name == "y") YValue = jProperty.Value.ToString();
             }
 
             returnValue[0] = Orientation;
@@ -107,12 +107,12 @@ namespace LabManager
         }
 
 
-        public double[] makeRTLSRequest()
+        public string[] makeRTLSRequest()
         {
             string strResponseValue = string.Empty;
             string result = string.Empty;
-            double[] tempResult = new double[3];
-
+            string[] tempResult = new string[3];
+            
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(RTLSaddress);
 
             request.Accept = "application/json";
@@ -144,7 +144,11 @@ namespace LabManager
            }
             catch (Exception ex)
             {
-                strResponseValue = "{\"errorMessages\":[\"" + ex.Message.ToString() + "\"],\"errors\":{}}";
+                //strResponseValue = "{\"errorMessages\":[\"" + ex.Message.ToString() + "\"],\"errors\":{}}";
+                tempResult[0] = string.Empty;
+                tempResult[1] = string.Empty;
+                tempResult[2] = string.Empty;
+
             }
             finally
             {
@@ -158,21 +162,21 @@ namespace LabManager
             return tempResult;
         }
 
-        public double[] ReadRTLSJson(string jsonStr, string keyNameParent)
+        public string[] ReadRTLSJson(string jsonStr, string keyNameParent)
         {
             //JArray jarray = JArray.Parse(jsonStr);
             //var json = jarray[0]; // first element of json array
             JObject json = JObject.Parse(jsonStr);
 
-            double Xvalue = 0.0;
-            double Yvalue = 0.0;
-            double Zvalue = 0.0;
+            string Xvalue = "";
+            string Yvalue = "";
+            string Zvalue = "";
 
-            double[] returnValue = new double[3];
+            string[] returnValue = new string[3];
 
-            Xvalue = (double)json.SelectToken("X");
-            Yvalue = (double)json.SelectToken("Y");
-            Zvalue = (double)json.SelectToken("Z"); 
+            Xvalue = (string)json.SelectToken("X");
+            Yvalue = (string)json.SelectToken("Y");
+            Zvalue = (string)json.SelectToken("Z"); 
 
             returnValue[0] = Xvalue;
             returnValue[1] = Yvalue;
