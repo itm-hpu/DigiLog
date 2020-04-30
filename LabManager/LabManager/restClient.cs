@@ -20,8 +20,8 @@ namespace LabManager
 
     class restClient
     {
-        public string AGVaddress { get; set; }
-        public string RTLSaddress { get; set; }
+        public string agvAddress { get; set; }
+        public string rtlsAddress { get; set; }
         public httpVerb httpMethod { get; set; }
         public string userName { get; set; }
         public string userPassword { get; set; }
@@ -30,8 +30,8 @@ namespace LabManager
 
         public restClient()
         {
-            AGVaddress = "";
-            RTLSaddress = "";
+            agvAddress = "";
+            rtlsAddress = "";
             httpMethod = httpVerb.GET;
         }
 
@@ -41,7 +41,7 @@ namespace LabManager
             string result = string.Empty;
             string[] tempResult = new string[3];
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(AGVaddress);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(agvAddress);
 
             request.Method = httpMethod.ToString();
 
@@ -113,7 +113,7 @@ namespace LabManager
             string result = string.Empty;
             string[] tempResult = new string[3];
             
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(RTLSaddress);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(rtlsAddress);
 
             request.Accept = "application/json";
             request.Headers.Add("X-Authenticate-User", userName);
