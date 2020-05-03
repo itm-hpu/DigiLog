@@ -18,7 +18,7 @@ namespace LabManager
         DELETE
     }
 
-    class restClient
+    class RESTClinet
     {
         public string agvAddress { get; set; }
         public string rtlsAddress { get; set; }
@@ -28,14 +28,14 @@ namespace LabManager
         public string iterationNum { get; set; }
         public string intervalTime { get; set; }
 
-        public restClient()
+        public RESTClinet()
         {
             agvAddress = "";
             rtlsAddress = "";
             httpMethod = httpVerb.GET;
         }
 
-        public string[] makeAGVRequest()
+        public string[] makeAgvRequest()
         {
             string strResponseValue = string.Empty;
             string result = string.Empty;
@@ -60,7 +60,7 @@ namespace LabManager
                         {
                             strResponseValue = reader.ReadToEnd();
 
-                            tempResult = ReadAGVJson(strResponseValue, "position");
+                            tempResult = readAgvJson(strResponseValue, "position");
                         }
                     }
                 }
@@ -81,7 +81,7 @@ namespace LabManager
             return tempResult;
         }
 
-        public string[] ReadAGVJson(string jsonStr, string keyNameParent)
+        public string[] readAgvJson(string jsonStr, string keyNameParent)
         {
             JObject json = JObject.Parse(jsonStr);
             string Orientation = "";
@@ -107,7 +107,7 @@ namespace LabManager
         }
 
 
-        public string[] makeRTLSRequest()
+        public string[] makeRtlsRequest()
         {
             string strResponseValue = string.Empty;
             string result = string.Empty;
@@ -137,7 +137,7 @@ namespace LabManager
                         {
                             strResponseValue = reader.ReadToEnd();
                             
-                            tempResult = ReadRTLSJson(strResponseValue, "RootObject");
+                            tempResult = readRtlsJson(strResponseValue, "RootObject");
                         }
                     }
                 }
@@ -162,7 +162,7 @@ namespace LabManager
             return tempResult;
         }
 
-        public string[] ReadRTLSJson(string jsonStr, string keyNameParent)
+        public string[] readRtlsJson(string jsonStr, string keyNameParent)
         {
             //JArray jarray = JArray.Parse(jsonStr);
             //var json = jarray[0]; // first element of json array

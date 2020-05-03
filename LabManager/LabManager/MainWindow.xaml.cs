@@ -40,24 +40,24 @@ namespace LabManager
             InitializeComponent();
         }
 
-        private string[] AGVRequestToServer()
+        private string[] requestAgvServer()
         {
             string[] responseResult = new string[3];
 
-            restClient rClient = new restClient();
+            RESTClinet rClient = new RESTClinet();
             
             rClient.agvAddress = "http://130.237.2.106/api/v2.0.0/status"; 
 
-            responseResult = rClient.makeAGVRequest();
+            responseResult = rClient.makeAgvRequest();
 
             return responseResult;
         }
         
-        private string[] RTLSRequestToServer()
+        private string[] requestRtlsServer()
         {
             string[] responseResult = new string[3];
 
-            restClient rClient = new restClient();
+            RESTClinet rClient = new RESTClinet();
 
             //rClient.endPoint = txtURI.Text;
             //rClient.userName = txtUserName.Text;
@@ -66,7 +66,7 @@ namespace LabManager
             rClient.userName = "KTH";
             rClient.userPassword = "!Test4KTH";
 
-            responseResult = rClient.makeRTLSRequest();
+            responseResult = rClient.makeRtlsRequest();
 
             return responseResult;
         }
@@ -78,28 +78,28 @@ namespace LabManager
 
             for (int i = 0; i < iterNum; i++)
             {
-                string TimeStamp = System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.ff");
+                string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.ff");
 
 
                 // Get coordinates of HDW tag on AGV
-                //Task<double[]> RTLStask = new Task<double[]>(RTLSRequestToServer);
-                //RTLStask.Start();
-                //rtlsTempResult = await RTLStask;
+                //Task<double[]> rtlsTask = new Task<double[]>(requestRtlsServer);
+                //rtlsTask.Start();
+                //rtlsTempResult = await rtlsTask;
 
-                var RTLStask = Task.Run(() => RTLSRequestToServer());
-                rtlsTempResult = await RTLStask;
+                var rtlsTask = Task.Run(() => requestRtlsServer());
+                rtlsTempResult = await rtlsTask;
 
                 // Get coordinates of AGV
-                //Task<double[]> AGVtask = new Task<double[]>(AGVRequestToServer);
-                //AGVtask.Start();
-                //agvTempResult = await AGVtask;
+                //Task<double[]> agvTask = new Task<double[]>(requestAgvServer);
+                //agvTask.Start();
+                //agvTempResult = await agvTask;
 
-                var AGVtask = Task.Run(() => AGVRequestToServer());
-                agvTempResult = await AGVtask;
+                var agvTask = Task.Run(() => requestAgvServer());
+                agvTempResult = await agvTask;
 
 
                 // match RTLS point coordinatesand AGV point coordinates towards canvas coordinates system
-                rtlsSubResult[0] = TimeStamp; // timestamp 
+                rtlsSubResult[0] = timeStamp; // timeStamp 
                 if (rtlsTempResult[1] == "") rtlsSubResult[1] = string.Empty;
                 else rtlsSubResult[1] = (-Convert.ToDouble(rtlsTempResult[1]) * (-0.01116546) + 7.824105).ToString(); // X
                 //rtlsSubResult[1] = (-Convert.ToDouble(rtlsTempResult[1]) * (-0.01116546) + 7.824105).ToString(); // X
@@ -107,12 +107,12 @@ namespace LabManager
                 else rtlsSubResult[2] = (Convert.ToDouble(rtlsTempResult[0]) * (-0.01116546) + 18.16041).ToString(); // Y
                 //rtlsSubResult[2] = (Convert.ToDouble(rtlsTempResult[0]) * (-0.01116546) + 18.16041).ToString(); // Y
 
-                agvSubResult[0] = TimeStamp; // timestamp
+                agvSubResult[0] = timeStamp; // timeStamp
                 agvSubResult[1] = agvTempResult[1]; // X
                 agvSubResult[2] = agvTempResult[2]; // Y
 
 
-                // store coordinates and timestamp of RTLS tag and AGV into list object
+                // store coordinates and timeStamp of RTLS tag and AGV into list object
                 rtlsPosition.Add(new List<string>());
                 rtlsPosition[i].Add(rtlsSubResult[0]);
                 rtlsPosition[i].Add(rtlsSubResult[1]);
@@ -154,7 +154,7 @@ namespace LabManager
                     rtlsResult = "Coordinates of RTLS tag {Time: " + rtlsPosition[i][0] + ", X: ---, Y: --- }";
                 }
                 agvResult = "Coordinates of MirAGV {Time: " + agvPosition[i][0] + ", X: " + agvPosition[i][1] + ", Y: " + agvPosition[i][2] + "}";
-                txtResponse.Text = txtResponse.Text + (i + 1).ToString() + ", " + TimeStamp + "\r\n" + rtlsResult + "\r\n" + agvResult + "\r\n";
+                txtResponse.Text = txtResponse.Text + (i + 1).ToString() + ", " + timeStamp + "\r\n" + rtlsResult + "\r\n" + agvResult + "\r\n";
                 txtResponse.ScrollToEnd();
 
 
