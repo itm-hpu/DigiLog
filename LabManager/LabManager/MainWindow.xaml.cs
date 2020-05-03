@@ -19,20 +19,28 @@ using System.Net;
 
 namespace LabManager
 {
+
+    class PositionData
+    {
+        public string TimeStamp { get; set; }
+        public string Coordinate_X { get; set; }
+        public string Coordinate_Y { get; set; }
+    }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        string[] rtlsTempResult = new string[3];
-        string[] agvTempResult = new string[3];
-        string[] rtlsSubResult = new string[3];
-        string[] agvSubResult = new string[3];
-        string rtlsResult = "";
-        string agvResult = "";
-        
-        List<List<string>> rtlsPosition = new List<List<string>>();
-        List<List<string>> agvPosition = new List<List<string>>();
+        string[] tempReuslt_RTLS = new string[3];
+        string[] tempReuslt_AGV = new string[3];
+        string[] subResult_RTLS = new string[3];
+        string[] subResult_AGV = new string[3];
+        string result_RTLS = "";
+        string result_AGV = "";
+
+        List<PositionData> position_RTLS = new List<PositionData>();
+        List<PositionData> position_AGV = new List<PositionData>();
         
         
         public MainWindow()
@@ -40,7 +48,7 @@ namespace LabManager
             InitializeComponent();
         }
 
-        private string[] requestAgvServer(string agvURI)
+        private string[] RequestServer_AGV(string agvURI)
         {
             string[] responseResult = new string[3];
 
@@ -48,13 +56,13 @@ namespace LabManager
             
             rClient.agvAddress = agvURI; 
 
-            responseResult = rClient.makeAgvRequest();
+            responseResult = rClient.MakeAGVRequest();
 
             return responseResult;
         }
         
 
-        private string[] requestRtlsServer(string rtlsURI, string username, string password)
+        private string[] RequestServer_RTLS(string rtlsURI, string username, string password)
         {
             string[] responseResult = new string[3];
 
@@ -67,36 +75,36 @@ namespace LabManager
             rClient.userName = username;
             rClient.userPassword = password;
 
-            responseResult = rClient.makeRtlsRequest();
+            responseResult = rClient.MakeRTLSRequest();
 
             return responseResult;
         }
-        
+
 
         /// <summary>
-        /// calculate distance by method,
-        /// method 1: calculating RTLS tag's on time (i) and time (i - 1),
+        /// calculate distance by method, 
+        /// method 1: calculating RTLS tag's on time (i) and time (i-1),
         /// method 2: calculating RTLS tag and AGV on time (i)
         /// </summary>
         /// <param name="firstResource"></param>
         /// <param name="secondResource"></param>
-        /// <param name="i"></param>
         /// <param name="method"></param>
+        /// <param name="i"></param>
         /// <returns></returns>
-        private double getDistance(List<List<string>> firstResource, List<List<string>> secondResource, int method, int i)
+        private double GetDistance(List<PositionData> firstResource, List<PositionData> secondResource, int method, int i)
         {
             double dist = 0.0;
 
             if (method == 1)
             {
-                double dist1 = (Convert.ToDouble(firstResource[i][1]) - Convert.ToDouble(firstResource[i - 1][1]));
-                double dist2 = (Convert.ToDouble(firstResource[i][2]) - Convert.ToDouble(firstResource[i - 1][2]));
+                double dist1 = (Convert.ToDouble(firstResource[i].Coordinate_X) - Convert.ToDouble(firstResource[i - 1].Coordinate_X));
+                double dist2 = (Convert.ToDouble(firstResource[i].Coordinate_Y) - Convert.ToDouble(firstResource[i - 1].Coordinate_Y));
                 dist = Math.Sqrt(dist1 * dist1 + dist2 * dist2);
             }
             else if (method == 2)
             {
-                double dist1 = (Convert.ToDouble(firstResource[i][1]) - Convert.ToDouble(secondResource[i][1]));
-                double dist2 = (Convert.ToDouble(firstResource[i][2]) - Convert.ToDouble(secondResource[i][2]));
+                double dist1 = (Convert.ToDouble(firstResource[i].Coordinate_X) - Convert.ToDouble(secondResource[i].Coordinate_X));
+                double dist2 = (Convert.ToDouble(firstResource[i].Coordinate_Y) - Convert.ToDouble(secondResource[i].Coordinate_Y));
                 dist = Math.Sqrt(dist1 * dist1 + dist2 * dist2);
             }
 
@@ -114,8 +122,6 @@ namespace LabManager
             txtRTLSuri.Text = rtlsAddress;
             txtUserName.Text = userName;
             txtPassword.Text = password;
-
-            
         }
 
 
@@ -133,75 +139,70 @@ namespace LabManager
                 string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.ff");
 
                 // Get coordinates of HDW tag on AGV
-                var rtlsTask = Task.Run(() => requestRtlsServer(rtlsURI, userName, password));
-                rtlsTempResult = await rtlsTask;
+                var rtlsTask = Task.Run(() => RequestServer_RTLS(rtlsURI, userName, password));
+                tempReuslt_RTLS = await rtlsTask;
 
                 // Get coordinates of AGV
-                var agvTask = Task.Run(() => requestAgvServer(agvURI));
-                agvTempResult = await agvTask;
-                
+                var agvTask = Task.Run(() => RequestServer_AGV(agvURI));
+                tempReuslt_AGV = await agvTask;
 
                 // match RTLS point coordinatesand AGV point coordinates towards canvas coordinates system
-                rtlsSubResult[0] = timeStamp; // timeStamp 
-                if (rtlsTempResult[1] == "") rtlsSubResult[1] = string.Empty;
-                else rtlsSubResult[1] = (-Convert.ToDouble(rtlsTempResult[1]) * (-0.01116546) + 7.824105).ToString(); // X
-                if (rtlsTempResult[2] == "") rtlsSubResult[2] = string.Empty;
-                else rtlsSubResult[2] = (Convert.ToDouble(rtlsTempResult[0]) * (-0.01116546) + 18.16041).ToString(); // Y
+                var subResult_RTLS = new PositionData();
+                subResult_RTLS.TimeStamp = timeStamp;
+                if (tempReuslt_RTLS[1] == "") subResult_RTLS.Coordinate_X = string.Empty;
+                else subResult_RTLS.Coordinate_X = (-Convert.ToDouble(tempReuslt_RTLS[1]) * (-0.01116546) + 7.824105).ToString(); // X
+                if (tempReuslt_RTLS[2] == "") subResult_RTLS.Coordinate_Y = string.Empty;
+                else subResult_RTLS.Coordinate_Y = (Convert.ToDouble(tempReuslt_RTLS[0]) * (-0.01116546) + 18.16041).ToString(); // Y
 
-                agvSubResult[0] = timeStamp; // timeStamp
-                agvSubResult[1] = agvTempResult[1]; // X
-                agvSubResult[2] = agvTempResult[2]; // Y
+                var subResult_AGV = new PositionData();
+                subResult_AGV.TimeStamp = timeStamp;
+                subResult_AGV.Coordinate_X = tempReuslt_AGV[1];
+                subResult_AGV.Coordinate_Y = tempReuslt_AGV[2];
 
 
-                // store coordinates and timeStamp of RTLS tag and AGV into list object
-                rtlsPosition.Add(new List<string>());
-                rtlsPosition[i].Add(rtlsSubResult[0]);
-                rtlsPosition[i].Add(rtlsSubResult[1]);
-                rtlsPosition[i].Add(rtlsSubResult[2]);
-
-                agvPosition.Add(new List<string>());
-                agvPosition[i].Add(agvSubResult[0]);
-                agvPosition[i].Add(agvSubResult[1]);
-                agvPosition[i].Add(agvSubResult[2]);
-
+                // store PositionData of RTLS tag and AGV into list
+                position_RTLS.Add(subResult_RTLS);
+                position_AGV.Add(subResult_AGV);
+                
 
                 // check whether RTLS tag point is outlier or not
-                if (rtlsPosition.Count > 1)
+                if (position_RTLS.Count > 1)
                 {
-                    if (rtlsPosition[i][1] != "" && rtlsPosition[i - 1][1] != "")
+                    if (position_RTLS[i].Coordinate_X != "" && position_RTLS[i - 1].Coordinate_X != "")
                     {
                         // distance between RTLS tag's time (i) point and time (i-1) point
-                        double dist = getDistance(rtlsPosition, rtlsPosition, 1, i);
+                        double dist = GetDistance(position_RTLS, position_RTLS, 1, i);
 
                         // outlier criteria = ? 
                         if (dist > 3.0)
                         {
-                            rtlsPosition[i][1] = rtlsPosition[i - 1][1];
-                            rtlsPosition[i][2] = rtlsPosition[i - 1][2];
+                            position_RTLS[i].Coordinate_X = position_RTLS[i - 1].Coordinate_X;
+                            position_RTLS[i].Coordinate_Y = position_RTLS[i - 1].Coordinate_Y;
                         }
                     }
                 }
                 
 
                 // show coordinates of RTLS tag and AGV
-                if (rtlsPosition[i][1] != "")
+                if (position_RTLS[i].Coordinate_X != "")
                 {
-                    rtlsResult = "Coordinates of RTLS tag {Time: " + rtlsPosition[i][0] + ", X: " + rtlsPosition[i][1] + ", Y: " + rtlsPosition[i][2] + "}";
+                    result_RTLS = "Coordinates of RTLS tag {Time: " + position_RTLS[i].TimeStamp + ", X: " + position_RTLS[i].Coordinate_X + ", Y: " + position_RTLS[i].Coordinate_Y + "}";
                 }
                 else
                 {
-                    rtlsResult = "Coordinates of RTLS tag {Time: " + rtlsPosition[i][0] + ", X: ---, Y: --- }";
+                    result_RTLS = "Coordinates of RTLS tag {Time: " + position_RTLS[i].TimeStamp + ", X: ---, Y: --- }";
                 }
-                agvResult = "Coordinates of MirAGV {Time: " + agvPosition[i][0] + ", X: " + agvPosition[i][1] + ", Y: " + agvPosition[i][2] + "}";
-                txtResponse.Text = txtResponse.Text + (i + 1).ToString() + ", " + timeStamp + "\r\n" + rtlsResult + "\r\n" + agvResult + "\r\n";
+                result_AGV = "Coordinates of MirAGV {Time: " + position_AGV[i].TimeStamp + ", X: " + position_AGV[i].Coordinate_X + ", Y: " + position_AGV[i].Coordinate_Y + "}";
+                txtResponse.Text = txtResponse.Text + (i + 1).ToString() + ", " + timeStamp + "\r\n" + result_RTLS + "\r\n" + result_AGV + "\r\n";
                 txtResponse.ScrollToEnd();
                 
+
                 /*
                 // calculate distance between RTLS tag and AGV for judging same place or redZone
-                if (rtlsPosition[i][1] != "")
+                if (position_RTLS[i][1] != "")
                 {
                     // calculate distance between RTLS tag and AGV
-                    double dist = getDistance(rtlsPosition, agvPosition, 2, i);
+                    double dist = getDistance(position_RTLS, position_AGV, 2, i);
 
                     // same place criteria = ?
                     if (dist < 2.0) 
@@ -210,6 +211,7 @@ namespace LabManager
                     }
                 }
                 */
+                
                 
                 // Show where the RTLS tag has been
                 int dotSizeRTLS = 5;
@@ -224,9 +226,9 @@ namespace LabManager
                 currentDotRTLS.Width = dotSizeRTLS;
                 currentDotRTLS.Fill = new SolidColorBrush(colorRTLS);
 
-                if (rtlsPosition[i][1] != "")
+                if (position_RTLS[i].Coordinate_X != "")
                 {
-                    currentDotRTLS.Margin = new Thickness(Convert.ToDouble(rtlsPosition[i][1]) * 15.0, Convert.ToDouble(rtlsPosition[i][2]) * 15.0, 0, 0); // Set the position
+                    currentDotRTLS.Margin = new Thickness(Convert.ToDouble(position_RTLS[i].Coordinate_X) * 15.0, Convert.ToDouble(position_RTLS[i].Coordinate_Y) * 15.0, 0, 0); // Set the position
                     myCanvas.Children.Add(currentDotRTLS);
                 }
 
@@ -243,11 +245,12 @@ namespace LabManager
                 currentDotAGV.Height = dotSizeAGV;
                 currentDotAGV.Width = dotSizeAGV;
                 currentDotAGV.Fill = new SolidColorBrush(colorAGV);
-                currentDotAGV.Margin = new Thickness(Convert.ToDouble(agvPosition[i][1]) * 15.0, Convert.ToDouble(agvPosition[i][2]) * 15.0, 0, 0); // Set the position
+                currentDotAGV.Margin = new Thickness(Convert.ToDouble(position_AGV[i].Coordinate_X) * 15.0, Convert.ToDouble(position_AGV[i].Coordinate_Y) * 15.0, 0, 0); // Set the position
                 myCanvas.Children.Add(currentDotAGV);
                 
                 
                 await Task.Delay(TimeSpan.FromMilliseconds(intervalTime * 1000));
+                
             }
         }
 
@@ -274,7 +277,5 @@ namespace LabManager
                     return Color.FromArgb(255, 255, 0, Convert.ToByte(descending));
             }
         }
-
-        
     }
 }

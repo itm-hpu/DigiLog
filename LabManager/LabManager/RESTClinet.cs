@@ -35,7 +35,7 @@ namespace LabManager
             httpMethod = httpVerb.GET;
         }
 
-        public string[] makeAgvRequest()
+        public string[] MakeAGVRequest()
         {
             string strResponseValue = string.Empty;
             string result = string.Empty;
@@ -60,7 +60,7 @@ namespace LabManager
                         {
                             strResponseValue = reader.ReadToEnd();
 
-                            tempResult = readAgvJson(strResponseValue, "position");
+                            tempResult = ReadAGVJSON(strResponseValue, "position");
                         }
                     }
                 }
@@ -81,7 +81,7 @@ namespace LabManager
             return tempResult;
         }
 
-        public string[] readAgvJson(string jsonStr, string keyNameParent)
+        public string[] ReadAGVJSON(string jsonStr, string keyNameParent)
         {
             JObject json = JObject.Parse(jsonStr);
             string Orientation = "";
@@ -107,7 +107,7 @@ namespace LabManager
         }
 
 
-        public string[] makeRtlsRequest()
+        public string[] MakeRTLSRequest()
         {
             string strResponseValue = string.Empty;
             string result = string.Empty;
@@ -137,7 +137,7 @@ namespace LabManager
                         {
                             strResponseValue = reader.ReadToEnd();
                             
-                            tempResult = readRtlsJson(strResponseValue, "RootObject");
+                            tempResult = ReadRTLSJson(strResponseValue, "RootObject");
                         }
                     }
                 }
@@ -148,7 +148,6 @@ namespace LabManager
                 tempResult[0] = string.Empty;
                 tempResult[1] = string.Empty;
                 tempResult[2] = string.Empty;
-
             }
             finally
             {
@@ -162,7 +161,7 @@ namespace LabManager
             return tempResult;
         }
 
-        public string[] readRtlsJson(string jsonStr, string keyNameParent)
+        public string[] ReadRTLSJson(string jsonStr, string keyNameParent)
         {
             //JArray jarray = JArray.Parse(jsonStr);
             //var json = jarray[0]; // first element of json array
