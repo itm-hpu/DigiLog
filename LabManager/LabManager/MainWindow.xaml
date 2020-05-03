@@ -5,26 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LabManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="823.028" Width="1012.571">
+        Title="MainWindow" Height="869.314" Width="1012.571">
     <Grid Margin="0,0,-6.143,0.286">
-        <Label Content="URI Address&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="32"/>
-        <Label Content="UserName" HorizontalAlignment="Left" Margin="99,50,0,0" VerticalAlignment="Top" Width="89"/>
-        <Label Content="Password" HorizontalAlignment="Left" Margin="99,85,0,0" VerticalAlignment="Top" Width="89"/>
-        <TextBox x:Name="txtURI" HorizontalAlignment="Left" Height="28" Margin="99,14,0,0" TextWrapping="Wrap" Text="Enter the URI Address" VerticalAlignment="Top" Width="580"/>
-        <TextBox x:Name="txtUserName" HorizontalAlignment="Left" Height="23" Margin="189,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
-        <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Height="23" Margin="189,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
-        <Label Content="IterationNum" HorizontalAlignment="Left" Margin="423,50,0,0" VerticalAlignment="Top" Width="83"/>
-        <Label Content="IntervalTime" HorizontalAlignment="Left" Margin="423,85,0,0" VerticalAlignment="Top" Width="83"/>
-        <TextBox x:Name="txtIterationNum" HorizontalAlignment="Left" Height="23" Margin="519,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
-        <TextBox x:Name="txtIntervalTime" HorizontalAlignment="Left" Height="23" Margin="519,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
-        <Button x:Name="btnGo" Content="Go" HorizontalAlignment="Left" Margin="702,10,0,0" VerticalAlignment="Top" Width="75" Height="101" Click="Button_Click"/>
-        <Label Content="URI Response&#xA;" HorizontalAlignment="Left" Margin="10,135,0,0" VerticalAlignment="Top" Height="32"/>
-        <TextBox x:Name="txtResponse" HorizontalAlignment="Left" Height="160" Margin="99,138,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="580"/>
-        <Canvas x:Name="myCanvas" HorizontalAlignment="Left" Height="433" Margin="99,313,0,0" VerticalAlignment="Top" Width="796">
+        <Label Content="RTLS Address&#xA;" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Height="32"/>
+        <Label Content="UserName" HorizontalAlignment="Left" Margin="99,129,0,0" VerticalAlignment="Top" Width="89"/>
+        <Label Content="Password" HorizontalAlignment="Left" Margin="99,164,0,0" VerticalAlignment="Top" Width="89"/>
+        <TextBox x:Name="txtRTLSuri" HorizontalAlignment="Left" Height="28" Margin="99,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591"/>
+        <TextBox x:Name="txtUserName" HorizontalAlignment="Left" Height="23" Margin="189,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
+        <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Height="23" Margin="189,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
+        <Label Content="* IterationNum" HorizontalAlignment="Left" Margin="422,133,0,0" VerticalAlignment="Top" Width="95"/>
+        <Label Content="* IntervalTime" HorizontalAlignment="Left" Margin="422,164,0,0" VerticalAlignment="Top" Width="95"/>
+        <TextBox x:Name="txtIterationNum" HorizontalAlignment="Left" Height="23" Margin="530,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
+        <TextBox x:Name="txtIntervalTime" HorizontalAlignment="Left" Height="23" Margin="530,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
+        <Button x:Name="btnGo" Content="Go" HorizontalAlignment="Left" Margin="832,18,0,0" VerticalAlignment="Top" Width="90" Height="173" Click="ButtonGo_Click"/>
+        <Label Content="URI Response&#xA;" HorizontalAlignment="Left" Margin="10,205,0,0" VerticalAlignment="Top" Height="32"/>
+        <TextBox x:Name="txtResponse" HorizontalAlignment="Left" Height="160" Margin="99,208,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="820"/>
+        <Canvas x:Name="myCanvas" HorizontalAlignment="Left" Height="433" Margin="99,383,0,0" VerticalAlignment="Top" Width="820">
             <Canvas.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
             </Canvas.Background>
         </Canvas>
+        <Label Content="AGV Address&#xA;" HorizontalAlignment="Left" Margin="10,14,0,0" VerticalAlignment="Top" Height="32"/>
+        <TextBox x:Name="txtAGVuri" HorizontalAlignment="Left" Height="28" Margin="99,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591"/>
+        <Button x:Name="btnCheck" Content="Check" HorizontalAlignment="Left" Margin="724,18,0,0" VerticalAlignment="Top" Width="90" Height="173" Click="ButtonCheck_Click"/>
+        <Label Content="* How many seconds do you want to check the position of RTLS tags?" HorizontalAlignment="Left" Margin="99,101,0,0" VerticalAlignment="Top" Width="418"/>
+        <TextBox x:Name="txtCheckSeconds" HorizontalAlignment="Left" Height="23" Margin="530,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
 
     </Grid>
 </Window>

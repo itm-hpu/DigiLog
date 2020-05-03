@@ -40,13 +40,13 @@ namespace LabManager
             InitializeComponent();
         }
 
-        private string[] requestAgvServer()
+        private string[] requestAgvServer(string agvURI)
         {
             string[] responseResult = new string[3];
 
             RESTClinet rClient = new RESTClinet();
             
-            rClient.agvAddress = "http://130.237.2.106/api/v2.0.0/status"; 
+            rClient.agvAddress = agvURI; 
 
             responseResult = rClient.makeAgvRequest();
 
@@ -54,7 +54,7 @@ namespace LabManager
         }
         
 
-        private string[] requestRtlsServer()
+        private string[] requestRtlsServer(string rtlsURI, string username, string password)
         {
             string[] responseResult = new string[3];
 
@@ -63,9 +63,9 @@ namespace LabManager
             //rClient.endPoint = txtURI.Text;
             //rClient.userName = txtUserName.Text;
             //rClient.userPassword = txtPassword.Text;
-            rClient.rtlsAddress = "https://p186-geps-production-api.hd-rtls.com/objects/00000011/pos?max_age=2"; // max_age criteria ?
-            rClient.userName = "KTH";
-            rClient.userPassword = "!Test4KTH";
+            rClient.rtlsAddress = rtlsURI; // max_age criteria ?
+            rClient.userName = username;
+            rClient.userPassword = password;
 
             responseResult = rClient.makeRtlsRequest();
 
@@ -103,9 +103,28 @@ namespace LabManager
             return dist;
         }
 
+        private void ButtonCheck_Click(object sender, RoutedEventArgs e)
+        {
+            string agvAddress = "http://130.237.2.106/api/v2.0.0/status";
+            string rtlsAddress = "https://p186-geps-production-api.hd-rtls.com/objects/00000011/pos?max_age=" + txtCheckSeconds.Text; // max_age criteria ?
+            string userName = "KTH";
+            string password = "!Test4KTH";
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
-        {                    
+            txtAGVuri.Text = agvAddress;
+            txtRTLSuri.Text = rtlsAddress;
+            txtUserName.Text = userName;
+            txtPassword.Text = password;
+
+            
+        }
+
+
+        private async void ButtonGo_Click(object sender, RoutedEventArgs e)
+        {
+            string agvURI = txtAGVuri.Text;
+            string rtlsURI = txtRTLSuri.Text;
+            string userName = txtUserName.Text;
+            string password = txtPassword.Text;
             int iterNum = Convert.ToInt32(txtIterationNum.Text); // iteration number
             double intervalTime = Convert.ToDouble(txtIntervalTime.Text); // interval time
 
@@ -114,11 +133,11 @@ namespace LabManager
                 string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.ff");
 
                 // Get coordinates of HDW tag on AGV
-                var rtlsTask = Task.Run(() => requestRtlsServer());
+                var rtlsTask = Task.Run(() => requestRtlsServer(rtlsURI, userName, password));
                 rtlsTempResult = await rtlsTask;
 
                 // Get coordinates of AGV
-                var agvTask = Task.Run(() => requestAgvServer());
+                var agvTask = Task.Run(() => requestAgvServer(agvURI));
                 agvTempResult = await agvTask;
                 
 
@@ -255,5 +274,7 @@ namespace LabManager
                     return Color.FromArgb(255, 255, 0, Convert.ToByte(descending));
             }
         }
+
+        
     }
 }
