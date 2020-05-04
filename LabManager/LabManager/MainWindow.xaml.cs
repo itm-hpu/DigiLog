@@ -16,22 +16,26 @@ using System.Windows.Shapes;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using System.IO;
+
 
 namespace LabManager
 {
-
-    class PositionData
-    {
-        public string TimeStamp { get; set; }
-        public string Coordinate_X { get; set; }
-        public string Coordinate_Y { get; set; }
-    }
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        public class PositionData
+        {
+            public string TimeStamp { get; set; }
+            public string Coordinate_X { get; set; }
+            public string Coordinate_Y { get; set; }
+        }
+
+
         string[] tempReuslt_RTLS = new string[3];
         string[] tempReuslt_AGV = new string[3];
         string[] subResult_RTLS = new string[3];
@@ -42,11 +46,12 @@ namespace LabManager
         List<PositionData> position_RTLS = new List<PositionData>();
         List<PositionData> position_AGV = new List<PositionData>();
         
-        
+
         public MainWindow()
         {
             InitializeComponent();
         }
+
 
         private string[] RequestServer_AGV(string agvURI)
         {
@@ -82,34 +87,35 @@ namespace LabManager
 
 
         /// <summary>
-        /// calculate distance by method, 
-        /// method 1: calculating RTLS tag's on time (i) and time (i-1),
-        /// method 2: calculating RTLS tag and AGV on time (i)
+        /// Calculate distance by method, "firstResource" and "secondResource": resources to calculate, 
+        /// "method": { 0: calculate RTLS tag's between time (i) and time (i-1), 1: calculate RTLS tag and AGV on time (i) },
+        /// "index": data index to calculate
         /// </summary>
         /// <param name="firstResource"></param>
         /// <param name="secondResource"></param>
         /// <param name="method"></param>
-        /// <param name="i"></param>
+        /// <param name="index"></param>
         /// <returns></returns>
-        private double GetDistance(List<PositionData> firstResource, List<PositionData> secondResource, int method, int i)
+        private double GetDistance(List<PositionData> firstResource, List<PositionData> secondResource, int method, int index)
         {
             double dist = 0.0;
 
-            if (method == 1)
+            if (method == 0)
             {
-                double dist1 = (Convert.ToDouble(firstResource[i].Coordinate_X) - Convert.ToDouble(firstResource[i - 1].Coordinate_X));
-                double dist2 = (Convert.ToDouble(firstResource[i].Coordinate_Y) - Convert.ToDouble(firstResource[i - 1].Coordinate_Y));
+                double dist1 = (Convert.ToDouble(firstResource[index].Coordinate_X) - Convert.ToDouble(firstResource[index - 1].Coordinate_X));
+                double dist2 = (Convert.ToDouble(firstResource[index].Coordinate_Y) - Convert.ToDouble(firstResource[index - 1].Coordinate_Y));
                 dist = Math.Sqrt(dist1 * dist1 + dist2 * dist2);
             }
-            else if (method == 2)
+            else if (method == 1)
             {
-                double dist1 = (Convert.ToDouble(firstResource[i].Coordinate_X) - Convert.ToDouble(secondResource[i].Coordinate_X));
-                double dist2 = (Convert.ToDouble(firstResource[i].Coordinate_Y) - Convert.ToDouble(secondResource[i].Coordinate_Y));
+                double dist1 = (Convert.ToDouble(firstResource[index].Coordinate_X) - Convert.ToDouble(secondResource[index].Coordinate_X));
+                double dist2 = (Convert.ToDouble(firstResource[index].Coordinate_Y) - Convert.ToDouble(secondResource[index].Coordinate_Y));
                 dist = Math.Sqrt(dist1 * dist1 + dist2 * dist2);
             }
 
             return dist;
         }
+
 
         private void ButtonCheck_Click(object sender, RoutedEventArgs e)
         {
@@ -155,7 +161,7 @@ namespace LabManager
                 else subResult_RTLS.Coordinate_Y = (Convert.ToDouble(tempReuslt_RTLS[0]) * (-0.01116546) + 18.16041).ToString(); // Y
 
                 var subResult_AGV = new PositionData();
-                subResult_AGV.TimeStamp = timeStamp;
+                subResult_AGV.TimeStamp = timeStamp; // AGV timestamp means program time (there is no AGV's own timestamp)
                 subResult_AGV.Coordinate_X = tempReuslt_AGV[1];
                 subResult_AGV.Coordinate_Y = tempReuslt_AGV[2];
 
@@ -171,7 +177,7 @@ namespace LabManager
                     if (position_RTLS[i].Coordinate_X != "" && position_RTLS[i - 1].Coordinate_X != "")
                     {
                         // distance between RTLS tag's time (i) point and time (i-1) point
-                        double dist = GetDistance(position_RTLS, position_RTLS, 1, i);
+                        double dist = GetDistance(position_RTLS, position_RTLS, 0, i);
 
                         // outlier criteria = ? 
                         if (dist > 3.0)
@@ -202,7 +208,7 @@ namespace LabManager
                 if (position_RTLS[i].Coordinate_X != "")
                 {
                     // calculate distance between RTLS tag and AGV
-                    double dist = GetDistance(position_RTLS, position_AGV, 2, i);
+                    double dist = GetDistance(position_RTLS, position_AGV, 1, i);
 
                     // same place criteria = ?
                     if (dist < 2.0) 
@@ -252,6 +258,9 @@ namespace LabManager
                 await Task.Delay(TimeSpan.FromMilliseconds(intervalTime * 1000));
                 
             }
+
+            WriteCSVfile(position_RTLS, 0);
+            WriteCSVfile(position_AGV, 1);
         }
 
 
@@ -277,5 +286,39 @@ namespace LabManager
                     return Color.FromArgb(255, 255, 0, Convert.ToByte(descending));
             }
         }
+
+        /// <summary>
+        /// Write position data into txt file, "positionDatas": object name to store, "system": { 0: RTLS, 1: AGV }
+        /// </summary>
+        /// <param name="positionDatas"></param>
+        /// <param name="system"></param>
+        public void WriteCSVfile(List<PositionData> positionDatas, int system)
+        {
+            string filedir = Directory.GetCurrentDirectory();
+
+            if (system == 0)
+            {
+                filedir = filedir + @"\PositionData_RTLS_" + System.DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
+            }
+            else if (system == 1)
+            {
+                filedir = filedir + @"\PositionData_AGV_" + System.DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
+            }
+
+            StreamWriter file = new StreamWriter(filedir);
+
+            int inputLength = positionDatas.Count();
+
+            for (int i = 0; i < inputLength; i++)
+            {
+                file.Write(positionDatas[i].TimeStamp + ", " + positionDatas[i].Coordinate_X + ", " + positionDatas[i].Coordinate_Y);
+                file.Write("\n");
+            }
+
+            file.Close();
+
+            return;
+        }
+        
     }
 }
