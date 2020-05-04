@@ -169,17 +169,17 @@ namespace LabManager
 
             string Xvalue = "";
             string Yvalue = "";
-            string Zvalue = "";
+            string TimeStamp = "";
 
             string[] returnValue = new string[3];
 
             Xvalue = (string)json.SelectToken("X");
             Yvalue = (string)json.SelectToken("Y");
-            Zvalue = (string)json.SelectToken("Z"); 
+            TimeStamp = (string)json.SelectToken("Timestamp"); 
 
             returnValue[0] = Xvalue;
             returnValue[1] = Yvalue;
-            returnValue[2] = Zvalue;
+            returnValue[2] = TimeStamp;
             
             return returnValue;
         }

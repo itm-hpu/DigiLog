@@ -148,7 +148,7 @@ namespace LabManager
 
                 // match RTLS point coordinatesand AGV point coordinates towards canvas coordinates system
                 var subResult_RTLS = new PositionData();
-                subResult_RTLS.TimeStamp = timeStamp;
+                subResult_RTLS.TimeStamp = tempReuslt_RTLS[2];
                 if (tempReuslt_RTLS[1] == "") subResult_RTLS.Coordinate_X = string.Empty;
                 else subResult_RTLS.Coordinate_X = (-Convert.ToDouble(tempReuslt_RTLS[1]) * (-0.01116546) + 7.824105).ToString(); // X
                 if (tempReuslt_RTLS[2] == "") subResult_RTLS.Coordinate_Y = string.Empty;
@@ -197,12 +197,12 @@ namespace LabManager
                 txtResponse.ScrollToEnd();
                 
 
-                /*
+                
                 // calculate distance between RTLS tag and AGV for judging same place or redZone
-                if (position_RTLS[i][1] != "")
+                if (position_RTLS[i].Coordinate_X != "")
                 {
                     // calculate distance between RTLS tag and AGV
-                    double dist = getDistance(position_RTLS, position_AGV, 2, i);
+                    double dist = GetDistance(position_RTLS, position_AGV, 2, i);
 
                     // same place criteria = ?
                     if (dist < 2.0) 
@@ -210,7 +210,7 @@ namespace LabManager
 
                     }
                 }
-                */
+                
                 
                 
                 // Show where the RTLS tag has been
