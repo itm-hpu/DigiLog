@@ -87,31 +87,36 @@ namespace LabManager
 
 
         /// <summary>
-        /// Calculate distance by method, "firstResource" and "secondResource": resources to calculate, 
-        /// "method": { 0: calculate RTLS tag's between time (i) and time (i-1), 1: calculate RTLS tag and AGV on time (i) },
-        /// "index": data index to calculate
+        /// Calculate distance between each different objects, "index": Name which is specified as an index variable
         /// </summary>
         /// <param name="firstResource"></param>
         /// <param name="secondResource"></param>
-        /// <param name="method"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        private double GetDistance(List<PositionData> firstResource, List<PositionData> secondResource, int method, int index)
+        private double GetDistance(List<PositionData> firstResource, List<PositionData> secondResource, int index) // for calculating safe distance between two objects
+        {
+            double dist = 0.0;
+            
+            double dist1 = (Convert.ToDouble(firstResource[index].Coordinate_X) - Convert.ToDouble(secondResource[index].Coordinate_X));
+            double dist2 = (Convert.ToDouble(firstResource[index].Coordinate_Y) - Convert.ToDouble(secondResource[index].Coordinate_Y));
+            dist = Math.Sqrt(dist1 * dist1 + dist2 * dist2);
+            
+            return dist;
+        }
+
+        /// <summary>
+        /// Calculate distance between current and one second ago position of the same objects, "index": Name which is specified as an index variable
+        /// </summary>
+        /// <param name="firstResource"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private double GetDistance(List<PositionData> firstResource, int index) // for checking outlier and calculating movement distance
         {
             double dist = 0.0;
 
-            if (method == 0)
-            {
-                double dist1 = (Convert.ToDouble(firstResource[index].Coordinate_X) - Convert.ToDouble(firstResource[index - 1].Coordinate_X));
-                double dist2 = (Convert.ToDouble(firstResource[index].Coordinate_Y) - Convert.ToDouble(firstResource[index - 1].Coordinate_Y));
-                dist = Math.Sqrt(dist1 * dist1 + dist2 * dist2);
-            }
-            else if (method == 1)
-            {
-                double dist1 = (Convert.ToDouble(firstResource[index].Coordinate_X) - Convert.ToDouble(secondResource[index].Coordinate_X));
-                double dist2 = (Convert.ToDouble(firstResource[index].Coordinate_Y) - Convert.ToDouble(secondResource[index].Coordinate_Y));
-                dist = Math.Sqrt(dist1 * dist1 + dist2 * dist2);
-            }
+            double dist1 = (Convert.ToDouble(firstResource[index].Coordinate_X) - Convert.ToDouble(firstResource[index - 1].Coordinate_X));
+            double dist2 = (Convert.ToDouble(firstResource[index].Coordinate_Y) - Convert.ToDouble(firstResource[index - 1].Coordinate_Y));
+            dist = Math.Sqrt(dist1 * dist1 + dist2 * dist2);
 
             return dist;
         }
@@ -177,7 +182,7 @@ namespace LabManager
                     if (position_RTLS[i].Coordinate_X != "" && position_RTLS[i - 1].Coordinate_X != "")
                     {
                         // distance between RTLS tag's time (i) point and time (i-1) point
-                        double dist = GetDistance(position_RTLS, position_RTLS, 0, i);
+                        double dist = GetDistance(position_RTLS, i);
 
                         // outlier criteria = ? 
                         if (dist > 3.0)
@@ -208,7 +213,7 @@ namespace LabManager
                 if (position_RTLS[i].Coordinate_X != "")
                 {
                     // calculate distance between RTLS tag and AGV
-                    double dist = GetDistance(position_RTLS, position_AGV, 1, i);
+                    double dist = GetDistance(position_RTLS, position_AGV, i);
 
                     // same place criteria = ?
                     if (dist < 2.0) 
