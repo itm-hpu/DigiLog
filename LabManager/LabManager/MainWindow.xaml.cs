@@ -35,6 +35,14 @@ namespace LabManager
             public string Coordinate_Y { get; set; }
         }
 
+        public class TimeForActivity
+        {
+            public string DepartTime { get; set; }
+            public string ArriveTime { get; set; }
+            public string DepartPos { get; set; }
+            public string ArrivePos { get; set; }
+        }
+
 
         string[] tempReuslt_RTLS = new string[3];
         string[] tempReuslt_AGV = new string[3];
@@ -85,37 +93,20 @@ namespace LabManager
             return responseResult;
         }
 
-
         /// <summary>
-        /// Calculate distance between each different objects, "index": Name which is specified as an index variable
+        /// Calculate distance between the first and second point
         /// </summary>
-        /// <param name="firstResource"></param>
-        /// <param name="secondResource"></param>
-        /// <param name="index"></param>
+        /// <param name="firstPoint_X"></param>
+        /// <param name="firstPoint_Y"></param>
+        /// <param name="secondPoint_X"></param>
+        /// <param name="secondPoint_Y"></param>
         /// <returns></returns>
-        private double GetDistance(List<PositionData> firstResource, List<PositionData> secondResource, int index) // for calculating safe distance between two objects
-        {
-            double dist = 0.0;
-            
-            double dist1 = (Convert.ToDouble(firstResource[index].Coordinate_X) - Convert.ToDouble(secondResource[index].Coordinate_X));
-            double dist2 = (Convert.ToDouble(firstResource[index].Coordinate_Y) - Convert.ToDouble(secondResource[index].Coordinate_Y));
-            dist = Math.Sqrt(dist1 * dist1 + dist2 * dist2);
-            
-            return dist;
-        }
-
-        /// <summary>
-        /// Calculate distance between current and one second ago position of the same objects, "index": Name which is specified as an index variable
-        /// </summary>
-        /// <param name="firstResource"></param>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        private double GetDistance(List<PositionData> firstResource, int index) // for checking outlier and calculating movement distance
+        private double GetDistance(string firstPoint_X, string firstPoint_Y, string secondPoint_X, string secondPoint_Y) 
         {
             double dist = 0.0;
 
-            double dist1 = (Convert.ToDouble(firstResource[index].Coordinate_X) - Convert.ToDouble(firstResource[index - 1].Coordinate_X));
-            double dist2 = (Convert.ToDouble(firstResource[index].Coordinate_Y) - Convert.ToDouble(firstResource[index - 1].Coordinate_Y));
+            double dist1 = (Convert.ToDouble(firstPoint_X) - Convert.ToDouble(secondPoint_X));
+            double dist2 = (Convert.ToDouble(firstPoint_Y) - Convert.ToDouble(secondPoint_Y));
             dist = Math.Sqrt(dist1 * dist1 + dist2 * dist2);
 
             return dist;
@@ -147,7 +138,8 @@ namespace LabManager
 
             for (int i = 0; i < iterNum; i++)
             {
-                string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.ff");
+                // https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
+                string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ff");
 
                 // Get coordinates of HDW tag on AGV
                 var rtlsTask = Task.Run(() => RequestServer_RTLS(rtlsURI, userName, password));
@@ -159,7 +151,7 @@ namespace LabManager
 
                 // match RTLS point coordinatesand AGV point coordinates towards canvas coordinates system
                 var subResult_RTLS = new PositionData();
-                subResult_RTLS.TimeStamp = tempReuslt_RTLS[2];
+                subResult_RTLS.TimeStamp = tempReuslt_RTLS[2]; // RTLS Server timestamp
                 if (tempReuslt_RTLS[1] == "") subResult_RTLS.Coordinate_X = string.Empty;
                 else subResult_RTLS.Coordinate_X = (-Convert.ToDouble(tempReuslt_RTLS[1]) * (-0.01116546) + 7.824105).ToString(); // X
                 if (tempReuslt_RTLS[2] == "") subResult_RTLS.Coordinate_Y = string.Empty;
@@ -170,7 +162,7 @@ namespace LabManager
                 subResult_AGV.Coordinate_X = tempReuslt_AGV[1];
                 subResult_AGV.Coordinate_Y = tempReuslt_AGV[2];
 
-
+                
                 // store PositionData of RTLS tag and AGV into list
                 position_RTLS.Add(subResult_RTLS);
                 position_AGV.Add(subResult_AGV);
@@ -182,7 +174,7 @@ namespace LabManager
                     if (position_RTLS[i].Coordinate_X != "" && position_RTLS[i - 1].Coordinate_X != "")
                     {
                         // distance between RTLS tag's time (i) point and time (i-1) point
-                        double dist = GetDistance(position_RTLS, i);
+                        double dist = GetDistance(position_RTLS[i].Coordinate_X, position_RTLS[i].Coordinate_Y, position_RTLS[i - 1].Coordinate_X, position_RTLS[i - 1].Coordinate_Y);
 
                         // outlier criteria = ? 
                         if (dist > 3.0)
@@ -208,12 +200,12 @@ namespace LabManager
                 txtResponse.ScrollToEnd();
                 
 
-                
+                /*
                 // calculate distance between RTLS tag and AGV for judging same place or redZone
                 if (position_RTLS[i].Coordinate_X != "")
                 {
                     // calculate distance between RTLS tag and AGV
-                    double dist = GetDistance(position_RTLS, position_AGV, i);
+                    double dist = GetDistance(position_RTLS[i].Coordinate_X, position_RTLS[i].Coordinate_Y, position_AGV[i].Coordinate_X, position_AGV[i].Coordinate_Y);
 
                     // same place criteria = ?
                     if (dist < 2.0) 
@@ -221,7 +213,7 @@ namespace LabManager
 
                     }
                 }
-                
+                */
                 
                 
                 // Show where the RTLS tag has been
@@ -293,7 +285,7 @@ namespace LabManager
         }
 
         /// <summary>
-        /// Write position data into txt file, "positionDatas": object name to store, "system": { 0: RTLS, 1: AGV }
+        /// Write position data into txt file, "positionDatas": object name to store, "system": select system where position data from { 0: RTLS, 1: AGV }
         /// </summary>
         /// <param name="positionDatas"></param>
         /// <param name="system"></param>
@@ -303,7 +295,7 @@ namespace LabManager
 
             if (system == 0)
             {
-                filedir = filedir + @"\PositionData_RTLS_" + System.DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
+                filedir = filedir + @"\PositionData_RTLS_" + System.DateTime.Now.ToString("yyyy-MM-dd") + ".txt"; // csv
             }
             else if (system == 1)
             {
