@@ -7,6 +7,7 @@ using System.Net;
 using System.IO;
 
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace LabManager
 {
@@ -51,7 +52,7 @@ namespace LabManager
             {
                 response = (HttpWebResponse)request.GetResponse();
 
-                //Proecess the resppnse stream... (could be JSON, XML or HTML etc..._
+                //Proecess the resppnse stream... (could be JSON, XML or HTML etc...)
                 using (Stream responseStream = response.GetResponseStream())
                 {
                     if (responseStream != null)
@@ -128,7 +129,7 @@ namespace LabManager
 
                 var statuscode = response.StatusCode;
 
-                //Proecess the resppnse stream... (could be JSON, XML or HTML etc..._
+                //Proecess the resppnse stream... (could be JSON, XML or HTML etc...)
                 using (Stream responseStream = response.GetResponseStream())
                 {
                     if (responseStream != null)
@@ -181,6 +182,76 @@ namespace LabManager
             returnValue[1] = Yvalue;
             returnValue[2] = TimeStamp;
             
+            return returnValue;
+        }
+
+
+        /// <summary>
+        /// Get TAG IDs in RTLS system
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetIDs()
+        {
+            string strResponseValue = string.Empty;
+            string result = string.Empty;
+            string[] tempResult = new string[3];
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(rtlsAddress);
+
+            request.Accept = "application/json";
+            request.Headers.Add("X-Authenticate-User", userName);
+            request.Headers.Add("X-Authenticate-Password", userPassword);
+            request.Method = httpMethod.ToString();
+
+            HttpWebResponse response = null;
+
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+
+                var statuscode = response.StatusCode;
+
+                //Proecess the resppnse stream... (could be JSON, XML or HTML etc...)
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    if (responseStream != null)
+                    {
+                        using (StreamReader reader = new StreamReader(responseStream))
+                        {
+                            strResponseValue = reader.ReadToEnd();
+
+                            tempResult = ReadRTLSTAGJson(strResponseValue, "RootObject");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                strResponseValue = "{\"errorMessages\":[\"" + ex.Message.ToString() + "\"],\"errors\":{}}";
+            }
+            finally
+            {
+                if (response != null)
+                {
+                    ((IDisposable)response).Dispose();
+                }
+            }
+
+            //return result;
+            return tempResult;
+        }
+
+        public string[] ReadRTLSTAGJson(string jsonStr, string keyNameParent)
+        {
+            var jarray = JsonConvert.DeserializeObject<JArray>(jsonStr);
+
+            string[] returnValue = new string[jarray.Count()];
+
+            for (int i = 0; i < jarray.Count(); i++)
+            {
+                returnValue[i] = jarray[i].ToString();
+            }
+
             return returnValue;
         }
     }

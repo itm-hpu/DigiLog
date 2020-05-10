@@ -53,6 +53,8 @@ namespace LabManager
 
         List<PositionData> position_RTLS = new List<PositionData>();
         List<PositionData> position_AGV = new List<PositionData>();
+
+        string result_IDs = "";
         
 
         public MainWindow()
@@ -92,6 +94,7 @@ namespace LabManager
 
             return responseResult;
         }
+
 
         /// <summary>
         /// Calculate distance between the first and second point
@@ -316,6 +319,27 @@ namespace LabManager
 
             return;
         }
-        
+
+        private void BtnGetID_Click(object sender, RoutedEventArgs e)
+        {
+            string rtlsURI = "https://p186-geps-production-api.hd-rtls.com/objects";
+            string userName = "KTH";
+            string password = "!Test4KTH";
+
+            RESTClinet rClient = new RESTClinet();
+
+            rClient.rtlsAddress = rtlsURI;
+            rClient.userName = userName;
+            rClient.userPassword = password;
+
+            string[] responseResult = rClient.GetIDs();
+
+            for (int i = 0; i < responseResult.Count(); i++)
+            {
+                result_IDs = result_IDs + responseResult[i] + ", "; 
+            }
+
+            txtTAGIDs.Text = "{ " + result_IDs + " }";
+        }
     }
 }
