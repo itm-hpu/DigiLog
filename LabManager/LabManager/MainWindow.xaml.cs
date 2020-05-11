@@ -28,7 +28,15 @@ namespace LabManager
     public partial class MainWindow : Window
     {
 
-        public class PositionData
+        public class PositionDataRTLS
+        {
+            public string TimeStamp { get; set; }
+            public string Coordinate_X { get; set; }
+            public string Coordinate_Y { get; set; }
+            public string objectID { get; set; }
+        }
+
+        public class PositionDataAGV
         {
             public string TimeStamp { get; set; }
             public string Coordinate_X { get; set; }
@@ -42,21 +50,17 @@ namespace LabManager
             public string DepartPos { get; set; }
             public string ArrivePos { get; set; }
         }
-
-
+        
         string[] tempReuslt_RTLS = new string[3];
         string[] tempReuslt_AGV = new string[3];
         string[] subResult_RTLS = new string[3];
         string[] subResult_AGV = new string[3];
-        string result_RTLS = "";
-        string result_AGV = "";
 
-        List<PositionData> position_RTLS = new List<PositionData>();
-        List<PositionData> position_AGV = new List<PositionData>();
+        List<List<PositionDataRTLS>> position_RTLS = new List<List<PositionDataRTLS>>();
+        List<PositionDataAGV> position_AGV = new List<PositionDataAGV>();
 
         string result_IDs = "";
         
-
         public MainWindow()
         {
             InitializeComponent();
@@ -77,16 +81,16 @@ namespace LabManager
         }
         
 
-        private string[] RequestServer_RTLS(string rtlsURI, string username, string password)
+        private string[] RequestServer_RTLS(string rtlsURI, string username, string password, string objectID)
         {
-            string[] responseResult = new string[3];
+            string[] responseResult = new string[4];
 
             RESTClinet rClient = new RESTClinet();
 
             //rClient.endPoint = txtURI.Text;
             //rClient.userName = txtUserName.Text;
             //rClient.userPassword = txtPassword.Text;
-            rClient.rtlsAddress = rtlsURI; // max_age criteria ?
+            rClient.rtlsAddress = rtlsURI; 
             rClient.userName = username;
             rClient.userPassword = password;
 
@@ -118,13 +122,22 @@ namespace LabManager
 
         private void ButtonCheck_Click(object sender, RoutedEventArgs e)
         {
+            string objectIDs = txtTAGIDs.Text;
+            string[] objectIDsArray = objectIDs.Split(new char[] { '\n' });
+            Array.Resize(ref objectIDsArray, objectIDsArray.Length - 1);
+
             string agvAddress = "http://130.237.2.106/api/v2.0.0/status";
-            string rtlsAddress = "https://p186-geps-production-api.hd-rtls.com/objects/00000011/pos?max_age=" + txtCheckSeconds.Text; // max_age criteria ?
+            txtAGVuri.Text = agvAddress;
+
+            string[] rtlsAddressArray = new string[objectIDsArray.Length];
+            for (int i = 0; i < objectIDsArray.Length; i++)
+            {
+                rtlsAddressArray[i] = "https://p186-geps-production-api.hd-rtls.com/objects/" + objectIDsArray[i] + "/pos?max_age=" + txtCheckSeconds.Text;
+                txtRTLSuri.Text = txtRTLSuri.Text + rtlsAddressArray[i] + '\n';
+            }
+
             string userName = "KTH";
             string password = "!Test4KTH";
-
-            txtAGVuri.Text = agvAddress;
-            txtRTLSuri.Text = rtlsAddress;
             txtUserName.Text = userName;
             txtPassword.Text = password;
         }
@@ -133,9 +146,18 @@ namespace LabManager
         private async void ButtonGo_Click(object sender, RoutedEventArgs e)
         {
             string agvURI = txtAGVuri.Text;
+
+            string objectIDs = txtTAGIDs.Text;
+            string[] objectIDsArray = objectIDs.Split(new char[] { '\n' });
+            Array.Resize(ref objectIDsArray, objectIDsArray.Length - 1);
+
             string rtlsURI = txtRTLSuri.Text;
+            string[] rtlsURIArray = rtlsURI.Split(new char[] { '\n' });
+            Array.Resize(ref rtlsURIArray, rtlsURIArray.Length - 1);
+
             string userName = txtUserName.Text;
             string password = txtPassword.Text;
+             
             int iterNum = Convert.ToInt32(txtIterationNum.Text); // iteration number
             double intervalTime = Convert.ToDouble(txtIntervalTime.Text); // interval time
 
@@ -144,33 +166,47 @@ namespace LabManager
                 // https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
                 string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ff");
 
-                // Get coordinates of HDW tag on AGV
-                var rtlsTask = Task.Run(() => RequestServer_RTLS(rtlsURI, userName, password));
-                tempReuslt_RTLS = await rtlsTask;
+                // Get coordinates of HDW tags
+                List<string[]> tempReuslt_RTLS_list = new List<string[]>();
+                for (int j = 0; j < rtlsURIArray.Length; j++)
+                {
+                    var rtlsTask = Task.Run(() => RequestServer_RTLS(rtlsURIArray[j], userName, password, objectIDsArray[j]));
+                    tempReuslt_RTLS_list.Add(await rtlsTask);
+                }
 
                 // Get coordinates of AGV
                 var agvTask = Task.Run(() => RequestServer_AGV(agvURI));
                 tempReuslt_AGV = await agvTask;
 
                 // match RTLS point coordinatesand AGV point coordinates towards canvas coordinates system
-                var subResult_RTLS = new PositionData();
-                subResult_RTLS.TimeStamp = tempReuslt_RTLS[2]; // RTLS Server timestamp
-                if (tempReuslt_RTLS[1] == "") subResult_RTLS.Coordinate_X = string.Empty;
-                else subResult_RTLS.Coordinate_X = (-Convert.ToDouble(tempReuslt_RTLS[1]) * (-0.01116546) + 7.824105).ToString(); // X
-                if (tempReuslt_RTLS[2] == "") subResult_RTLS.Coordinate_Y = string.Empty;
-                else subResult_RTLS.Coordinate_Y = (Convert.ToDouble(tempReuslt_RTLS[0]) * (-0.01116546) + 18.16041).ToString(); // Y
+                List<PositionDataRTLS> subResult_RTLS_list = new List<PositionDataRTLS>();
+                
+                for (int j = 0; j < tempReuslt_RTLS_list.Count(); j++)
+                {
+                    subResult_RTLS_list.Add(new PositionDataRTLS());
 
-                var subResult_AGV = new PositionData();
+                    subResult_RTLS_list[j].TimeStamp = tempReuslt_RTLS_list[j][2];
+
+                    if (tempReuslt_RTLS_list[j][1] == "") subResult_RTLS_list[j].Coordinate_X = string.Empty;
+                    else subResult_RTLS_list[j].Coordinate_X = (-Convert.ToDouble(tempReuslt_RTLS_list[j][1]) * (-0.01116546) + 7.824105).ToString(); // X
+
+                    if (tempReuslt_RTLS_list[j][2] == "") subResult_RTLS_list[j].Coordinate_Y = string.Empty;
+                    else subResult_RTLS_list[j].Coordinate_Y = (Convert.ToDouble(tempReuslt_RTLS_list[j][0]) * (-0.01116546) + 18.16041).ToString(); // Y
+
+                    subResult_RTLS_list[j].objectID = tempReuslt_RTLS_list[j][3]; // TAG ID
+                }
+ 
+                var subResult_AGV = new PositionDataAGV();
                 subResult_AGV.TimeStamp = timeStamp; // AGV timestamp means program time (there is no AGV's own timestamp)
                 subResult_AGV.Coordinate_X = tempReuslt_AGV[1];
                 subResult_AGV.Coordinate_Y = tempReuslt_AGV[2];
 
                 
                 // store PositionData of RTLS tag and AGV into list
-                position_RTLS.Add(subResult_RTLS);
+                position_RTLS.Add(subResult_RTLS_list);
                 position_AGV.Add(subResult_AGV);
-                
 
+                /*
                 // check whether RTLS tag point is outlier or not
                 if (position_RTLS.Count > 1)
                 {
@@ -187,21 +223,25 @@ namespace LabManager
                         }
                     }
                 }
-                
+                */
 
                 // show coordinates of RTLS tag and AGV
-                if (position_RTLS[i].Coordinate_X != "")
+                string result_RTLS = "";
+                string result_AGV = "";
+                for (int j = 0; j < position_RTLS[i].Count(); j++)
                 {
-                    result_RTLS = "Coordinates of RTLS tag {Time: " + position_RTLS[i].TimeStamp + ", X: " + position_RTLS[i].Coordinate_X + ", Y: " + position_RTLS[i].Coordinate_Y + "}";
+                    if (position_RTLS[i][j].Coordinate_X != "")
+                    {
+                        result_RTLS = result_RTLS + "Coordinates of RTLS tag {Time: " + position_RTLS[i][j].TimeStamp + ", X: " + position_RTLS[i][j].Coordinate_X + ", Y: " + position_RTLS[i][j].Coordinate_Y + ", objectID: " + position_RTLS[i][j].objectID + "}" + "\r\n";
+                    }
+                    else
+                    {
+                        result_RTLS = result_RTLS + "Coordinates of RTLS tag {Time: " + position_RTLS[i][j].TimeStamp + ", X: ---, Y: ---, objectID: " + position_RTLS[i][j].objectID + " }" + "\r\n";
+                    }
+                    result_AGV = "Coordinates of MirAGV {Time: " + position_AGV[i].TimeStamp + ", X: " + position_AGV[i].Coordinate_X + ", Y: " + position_AGV[i].Coordinate_Y + "}";
                 }
-                else
-                {
-                    result_RTLS = "Coordinates of RTLS tag {Time: " + position_RTLS[i].TimeStamp + ", X: ---, Y: --- }";
-                }
-                result_AGV = "Coordinates of MirAGV {Time: " + position_AGV[i].TimeStamp + ", X: " + position_AGV[i].Coordinate_X + ", Y: " + position_AGV[i].Coordinate_Y + "}";
-                txtResponse.Text = txtResponse.Text + (i + 1).ToString() + ", " + timeStamp + "\r\n" + result_RTLS + "\r\n" + result_AGV + "\r\n";
+                txtResponse.Text = txtResponse.Text + (i + 1).ToString() + ", " + timeStamp + "\r\n" + result_RTLS + result_AGV + "\r\n";
                 txtResponse.ScrollToEnd();
-                
 
                 /*
                 // calculate distance between RTLS tag and AGV for judging same place or redZone
@@ -217,27 +257,38 @@ namespace LabManager
                     }
                 }
                 */
-                
-                
+
+                /*
                 // Show where the RTLS tag has been
                 int dotSizeRTLS = 5;
                 Ellipse currentDotRTLS = new Ellipse();
                 Color colorRTLS = new Color();
                 double tempProgressRTLS = (double)i / (double)intervalTime;
                 colorRTLS = Colors.Red;
+                
                 currentDotRTLS.Stroke = new SolidColorBrush(colorRTLS);
                 currentDotRTLS.StrokeThickness = 3;
                 Canvas.SetZIndex(currentDotRTLS, 3);
                 currentDotRTLS.Height = dotSizeRTLS;
                 currentDotRTLS.Width = dotSizeRTLS;
                 currentDotRTLS.Fill = new SolidColorBrush(colorRTLS);
-
-                if (position_RTLS[i].Coordinate_X != "")
+                
+                for (int j = 0; j < position_RTLS.Count(); j++)
                 {
-                    currentDotRTLS.Margin = new Thickness(Convert.ToDouble(position_RTLS[i].Coordinate_X) * 15.0, Convert.ToDouble(position_RTLS[i].Coordinate_Y) * 15.0, 0, 0); // Set the position
-                    myCanvas.Children.Add(currentDotRTLS);
-                }
+                    currentDotRTLS.Stroke = new SolidColorBrush(colorRTLS);
+                    currentDotRTLS.StrokeThickness = 3;
+                    Canvas.SetZIndex(currentDotRTLS, 3);
+                    currentDotRTLS.Height = dotSizeRTLS;
+                    currentDotRTLS.Width = dotSizeRTLS;
+                    currentDotRTLS.Fill = new SolidColorBrush(colorRTLS);
 
+                    if (position_RTLS[i][j].Coordinate_X != "")
+                    {
+                        currentDotRTLS.Margin = new Thickness(Convert.ToDouble(position_RTLS[i][j].Coordinate_X) * 15.0, Convert.ToDouble(position_RTLS[i][j].Coordinate_Y) * 15.0, 0, 0); // Set the position
+                        myCanvas.Children.Add(currentDotRTLS);
+                    }
+                }
+                
 
                 // Show where the MiRAGV has been
                 int dotSizeAGV = 3;
@@ -253,14 +304,13 @@ namespace LabManager
                 currentDotAGV.Fill = new SolidColorBrush(colorAGV);
                 currentDotAGV.Margin = new Thickness(Convert.ToDouble(position_AGV[i].Coordinate_X) * 15.0, Convert.ToDouble(position_AGV[i].Coordinate_Y) * 15.0, 0, 0); // Set the position
                 myCanvas.Children.Add(currentDotAGV);
-                
-                
+                */
+
                 await Task.Delay(TimeSpan.FromMilliseconds(intervalTime * 1000));
-                
             }
 
-            WriteCSVfile(position_RTLS, 0);
-            WriteCSVfile(position_AGV, 1);
+            WriteCSVfile(position_RTLS);
+            WriteCSVfile(position_AGV);
         }
 
 
@@ -292,24 +342,42 @@ namespace LabManager
         /// </summary>
         /// <param name="positionDatas"></param>
         /// <param name="system"></param>
-        public void WriteCSVfile(List<PositionData> positionDatas, int system)
+        public void WriteCSVfile(List<List<PositionDataRTLS>> positionDatas)
         {
             string filedir = Directory.GetCurrentDirectory();
 
-            if (system == 0)
-            {
-                filedir = filedir + @"\PositionData_RTLS_" + System.DateTime.Now.ToString("yyyy-MM-dd") + ".txt"; // csv
-            }
-            else if (system == 1)
-            {
-                filedir = filedir + @"\PositionData_AGV_" + System.DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
-            }
+            filedir = filedir + @"\PositionData_RTLS_" + System.DateTime.Now.ToString("yyyy-MM-dd") + ".csv";
 
             StreamWriter file = new StreamWriter(filedir);
 
-            int inputLength = positionDatas.Count();
+            int iLength = positionDatas.Count();
+            int jLength = positionDatas[0].Count();
 
-            for (int i = 0; i < inputLength; i++)
+            for (int i = 0; i < iLength; i++)
+            {
+                for (int j = 0; j < jLength; j++)
+                {
+                    file.Write(positionDatas[i][j].objectID + ", " + positionDatas[i][j].TimeStamp + ", " + positionDatas[i][j].Coordinate_X + ", " + positionDatas[i][j].Coordinate_Y);
+                    file.Write("\n");
+                }
+            }
+
+            file.Close();
+
+            return;
+        }
+
+        public void WriteCSVfile(List<PositionDataAGV> positionDatas)
+        {
+            string filedir = Directory.GetCurrentDirectory();
+
+            filedir = filedir + @"\PositionData_AGV_" + System.DateTime.Now.ToString("yyyy-MM-dd") + ".csv";
+
+            StreamWriter file = new StreamWriter(filedir);
+
+            int iLength = positionDatas.Count();
+
+            for (int i = 0; i < iLength; i++)
             {
                 file.Write(positionDatas[i].TimeStamp + ", " + positionDatas[i].Coordinate_X + ", " + positionDatas[i].Coordinate_Y);
                 file.Write("\n");
@@ -336,10 +404,10 @@ namespace LabManager
 
             for (int i = 0; i < responseResult.Count(); i++)
             {
-                result_IDs = result_IDs + responseResult[i] + ", "; 
+                result_IDs = result_IDs + responseResult[i] + "\n"; 
             }
 
-            txtTAGIDs.Text = "{ " + result_IDs + " }";
+            txtTAGIDs.Text = result_IDs;
         }
     }
 }

@@ -112,7 +112,7 @@ namespace LabManager
         {
             string strResponseValue = string.Empty;
             string result = string.Empty;
-            string[] tempResult = new string[3];
+            string[] tempResult = new string[4];
             
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(rtlsAddress);
 
@@ -145,10 +145,12 @@ namespace LabManager
            }
             catch (Exception ex)
             {
-                //strResponseValue = "{\"errorMessages\":[\"" + ex.Message.ToString() + "\"],\"errors\":{}}";
+                strResponseValue = "{\"errorMessages\":[\"" + ex.Message.ToString() + "\"],\"errors\":{}}";
                 tempResult[0] = string.Empty;
                 tempResult[1] = string.Empty;
                 tempResult[2] = string.Empty;
+                string[] splitAddress = this.rtlsAddress.Split(new char[] { '/' });
+                tempResult[3] = splitAddress[4];
             }
             finally
             {
@@ -171,16 +173,19 @@ namespace LabManager
             string Xvalue = "";
             string Yvalue = "";
             string TimeStamp = "";
+            string ObjectID = "";
 
-            string[] returnValue = new string[3];
+            string[] returnValue = new string[4];
 
+            ObjectID = (string)json.SelectToken("Object");
             Xvalue = (string)json.SelectToken("X");
             Yvalue = (string)json.SelectToken("Y");
-            TimeStamp = (string)json.SelectToken("Timestamp"); 
+            TimeStamp = (string)json.SelectToken("Timestamp");
 
             returnValue[0] = Xvalue;
             returnValue[1] = Yvalue;
             returnValue[2] = TimeStamp;
+            returnValue[3] = ObjectID;
             
             return returnValue;
         }
