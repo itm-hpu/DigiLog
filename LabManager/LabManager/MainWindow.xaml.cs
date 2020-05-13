@@ -258,23 +258,15 @@ namespace LabManager
                 }
                 */
 
-                /*
+                
                 // Show where the RTLS tag has been
-                int dotSizeRTLS = 5;
-                Ellipse currentDotRTLS = new Ellipse();
-                Color colorRTLS = new Color();
-                double tempProgressRTLS = (double)i / (double)intervalTime;
-                colorRTLS = Colors.Red;
-                
-                currentDotRTLS.Stroke = new SolidColorBrush(colorRTLS);
-                currentDotRTLS.StrokeThickness = 3;
-                Canvas.SetZIndex(currentDotRTLS, 3);
-                currentDotRTLS.Height = dotSizeRTLS;
-                currentDotRTLS.Width = dotSizeRTLS;
-                currentDotRTLS.Fill = new SolidColorBrush(colorRTLS);
-                
-                for (int j = 0; j < position_RTLS.Count(); j++)
+                for (int j = 0; j < position_RTLS[i].Count(); j++)
                 {
+                    int dotSizeRTLS = 5;
+                    Ellipse currentDotRTLS = new Ellipse();
+                    Color colorRTLS = new Color();
+                    double tempProgressRTLS = (double)i / (double)intervalTime;
+                    colorRTLS = Colors.Red;
                     currentDotRTLS.Stroke = new SolidColorBrush(colorRTLS);
                     currentDotRTLS.StrokeThickness = 3;
                     Canvas.SetZIndex(currentDotRTLS, 3);
@@ -304,7 +296,7 @@ namespace LabManager
                 currentDotAGV.Fill = new SolidColorBrush(colorAGV);
                 currentDotAGV.Margin = new Thickness(Convert.ToDouble(position_AGV[i].Coordinate_X) * 15.0, Convert.ToDouble(position_AGV[i].Coordinate_Y) * 15.0, 0, 0); // Set the position
                 myCanvas.Children.Add(currentDotAGV);
-                */
+                
 
                 await Task.Delay(TimeSpan.FromMilliseconds(intervalTime * 1000));
             }
