@@ -108,7 +108,7 @@ namespace LabManager
         /// <param name="secondPoint_X"></param>
         /// <param name="secondPoint_Y"></param>
         /// <returns></returns>
-        private double GetDistance(string firstPoint_X, string firstPoint_Y, string secondPoint_X, string secondPoint_Y) 
+        private double GetDistance(string firstPoint_X, string firstPoint_Y, string secondPoint_X, string secondPoint_Y) // string
         {
             double dist = 0.0;
 
@@ -126,7 +126,7 @@ namespace LabManager
             string[] objectIDsArray = objectIDs.Split(new char[] { '\n' });
             Array.Resize(ref objectIDsArray, objectIDsArray.Length - 1);
 
-            string agvAddress = "http://130.237.2.106/api/v2.0.0/status";
+            string agvAddress = "http://130.237.5.89/api/v2.0.0/status";
             txtAGVuri.Text = agvAddress;
 
             string[] rtlsAddressArray = new string[objectIDsArray.Length];
@@ -160,6 +160,19 @@ namespace LabManager
              
             int iterNum = Convert.ToInt32(txtIterationNum.Text); // iteration number
             double intervalTime = Convert.ToDouble(txtIntervalTime.Text); // interval time
+
+            int dotsizeOrigin = 7;
+            Ellipse dotOrigin = new Ellipse();
+            Color colorOrigin = new Color();
+            colorOrigin = Colors.Black;
+            dotOrigin.Stroke = new SolidColorBrush(colorOrigin);
+            dotOrigin.StrokeThickness = 3;
+            Canvas.SetZIndex(dotOrigin, 3);
+            dotOrigin.Height = dotsizeOrigin;
+            dotOrigin.Width = dotsizeOrigin;
+            dotOrigin.Fill = new SolidColorBrush(colorOrigin);
+            dotOrigin.Margin = new Thickness(0, 0, 0, 0); 
+            myCanvas.Children.Add(dotOrigin);
 
             for (int i = 0; i < iterNum; i++)
             {
@@ -329,17 +342,14 @@ namespace LabManager
             }
         }
 
-        /// <summary>
-        /// Write position data into txt file, "positionDatas": object name to store, "system": select system where position data from { 0: RTLS, 1: AGV }
-        /// </summary>
-        /// <param name="positionDatas"></param>
-        /// <param name="system"></param>
         public void WriteCSVfile(List<List<PositionDataRTLS>> positionDatas)
         {
             string filedir = Directory.GetCurrentDirectory();
 
-            filedir = filedir + @"\PositionData_RTLS_" + System.DateTime.Now.ToString("yyyy-MM-dd") + ".csv";
+            string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
 
+            filedir = filedir + @"\PositionData_RTLS_" + timeStamp + ".csv";
+            
             StreamWriter file = new StreamWriter(filedir);
 
             int iLength = positionDatas.Count();
@@ -363,7 +373,9 @@ namespace LabManager
         {
             string filedir = Directory.GetCurrentDirectory();
 
-            filedir = filedir + @"\PositionData_AGV_" + System.DateTime.Now.ToString("yyyy-MM-dd") + ".csv";
+            string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
+
+            filedir = filedir + @"\PositionData_AGV_" + timeStamp + ".csv";
 
             StreamWriter file = new StreamWriter(filedir);
 
