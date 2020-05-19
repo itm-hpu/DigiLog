@@ -30,17 +30,17 @@ namespace LabManager
 
         public class PositionDataRTLS
         {
-            public string TimeStamp { get; set; }
-            public string Coordinate_X { get; set; }
-            public string Coordinate_Y { get; set; }
+            public DateTime? TimeStamp { get; set; }
+            public double Coordinate_X { get; set; }
+            public double Coordinate_Y { get; set; }
             public string objectID { get; set; }
         }
 
         public class PositionDataAGV
         {
-            public string TimeStamp { get; set; }
-            public string Coordinate_X { get; set; }
-            public string Coordinate_Y { get; set; }
+            public DateTime TimeStamp { get; set; }
+            public double Coordinate_X { get; set; }
+            public double Coordinate_Y { get; set; }
         }
 
         public class TimeForActivity
@@ -54,7 +54,7 @@ namespace LabManager
         string[] tempReuslt_RTLS = new string[3];
         string[] tempReuslt_AGV = new string[3];
         string[] subResult_RTLS = new string[3];
-        string[] subResult_AGV = new string[3];
+        //string[] subResult_AGV = new string[3];
 
         List<List<PositionDataRTLS>> position_RTLS = new List<List<PositionDataRTLS>>();
         List<PositionDataAGV> position_AGV = new List<PositionDataAGV>();
@@ -187,9 +187,11 @@ namespace LabManager
                     tempReuslt_RTLS_list.Add(await rtlsTask);
                 }
 
+                /*
                 // Get coordinates of AGV
                 var agvTask = Task.Run(() => RequestServer_AGV(agvURI));
                 tempReuslt_AGV = await agvTask;
+                */
 
                 // match RTLS point coordinatesand AGV point coordinates towards canvas coordinates system
                 List<PositionDataRTLS> subResult_RTLS_list = new List<PositionDataRTLS>();
@@ -198,26 +200,30 @@ namespace LabManager
                 {
                     subResult_RTLS_list.Add(new PositionDataRTLS());
 
-                    subResult_RTLS_list[j].TimeStamp = tempReuslt_RTLS_list[j][2];
+                    if (tempReuslt_RTLS_list[j][0] == "") subResult_RTLS_list[j].TimeStamp = null;
+                    else subResult_RTLS_list[j].TimeStamp = Convert.ToDateTime(tempReuslt_RTLS_list[j][2]);
 
-                    if (tempReuslt_RTLS_list[j][1] == "") subResult_RTLS_list[j].Coordinate_X = string.Empty;
-                    else subResult_RTLS_list[j].Coordinate_X = (-Convert.ToDouble(tempReuslt_RTLS_list[j][1]) * (-0.01116546) + 7.824105).ToString(); // X
+                    if (tempReuslt_RTLS_list[j][1] == "") subResult_RTLS_list[j].Coordinate_X = double.NaN;
+                    else subResult_RTLS_list[j].Coordinate_X = (-Convert.ToDouble(tempReuslt_RTLS_list[j][1])); // X
+                    //else subResult_RTLS_list[j].Coordinate_X = (-Convert.ToDouble(tempReuslt_RTLS_list[j][1]) * (-0.01116546) + 7.824105); // X
 
-                    if (tempReuslt_RTLS_list[j][2] == "") subResult_RTLS_list[j].Coordinate_Y = string.Empty;
-                    else subResult_RTLS_list[j].Coordinate_Y = (Convert.ToDouble(tempReuslt_RTLS_list[j][0]) * (-0.01116546) + 18.16041).ToString(); // Y
+                    if (tempReuslt_RTLS_list[j][2] == "") subResult_RTLS_list[j].Coordinate_Y = double.NaN;
+                    else subResult_RTLS_list[j].Coordinate_Y = (Convert.ToDouble(tempReuslt_RTLS_list[j][0])); // Y
+                    //else subResult_RTLS_list[j].Coordinate_Y = (Convert.ToDouble(tempReuslt_RTLS_list[j][0]) * (-0.01116546) + 18.16041); // Y
 
                     subResult_RTLS_list[j].objectID = tempReuslt_RTLS_list[j][3]; // TAG ID
                 }
- 
-                var subResult_AGV = new PositionDataAGV();
-                subResult_AGV.TimeStamp = timeStamp; // AGV timestamp means program time (there is no AGV's own timestamp)
-                subResult_AGV.Coordinate_X = tempReuslt_AGV[1];
-                subResult_AGV.Coordinate_Y = tempReuslt_AGV[2];
 
+                /*
+                var subResult_AGV = new PositionDataAGV();
+                subResult_AGV.TimeStamp = Convert.ToDateTime(timeStamp); // AGV timestamp means program time (there is no AGV's own timestamp)
+                subResult_AGV.Coordinate_X = Convert.ToDouble(tempReuslt_AGV[1]);
+                subResult_AGV.Coordinate_Y = Convert.ToDouble(tempReuslt_AGV[2]);
+                */
                 
                 // store PositionData of RTLS tag and AGV into list
                 position_RTLS.Add(subResult_RTLS_list);
-                position_AGV.Add(subResult_AGV);
+                //position_AGV.Add(subResult_AGV);
 
                 /*
                 // check whether RTLS tag point is outlier or not
@@ -240,10 +246,10 @@ namespace LabManager
 
                 // show coordinates of RTLS tag and AGV
                 string result_RTLS = "";
-                string result_AGV = "";
+                //string result_AGV = "";
                 for (int j = 0; j < position_RTLS[i].Count(); j++)
                 {
-                    if (position_RTLS[i][j].Coordinate_X != "")
+                    if (position_RTLS[i][j].Coordinate_X != System.Double.NaN)
                     {
                         result_RTLS = result_RTLS + "Coordinates of RTLS tag {Time: " + position_RTLS[i][j].TimeStamp + ", X: " + position_RTLS[i][j].Coordinate_X + ", Y: " + position_RTLS[i][j].Coordinate_Y + ", objectID: " + position_RTLS[i][j].objectID + "}" + "\r\n";
                     }
@@ -251,9 +257,9 @@ namespace LabManager
                     {
                         result_RTLS = result_RTLS + "Coordinates of RTLS tag {Time: " + position_RTLS[i][j].TimeStamp + ", X: ---, Y: ---, objectID: " + position_RTLS[i][j].objectID + " }" + "\r\n";
                     }
-                    result_AGV = "Coordinates of MirAGV {Time: " + position_AGV[i].TimeStamp + ", X: " + position_AGV[i].Coordinate_X + ", Y: " + position_AGV[i].Coordinate_Y + "}";
+                    //result_AGV = "Coordinates of MirAGV {Time: " + position_AGV[i].TimeStamp + ", X: " + position_AGV[i].Coordinate_X + ", Y: " + position_AGV[i].Coordinate_Y + "}";
                 }
-                txtResponse.Text = txtResponse.Text + (i + 1).ToString() + ", " + timeStamp + "\r\n" + result_RTLS + result_AGV + "\r\n";
+                txtResponse.Text = txtResponse.Text + (i + 1).ToString() + ", " + timeStamp + "\r\n" + result_RTLS + "\r\n"; //result_AGV + "\r\n";
                 txtResponse.ScrollToEnd();
 
                 /*
@@ -287,14 +293,18 @@ namespace LabManager
                     currentDotRTLS.Width = dotSizeRTLS;
                     currentDotRTLS.Fill = new SolidColorBrush(colorRTLS);
 
-                    if (position_RTLS[i][j].Coordinate_X != "")
+                    if (Double.IsNaN(position_RTLS[i][j].Coordinate_X))
                     {
-                        currentDotRTLS.Margin = new Thickness(Convert.ToDouble(position_RTLS[i][j].Coordinate_X) * 15.0, Convert.ToDouble(position_RTLS[i][j].Coordinate_Y) * 15.0, 0, 0); // Set the position
+                        continue;
+                    }
+                    else
+                    {
+                        currentDotRTLS.Margin = new Thickness(position_RTLS[i][j].Coordinate_X * 15.0, position_RTLS[i][j].Coordinate_Y * 15.0, 0, 0); // Set the position
                         myCanvas.Children.Add(currentDotRTLS);
                     }
                 }
                 
-
+                /*
                 // Show where the MiRAGV has been
                 int dotSizeAGV = 3;
                 Ellipse currentDotAGV = new Ellipse();
@@ -309,13 +319,13 @@ namespace LabManager
                 currentDotAGV.Fill = new SolidColorBrush(colorAGV);
                 currentDotAGV.Margin = new Thickness(Convert.ToDouble(position_AGV[i].Coordinate_X) * 15.0, Convert.ToDouble(position_AGV[i].Coordinate_Y) * 15.0, 0, 0); // Set the position
                 myCanvas.Children.Add(currentDotAGV);
-                
+                */
 
                 await Task.Delay(TimeSpan.FromMilliseconds(intervalTime * 1000));
             }
 
             WriteCSVfile(position_RTLS);
-            WriteCSVfile(position_AGV);
+            //WriteCSVfile(position_AGV);
         }
 
 
