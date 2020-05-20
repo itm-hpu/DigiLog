@@ -36,28 +36,22 @@ namespace LabManager
             public string objectID { get; set; }
         }
 
+        /*
         public class PositionDataAGV
         {
             public DateTime TimeStamp { get; set; }
             public double Coordinate_X { get; set; }
             public double Coordinate_Y { get; set; }
         }
-
-        public class TimeForActivity
-        {
-            public string DepartTime { get; set; }
-            public string ArriveTime { get; set; }
-            public string DepartPos { get; set; }
-            public string ArrivePos { get; set; }
-        }
+        */
         
         string[] tempReuslt_RTLS = new string[3];
-        string[] tempReuslt_AGV = new string[3];
+        //string[] tempReuslt_AGV = new string[3];
         string[] subResult_RTLS = new string[3];
         //string[] subResult_AGV = new string[3];
 
         List<List<PositionDataRTLS>> position_RTLS = new List<List<PositionDataRTLS>>();
-        List<PositionDataAGV> position_AGV = new List<PositionDataAGV>();
+        //List<PositionDataAGV> position_AGV = new List<PositionDataAGV>();
 
         string result_IDs = "";
         
@@ -87,9 +81,6 @@ namespace LabManager
 
             RESTClinet rClient = new RESTClinet();
 
-            //rClient.endPoint = txtURI.Text;
-            //rClient.userName = txtUserName.Text;
-            //rClient.userPassword = txtPassword.Text;
             rClient.rtlsAddress = rtlsURI; 
             rClient.userName = username;
             rClient.userPassword = password;
@@ -98,27 +89,6 @@ namespace LabManager
 
             return responseResult;
         }
-
-
-        /// <summary>
-        /// Calculate distance between the first and second point
-        /// </summary>
-        /// <param name="firstPoint_X"></param>
-        /// <param name="firstPoint_Y"></param>
-        /// <param name="secondPoint_X"></param>
-        /// <param name="secondPoint_Y"></param>
-        /// <returns></returns>
-        private double GetDistance(string firstPoint_X, string firstPoint_Y, string secondPoint_X, string secondPoint_Y) // string
-        {
-            double dist = 0.0;
-
-            double dist1 = (Convert.ToDouble(firstPoint_X) - Convert.ToDouble(secondPoint_X));
-            double dist2 = (Convert.ToDouble(firstPoint_Y) - Convert.ToDouble(secondPoint_Y));
-            dist = Math.Sqrt(dist1 * dist1 + dist2 * dist2);
-
-            return dist;
-        }
-
 
         private void ButtonCheck_Click(object sender, RoutedEventArgs e)
         {
@@ -161,6 +131,7 @@ namespace LabManager
             int iterNum = Convert.ToInt32(txtIterationNum.Text); // iteration number
             double intervalTime = Convert.ToDouble(txtIntervalTime.Text); // interval time
 
+            // To show origin point on canvas
             int dotsizeOrigin = 7;
             Ellipse dotOrigin = new Ellipse();
             Color colorOrigin = new Color();
@@ -225,24 +196,7 @@ namespace LabManager
                 position_RTLS.Add(subResult_RTLS_list);
                 //position_AGV.Add(subResult_AGV);
 
-                /*
-                // check whether RTLS tag point is outlier or not
-                if (position_RTLS.Count > 1)
-                {
-                    if (position_RTLS[i].Coordinate_X != "" && position_RTLS[i - 1].Coordinate_X != "")
-                    {
-                        // distance between RTLS tag's time (i) point and time (i-1) point
-                        double dist = GetDistance(position_RTLS[i].Coordinate_X, position_RTLS[i].Coordinate_Y, position_RTLS[i - 1].Coordinate_X, position_RTLS[i - 1].Coordinate_Y);
-
-                        // outlier criteria = ? 
-                        if (dist > 3.0)
-                        {
-                            position_RTLS[i].Coordinate_X = position_RTLS[i - 1].Coordinate_X;
-                            position_RTLS[i].Coordinate_Y = position_RTLS[i - 1].Coordinate_Y;
-                        }
-                    }
-                }
-                */
+                
 
                 // show coordinates of RTLS tag and AGV
                 string result_RTLS = "";
@@ -261,21 +215,6 @@ namespace LabManager
                 }
                 txtResponse.Text = txtResponse.Text + (i + 1).ToString() + ", " + timeStamp + "\r\n" + result_RTLS + "\r\n"; //result_AGV + "\r\n";
                 txtResponse.ScrollToEnd();
-
-                /*
-                // calculate distance between RTLS tag and AGV for judging same place or redZone
-                if (position_RTLS[i].Coordinate_X != "")
-                {
-                    // calculate distance between RTLS tag and AGV
-                    double dist = GetDistance(position_RTLS[i].Coordinate_X, position_RTLS[i].Coordinate_Y, position_AGV[i].Coordinate_X, position_AGV[i].Coordinate_Y);
-
-                    // same place criteria = ?
-                    if (dist < 2.0) 
-                    {
-
-                    }
-                }
-                */
 
                 
                 // Show where the RTLS tag has been
@@ -354,39 +293,37 @@ namespace LabManager
 
         public void WriteCSVfile(List<List<PositionDataRTLS>> positionDatas)
         {
-            string filedir = Directory.GetCurrentDirectory();
-
-            string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
-
-            filedir = filedir + @"\PositionData_RTLS_" + timeStamp + ".csv";
-            
-            StreamWriter file = new StreamWriter(filedir);
+            string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
             int iLength = positionDatas.Count();
             int jLength = positionDatas[0].Count();
 
-            for (int i = 0; i < iLength; i++)
+            string[] filedir = new string[jLength];
+            StreamWriter[] file = new StreamWriter[jLength];
+
+            for (int j = 0; j < jLength; j++)
             {
-                for (int j = 0; j < jLength; j++)
+                filedir[j] = Directory.GetCurrentDirectory();
+                filedir[j] = filedir[j] + @"\PositionData_RTLS_" + timeStamp + "_" + positionDatas[0][j].objectID + ".csv";
+                file[j] = new StreamWriter(filedir[j]);
+
+                for (int i = 0; i < iLength; i++)
                 {
-                    file.Write(positionDatas[i][j].objectID + ", " + positionDatas[i][j].TimeStamp + ", " + positionDatas[i][j].Coordinate_X + ", " + positionDatas[i][j].Coordinate_Y);
-                    file.Write("\n");
+                    file[j].Write(positionDatas[i][j].TimeStamp + ", " + positionDatas[i][j].Coordinate_X + ", " + positionDatas[i][j].Coordinate_Y);
+                    file[j].Write("\n");
                 }
+                file[j].Close();
             }
-
-            file.Close();
-
             return;
         }
 
+        /*
         public void WriteCSVfile(List<PositionDataAGV> positionDatas)
         {
             string filedir = Directory.GetCurrentDirectory();
-
             string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
 
             filedir = filedir + @"\PositionData_AGV_" + timeStamp + ".csv";
-
             StreamWriter file = new StreamWriter(filedir);
 
             int iLength = positionDatas.Count();
@@ -396,11 +333,10 @@ namespace LabManager
                 file.Write(positionDatas[i].TimeStamp + ", " + positionDatas[i].Coordinate_X + ", " + positionDatas[i].Coordinate_Y);
                 file.Write("\n");
             }
-
             file.Close();
-
             return;
         }
+        */
 
         private void BtnGetID_Click(object sender, RoutedEventArgs e)
         {
