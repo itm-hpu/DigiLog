@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Net.Http;
-using Newtonsoft.Json.Linq;
-using System.Net;
+using System.Windows.Forms;
 using System.IO;
 
 
@@ -27,7 +18,6 @@ namespace LabManager
     /// </summary>
     public partial class MainWindow : Window
     {
-
         public class PositionDataRTLS
         {
             public DateTime? TimeStamp { get; set; }
@@ -90,6 +80,28 @@ namespace LabManager
             return responseResult;
         }
 
+        private void BtnGetID_Click(object sender, RoutedEventArgs e)
+        {
+            string rtlsURI = "https://p186-geps-production-api.hd-rtls.com/objects";
+            string userName = "KTH";
+            string password = "!Test4KTH";
+
+            RESTClinet rClient = new RESTClinet();
+
+            rClient.rtlsAddress = rtlsURI;
+            rClient.userName = userName;
+            rClient.userPassword = password;
+
+            string[] responseResult = rClient.GetIDs();
+
+            for (int i = 0; i < responseResult.Count(); i++)
+            {
+                result_IDs = result_IDs + responseResult[i] + "\n";
+            }
+
+            txtTAGIDs.Text = result_IDs;
+        }
+
         private void ButtonCheck_Click(object sender, RoutedEventArgs e)
         {
             string objectIDs = txtTAGIDs.Text;
@@ -113,7 +125,7 @@ namespace LabManager
         }
 
 
-        private async void ButtonGo_Click(object sender, RoutedEventArgs e)
+        private async void ButtonAcquire_Click(object sender, RoutedEventArgs e)
         {
             string agvURI = txtAGVuri.Text;
 
@@ -263,8 +275,24 @@ namespace LabManager
                 await Task.Delay(TimeSpan.FromMilliseconds(intervalTime * 1000));
             }
 
+            string message = "Finish acquiring position data!";
+            string caption = "Acquire module";
+            System.Windows.MessageBox.Show(message, caption);
+        }
+
+        
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
             WriteCSVfile(position_RTLS);
             //WriteCSVfile(position_AGV);
+        }
+
+
+        private void BtnReset_Click(object sender, RoutedEventArgs e)
+        {
+            
+            //System.Windows.Forms.Application.Restart();
+            //System.Windows.Application.Current.Shutdown();
         }
 
 
@@ -337,27 +365,5 @@ namespace LabManager
             return;
         }
         */
-
-        private void BtnGetID_Click(object sender, RoutedEventArgs e)
-        {
-            string rtlsURI = "https://p186-geps-production-api.hd-rtls.com/objects";
-            string userName = "KTH";
-            string password = "!Test4KTH";
-
-            RESTClinet rClient = new RESTClinet();
-
-            rClient.rtlsAddress = rtlsURI;
-            rClient.userName = userName;
-            rClient.userPassword = password;
-
-            string[] responseResult = rClient.GetIDs();
-
-            for (int i = 0; i < responseResult.Count(); i++)
-            {
-                result_IDs = result_IDs + responseResult[i] + "\n"; 
-            }
-
-            txtTAGIDs.Text = result_IDs;
-        }
     }
 }
