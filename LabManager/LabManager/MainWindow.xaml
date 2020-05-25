@@ -8,17 +8,17 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="869.314" Width="1012.571">
     <Grid Margin="0,0,-6.143,0.286">
-        <Label Content="RTLS Address&#xA;" HorizontalAlignment="Left" Margin="10,145,0,0" VerticalAlignment="Top" Height="32"/>
-        <Label Content="UserName" HorizontalAlignment="Left" Margin="307,58,0,0" VerticalAlignment="Top" Width="89"/>
-        <Label Content="Password" HorizontalAlignment="Left" Margin="307,100,0,0" VerticalAlignment="Top" Width="89"/>
-        <TextBox x:Name="txtRTLSuri" HorizontalAlignment="Left" Height="130" Margin="99,146,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591"/>
-        <TextBox x:Name="txtUserName" HorizontalAlignment="Left" Height="23" Margin="397,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
-        <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Height="23" Margin="397,102,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
-        <Label Content="* IterationNum" HorizontalAlignment="Left" Margin="595,62,0,0" VerticalAlignment="Top" Width="95"/>
-        <Label Content="* IntervalTime" HorizontalAlignment="Left" Margin="595,100,0,0" VerticalAlignment="Top" Width="95"/>
-        <TextBox x:Name="txtIterationNum" HorizontalAlignment="Left" Height="23" Margin="709,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
-        <TextBox x:Name="txtIntervalTime" HorizontalAlignment="Left" Height="23" Margin="709,102,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
-        <Button x:Name="btnAcquire" Content="Acquire" HorizontalAlignment="Left" Margin="709,239,0,0" VerticalAlignment="Top" Width="70" Height="80" Click="ButtonAcquire_Click"/>
+        <Label Content="RTLS Address&#xA;" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Height="32"/>
+        <Label Content="UserName" HorizontalAlignment="Left" Margin="307,46,0,0" VerticalAlignment="Top" Width="89"/>
+        <Label Content="Password" HorizontalAlignment="Left" Margin="307,77,0,0" VerticalAlignment="Top" Width="89"/>
+        <TextBox x:Name="txtRTLSuri" HorizontalAlignment="Left" Height="80" Margin="99,110,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591"/>
+        <TextBox x:Name="txtUserName" HorizontalAlignment="Left" Height="23" Margin="397,51,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
+        <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Height="23" Margin="397,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
+        <Label Content="* IterationNum" HorizontalAlignment="Left" Margin="595,50,0,0" VerticalAlignment="Top" Width="95"/>
+        <Label Content="* IntervalTime" HorizontalAlignment="Left" Margin="595,77,0,0" VerticalAlignment="Top" Width="95"/>
+        <TextBox x:Name="txtIterationNum" HorizontalAlignment="Left" Height="23" Margin="709,51,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
+        <TextBox x:Name="txtIntervalTime" HorizontalAlignment="Left" Height="23" Margin="709,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
+        <Button x:Name="btnAcquire" Content="Acquire" HorizontalAlignment="Left" Margin="709,175,0,0" VerticalAlignment="Top" Width="70" Height="55" Click="ButtonAcquire_Click"/>
         <Label Content="URI Response&#xA;" HorizontalAlignment="Left" Margin="10,333,0,0" VerticalAlignment="Top" Height="32"/>
         <TextBox x:Name="txtResponse" HorizontalAlignment="Left" Height="160" Margin="99,336,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="770"/>
         <Canvas x:Name="myCanvas" HorizontalAlignment="Left" Height="301" Margin="99,515,0,0" VerticalAlignment="Top" Width="770">
@@ -26,16 +26,20 @@
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
             </Canvas.Background>
         </Canvas>
-        <Label Content="AGV Address&#xA;" HorizontalAlignment="Left" Margin="10,287,0,0" VerticalAlignment="Top" Height="32"/>
-        <TextBox x:Name="txtAGVuri" HorizontalAlignment="Left" Height="28" Margin="99,291,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591"/>
-        <Button x:Name="btnCheck" Content="Check" HorizontalAlignment="Left" Margin="709,146,0,0" VerticalAlignment="Top" Width="70" Height="80" Click="ButtonCheck_Click"/>
+        <Label Content="AGV Address&#xA;" HorizontalAlignment="Left" Margin="10,197,0,0" VerticalAlignment="Top" Height="32"/>
+        <TextBox x:Name="txtAGVuri" HorizontalAlignment="Left" Height="28" Margin="99,201,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591"/>
+        <Button x:Name="btnCheck" Content="Check" HorizontalAlignment="Left" Margin="709,110,0,0" VerticalAlignment="Top" Width="70" Height="55" Click="ButtonCheck_Click"/>
         <Label Content="* How many seconds do you want to check the position of RTLS tags?" HorizontalAlignment="Left" Margin="307,20,0,0" VerticalAlignment="Top" Width="418"/>
         <TextBox x:Name="txtCheckSeconds" HorizontalAlignment="Left" Height="23" Margin="709,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
-        <Button x:Name="btnGetID" Content="Get TAG IDs" HorizontalAlignment="Left" Margin="206,18,0,0" VerticalAlignment="Top" Width="84" Height="107" Click="BtnGetID_Click"/>
-        <TextBox x:Name="txtTAGIDs" HorizontalAlignment="Left" Height="107" Margin="99,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89"/>
+        <Button x:Name="btnGetID" Content="Get TAG IDs" HorizontalAlignment="Left" Margin="206,18,0,0" VerticalAlignment="Top" Width="84" Height="84" Click="BtnGetID_Click"/>
+        <TextBox x:Name="txtTAGIDs" HorizontalAlignment="Left" Height="84" Margin="99,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89"/>
         <Label Content="RTLS TAG IDs" HorizontalAlignment="Left" Margin="10,18,0,0" VerticalAlignment="Top" Width="79"/>
-        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="799,146,0,0" VerticalAlignment="Top" Width="70" Height="80" Click="btnSave_Click"/>
-        <Button x:Name="btnReset" Content="Reset" HorizontalAlignment="Left" Margin="799,239,0,0" VerticalAlignment="Top" Width="70" Height="80" Click="BtnReset_Click"/>
+        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="799,110,0,0" VerticalAlignment="Top" Width="70" Height="55" Click="btnSave_Click"/>
+        <Button x:Name="btnReset" Content="Reset" HorizontalAlignment="Left" Margin="799,175,0,0" VerticalAlignment="Top" Width="70" Height="55" Click="BtnReset_Click"/>
+        <Button x:Name="btnSelectFile" Content="Select File" HorizontalAlignment="Left" Height="40" Margin="709,239,0,0" VerticalAlignment="Top" Width="70" Click="BtnSelectFile_Click"/>
+        <Label Content="Input Path" HorizontalAlignment="Left" Margin="10,238,0,0" VerticalAlignment="Top" Width="79"/>
+        <TextBox x:Name="txtInputPath" HorizontalAlignment="Left" Height="40" Margin="99,239,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591"/>
+        <Button x:Name="btnFindPoint" Content="Find Point" HorizontalAlignment="Left" Margin="799,239,0,0" VerticalAlignment="Top" Width="70" Height="40" Click="BtnFindPoint_Click"/>
 
     </Grid>
 </Window>

@@ -18,6 +18,15 @@ namespace LabManager
     /// </summary>
     public partial class MainWindow : Window
     {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        // ###################################################
+        // ############# 1. Acquire raw data #################
+        // ###################################################
+
         public class PositionDataRTLS
         {
             public DateTime? TimeStamp { get; set; }
@@ -35,22 +44,16 @@ namespace LabManager
         }
         */
         
-        string[] tempReuslt_RTLS = new string[3];
-        //string[] tempReuslt_AGV = new string[3];
+        string[] tempReuslt_RTLS = new string[3];        
         string[] subResult_RTLS = new string[3];
-        //string[] subResult_AGV = new string[3];
-
         List<List<PositionDataRTLS>> position_RTLS = new List<List<PositionDataRTLS>>();
+
+        //string[] tempReuslt_AGV = new string[3];
+        //string[] subResult_AGV = new string[3];
         //List<PositionDataAGV> position_AGV = new List<PositionDataAGV>();
 
         string result_IDs = "";
         
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-
-
         private string[] RequestServer_AGV(string agvURI)
         {
             string[] responseResult = new string[3];
@@ -79,6 +82,76 @@ namespace LabManager
 
             return responseResult;
         }
+
+        public static Color Rainbow(float progress)
+        {
+            float div = (Math.Abs(progress % 1) * 6);
+            int ascending = (int)((div % 1) * 255);
+            int descending = 255 - ascending;
+
+            switch ((int)div)
+            {
+                case 0:
+                    return Color.FromArgb(255, 255, Convert.ToByte(ascending), 0);
+                case 1:
+                    return Color.FromArgb(255, Convert.ToByte(descending), 255, 0);
+                case 2:
+                    return Color.FromArgb(255, 0, 255, Convert.ToByte(ascending));
+                case 3:
+                    return Color.FromArgb(255, 0, Convert.ToByte(descending), 255);
+                case 4:
+                    return Color.FromArgb(255, Convert.ToByte(ascending), 0, 255);
+                default: // case 5:
+                    return Color.FromArgb(255, 255, 0, Convert.ToByte(descending));
+            }
+        }
+
+        public void WriteCSVfile(List<List<PositionDataRTLS>> positionDatas)
+        {
+            string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+
+            int iLength = positionDatas.Count();
+            int jLength = positionDatas[0].Count();
+
+            string[] filedir = new string[jLength];
+            StreamWriter[] file = new StreamWriter[jLength];
+
+            for (int j = 0; j < jLength; j++)
+            {
+                filedir[j] = Directory.GetCurrentDirectory();
+                filedir[j] = filedir[j] + @"\PositionData_RTLS_" + timeStamp + "_" + positionDatas[0][j].objectID + ".csv";
+                file[j] = new StreamWriter(filedir[j]);
+
+                for (int i = 0; i < iLength; i++)
+                {
+                    file[j].Write(positionDatas[i][j].TimeStamp + ", " + positionDatas[i][j].Coordinate_X + ", " + positionDatas[i][j].Coordinate_Y);
+                    file[j].Write("\n");
+                }
+                file[j].Close();
+            }
+            return;
+        }
+
+        /*
+        public void WriteCSVfile(List<PositionDataAGV> positionDatas)
+        {
+            string filedir = Directory.GetCurrentDirectory();
+            string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
+
+            filedir = filedir + @"\PositionData_AGV_" + timeStamp + ".csv";
+            StreamWriter file = new StreamWriter(filedir);
+
+            int iLength = positionDatas.Count();
+
+            for (int i = 0; i < iLength; i++)
+            {
+                file.Write(positionDatas[i].TimeStamp + ", " + positionDatas[i].Coordinate_X + ", " + positionDatas[i].Coordinate_Y);
+                file.Write("\n");
+            }
+            file.Close();
+            return;
+        }
+        */
 
         private void BtnGetID_Click(object sender, RoutedEventArgs e)
         {
@@ -290,80 +363,155 @@ namespace LabManager
 
         private void BtnReset_Click(object sender, RoutedEventArgs e)
         {
-            
-            //System.Windows.Forms.Application.Restart();
-            //System.Windows.Application.Current.Shutdown();
+            System.Windows.Forms.Application.Restart();
+            System.Windows.Application.Current.Shutdown();
         }
 
 
-        public static Color Rainbow(float progress)
+        // ###################################################
+        // ############# 2. Post-processing ##################
+        // ###################################################
+
+
+        // 1. ReadCSVfile Function
+        public static string[,] ReadCSVfile(string CSVdir)
         {
-            float div = (Math.Abs(progress % 1) * 6);
-            int ascending = (int)((div % 1) * 255);
-            int descending = 255 - ascending;
+            string whole_file = System.IO.File.ReadAllText(CSVdir);
 
-            switch ((int)div)
+            whole_file = whole_file.Replace('\n', '\r');
+
+            string[] lines = whole_file.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+            int numRows = lines.Length;
+
+            int numCols = lines[0].Split(',').Length;
+
+            string[,] tempValues = new string[numRows, numCols];
+
+            for (int r = 0; r < numRows; r++)
             {
-                case 0:
-                    return Color.FromArgb(255, 255, Convert.ToByte(ascending), 0);
-                case 1:
-                    return Color.FromArgb(255, Convert.ToByte(descending), 255, 0);
-                case 2:
-                    return Color.FromArgb(255, 0, 255, Convert.ToByte(ascending));
-                case 3:
-                    return Color.FromArgb(255, 0, Convert.ToByte(descending), 255);
-                case 4:
-                    return Color.FromArgb(255, Convert.ToByte(ascending), 0, 255);
-                default: // case 5:
-                    return Color.FromArgb(255, 255, 0, Convert.ToByte(descending));
-            }
-        }
+                string[] line_r = lines[r].Split(',');
 
-        public void WriteCSVfile(List<List<PositionDataRTLS>> positionDatas)
-        {
-            string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-
-            int iLength = positionDatas.Count();
-            int jLength = positionDatas[0].Count();
-
-            string[] filedir = new string[jLength];
-            StreamWriter[] file = new StreamWriter[jLength];
-
-            for (int j = 0; j < jLength; j++)
-            {
-                filedir[j] = Directory.GetCurrentDirectory();
-                filedir[j] = filedir[j] + @"\PositionData_RTLS_" + timeStamp + "_" + positionDatas[0][j].objectID + ".csv";
-                file[j] = new StreamWriter(filedir[j]);
-
-                for (int i = 0; i < iLength; i++)
+                for (int c = 0; c < numCols; c++)
                 {
-                    file[j].Write(positionDatas[i][j].TimeStamp + ", " + positionDatas[i][j].Coordinate_X + ", " + positionDatas[i][j].Coordinate_Y);
-                    file[j].Write("\n");
+                    tempValues[r, c] = line_r[c];
                 }
-                file[j].Close();
             }
-            return;
+            return tempValues;
         }
 
-        /*
-        public void WriteCSVfile(List<PositionDataAGV> positionDatas)
+        // 2. RemoveEmptyRows Function
+        public static string[,] RemoveEmptyRows(string[,] array)
         {
-            string filedir = Directory.GetCurrentDirectory();
-            string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
-
-            filedir = filedir + @"\PositionData_AGV_" + timeStamp + ".csv";
-            StreamWriter file = new StreamWriter(filedir);
-
-            int iLength = positionDatas.Count();
-
-            for (int i = 0; i < iLength; i++)
+            // Find how many rows have an " NaN" value
+            int rowsToRemove = 0;
+            for (int i = 0; i <= array.GetUpperBound(0); i++)
             {
-                file.Write(positionDatas[i].TimeStamp + ", " + positionDatas[i].Coordinate_X + ", " + positionDatas[i].Coordinate_Y);
-                file.Write("\n");
+                if (array[i, 2] == " NaN") // NaN value of X_coordinate
+                {
+                    rowsToRemove++;
+                }
             }
-            file.Close();
-            return;
+
+            // Reinitialize an array minus the number of empty rows
+            string[,] results = new string[array.GetUpperBound(0) + 1 - rowsToRemove, array.GetUpperBound(1) + 1];
+
+            int row = 0;
+            for (int i = 0; i <= array.GetUpperBound(0); i++)
+            {
+                int col = 0;
+                if (array[i, 2] != " NaN") // NaN value of X_coordinate
+                {
+                    for (int j = 0; j <= array.GetUpperBound(1); j++)
+                    {
+                        results[row, col] = array[i, j];
+                        col++;
+                    }
+                    row++;
+                }
+            }
+            return results;
         }
-        */
+
+        // 3. RemoveDuplicateRows Function
+        public string[,] RemoveDuplicateRows(string[,] array)
+        {
+            // Find how many rows have an " NaN" value
+            int rowsToRemove = 0;
+            for (int i = 0; i <= array.GetUpperBound(0) - 1; i++)
+            {
+                if (array[i, 1] == array[i + 1, 1]) // compare time with previous row
+                {
+                    rowsToRemove++;
+                }
+            }
+
+            // Reinitialize an array minus the number of duplicate rows
+            string[,] results = new string[array.GetUpperBound(0) - rowsToRemove, array.GetUpperBound(1) + 1];
+
+            int row = 0;
+            for (int i = 0; i <= array.GetUpperBound(0) - 1; i++)
+            {
+                int col = 0;
+                if (array[i, 1] != array[i + 1, 1]) // compare time with previous row
+                {
+                    for (int j = 0; j <= array.GetUpperBound(1); j++)
+                    {
+                        results[row, col] = array[i, j];
+                        col++;
+                    }
+                    row++;
+                }
+            }
+
+            string[] added = new string[array.GetUpperBound(1) + 1];
+            
+            if (array[array.GetUpperBound(0) - 1, 1] != array[array.GetUpperBound(0), 1])
+            {
+                for (int i = 0; i <= array.GetUpperBound(1); i++)
+                {
+                    added[i] = array[array.GetUpperBound(0), i];
+                }
+                results = AddRow(results, added);
+            }
+
+            return results;
+        }
+
+        static string[,] AddRow(string[,] original, string[] added)
+        {
+            int lastRow = original.GetUpperBound(0);
+            int lastColumn = original.GetUpperBound(1);
+            // Create new array.
+            string[,] result = new string[lastRow + 2, lastColumn + 1];
+            // Copy existing array into the new array.
+            for (int i = 0; i <= lastRow; i++)
+            {
+                for (int x = 0; x <= lastColumn; x++)
+                {
+                    result[i, x] = original[i, x];
+                }
+            }
+            // Add the new row.
+            for (int i = 0; i < added.Length; i++)
+            {
+                result[lastRow + 1, i] = added[i];
+            }
+            return result;
+        }
+
+
+        private void BtnSelectFile_Click(object sender, RoutedEventArgs e)
+        {
+            string fileDir = Directory.GetCurrentDirectory();
+            txtInputPath.Text = fileDir + @"\experiment\PositionData_RTLS_2020-05-19 14-50-25_00000011.csv"; // need to change in the code
+        }
+
+        private void BtnFindPoint_Click(object sender, RoutedEventArgs e)
+        {
+            string[,] rawData = ReadCSVfile(txtInputPath.Text); // Read input CSV data
+            string[,] rawData_v2 = RemoveEmptyRows(rawData); // Remove missing value rows
+            string[,] rawData_v3 = RemoveDuplicateRows(rawData_v2); // Remove duplicate rows
+        }
     }
 }
