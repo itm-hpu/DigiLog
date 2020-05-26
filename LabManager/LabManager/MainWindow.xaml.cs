@@ -30,9 +30,8 @@ namespace LabManager
         public class PositionDataRTLS
         {
             public DateTime? TimeStamp { get; set; }
-            public double Coordinate_X { get; set; }
-            public double Coordinate_Y { get; set; }
-            public string objectID { get; set; }
+            public Point Coordinates { get; set; }
+            public string ObjectID { get; set; }
         }
 
         /*
@@ -119,12 +118,12 @@ namespace LabManager
             for (int j = 0; j < jLength; j++)
             {
                 filedir[j] = Directory.GetCurrentDirectory();
-                filedir[j] = filedir[j] + @"\PositionData_RTLS_" + timeStamp + "_" + positionDatas[0][j].objectID + ".csv";
+                filedir[j] = filedir[j] + @"\PositionData_RTLS_" + timeStamp + "_" + positionDatas[0][j].ObjectID + ".csv";
                 file[j] = new StreamWriter(filedir[j]);
 
                 for (int i = 0; i < iLength; i++)
                 {
-                    file[j].Write(positionDatas[i][j].TimeStamp + ", " + positionDatas[i][j].Coordinate_X + ", " + positionDatas[i][j].Coordinate_Y);
+                    file[j].Write(positionDatas[i][j].TimeStamp + ", " + positionDatas[i][j].Coordinates.X + ", " + positionDatas[i][j].Coordinates.Y);
                     file[j].Write("\n");
                 }
                 file[j].Close();
@@ -259,15 +258,25 @@ namespace LabManager
                     if (tempReuslt_RTLS_list[j][0] == "") subResult_RTLS_list[j].TimeStamp = null;
                     else subResult_RTLS_list[j].TimeStamp = Convert.ToDateTime(tempReuslt_RTLS_list[j][2]);
 
-                    if (tempReuslt_RTLS_list[j][1] == "") subResult_RTLS_list[j].Coordinate_X = double.NaN;
-                    else subResult_RTLS_list[j].Coordinate_X = (-Convert.ToDouble(tempReuslt_RTLS_list[j][1])); // X
+                    //if (tempReuslt_RTLS_list[j][1] == "") subResult_RTLS_list[j].Coordinate_X = double.NaN;
+                    //else subResult_RTLS_list[j].Coordinate_X = (-Convert.ToDouble(tempReuslt_RTLS_list[j][1])); // X
                     //else subResult_RTLS_list[j].Coordinate_X = (-Convert.ToDouble(tempReuslt_RTLS_list[j][1]) * (-0.01116546) + 7.824105); // X
 
-                    if (tempReuslt_RTLS_list[j][2] == "") subResult_RTLS_list[j].Coordinate_Y = double.NaN;
-                    else subResult_RTLS_list[j].Coordinate_Y = (Convert.ToDouble(tempReuslt_RTLS_list[j][0])); // Y
+                    //if (tempReuslt_RTLS_list[j][2] == "") subResult_RTLS_list[j].Coordinate_Y = double.NaN;
+                    //else subResult_RTLS_list[j].Coordinate_Y = (Convert.ToDouble(tempReuslt_RTLS_list[j][0])); // Y
                     //else subResult_RTLS_list[j].Coordinate_Y = (Convert.ToDouble(tempReuslt_RTLS_list[j][0]) * (-0.01116546) + 18.16041); // Y
 
-                    subResult_RTLS_list[j].objectID = tempReuslt_RTLS_list[j][3]; // TAG ID
+                    subResult_RTLS_list[j].ObjectID = tempReuslt_RTLS_list[j][3]; // TAG ID
+
+                    if (tempReuslt_RTLS_list[j][1] != "" && tempReuslt_RTLS_list[j][2] != "")
+                    {
+                        subResult_RTLS_list[j].Coordinates = new Point(-Convert.ToDouble(tempReuslt_RTLS_list[j][1]), Convert.ToDouble(tempReuslt_RTLS_list[j][0]));
+                    }
+                    else
+                    {
+                        subResult_RTLS_list[j].Coordinates = new Point(double.NaN, double.NaN);
+                    }
+
                 }
 
                 /*
@@ -288,13 +297,13 @@ namespace LabManager
                 //string result_AGV = "";
                 for (int j = 0; j < position_RTLS[i].Count(); j++)
                 {
-                    if (position_RTLS[i][j].Coordinate_X != System.Double.NaN)
+                    if (position_RTLS[i][j].Coordinates.X != System.Double.NaN)
                     {
-                        result_RTLS = result_RTLS + "Coordinates of RTLS tag {Time: " + position_RTLS[i][j].TimeStamp + ", X: " + position_RTLS[i][j].Coordinate_X + ", Y: " + position_RTLS[i][j].Coordinate_Y + ", objectID: " + position_RTLS[i][j].objectID + "}" + "\r\n";
+                        result_RTLS = result_RTLS + "Coordinates of RTLS tag {Time: " + position_RTLS[i][j].TimeStamp + ", X: " + position_RTLS[i][j].Coordinates.X + ", Y: " + position_RTLS[i][j].Coordinates.Y + ", objectID: " + position_RTLS[i][j].ObjectID + "}" + "\r\n";
                     }
                     else
                     {
-                        result_RTLS = result_RTLS + "Coordinates of RTLS tag {Time: " + position_RTLS[i][j].TimeStamp + ", X: ---, Y: ---, objectID: " + position_RTLS[i][j].objectID + " }" + "\r\n";
+                        result_RTLS = result_RTLS + "Coordinates of RTLS tag {Time: " + position_RTLS[i][j].TimeStamp + ", X: ---, Y: ---, objectID: " + position_RTLS[i][j].ObjectID + " }" + "\r\n";
                     }
                     //result_AGV = "Coordinates of MirAGV {Time: " + position_AGV[i].TimeStamp + ", X: " + position_AGV[i].Coordinate_X + ", Y: " + position_AGV[i].Coordinate_Y + "}";
                 }
@@ -317,13 +326,13 @@ namespace LabManager
                     currentDotRTLS.Width = dotSizeRTLS;
                     currentDotRTLS.Fill = new SolidColorBrush(colorRTLS);
 
-                    if (Double.IsNaN(position_RTLS[i][j].Coordinate_X))
+                    if (Double.IsNaN(position_RTLS[i][j].Coordinates.X))
                     {
                         continue;
                     }
                     else
                     {
-                        currentDotRTLS.Margin = new Thickness(position_RTLS[i][j].Coordinate_X * 15.0, position_RTLS[i][j].Coordinate_Y * 15.0, 0, 0); // Set the position
+                        currentDotRTLS.Margin = new Thickness(position_RTLS[i][j].Coordinates.X * 15.0, position_RTLS[i][j].Coordinates.Y * 15.0, 0, 0); // Set the position
                         myCanvas.Children.Add(currentDotRTLS);
                     }
                 }
