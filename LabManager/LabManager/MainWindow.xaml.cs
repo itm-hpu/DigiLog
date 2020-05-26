@@ -123,7 +123,7 @@ namespace LabManager
 
                 for (int i = 0; i < iLength; i++)
                 {
-                    file[j].Write(positionDatas[i][j].TimeStamp + ", " + positionDatas[i][j].Coordinates.X + ", " + positionDatas[i][j].Coordinates.Y);
+                    file[j].Write(positionDatas[i][j].ObjectID + ", " + positionDatas[i][j].TimeStamp + ", " + positionDatas[i][j].Coordinates.X + ", " + positionDatas[i][j].Coordinates.Y);
                     file[j].Write("\n");
                 }
                 file[j].Close();
