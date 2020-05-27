@@ -36,9 +36,8 @@ namespace LabManager
         }
         
         List<List<PositionData>> result = new List<List<PositionData>>();
-        //List<PositionData> position_AGV = new List<PositionData>();
-
-        string result_IDs = "";
+        
+        
         
         private string[] RequestServer_AGV(string agvURI)
         {
@@ -69,6 +68,7 @@ namespace LabManager
             return responseResult;
         }
 
+
         public static Color Rainbow(float progress)
         {
             float div = (Math.Abs(progress % 1) * 6);
@@ -91,6 +91,7 @@ namespace LabManager
                     return Color.FromArgb(255, 255, 0, Convert.ToByte(descending));
             }
         }
+
 
         public void WriteCSVfile(List<List<PositionData>> positionDatas)
         {
@@ -119,8 +120,11 @@ namespace LabManager
             return;
         }
 
+
         private void BtnGetID_Click(object sender, RoutedEventArgs e)
         {
+            string result_IDs = "";
+
             string rtlsURI = "https://p186-geps-production-api.hd-rtls.com/objects";
             string userName = "KTH";
             string password = "!Test4KTH";
@@ -140,6 +144,7 @@ namespace LabManager
 
             txtTAGIDs.Text = result_IDs;
         }
+
 
         private void ButtonCheck_Click(object sender, RoutedEventArgs e)
         {
@@ -182,7 +187,7 @@ namespace LabManager
             int iterNum = Convert.ToInt32(txtIterationNum.Text); // iteration number
             double intervalTime = Convert.ToDouble(txtIntervalTime.Text); // interval time
 
-            // To show origin point on canvas
+            // Show origin point on canvas
             int dotsizeOrigin = 7;
             Ellipse dotOrigin = new Ellipse();
             Color colorOrigin = new Color();
@@ -201,6 +206,7 @@ namespace LabManager
                 // https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
                 string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ff");
 
+
                 // Get coordinates of HDW tags
                 List<string[]> tempReuslt_RTLS_list = new List<string[]>();
                 for (int j = 0; j < rtlsURIArray.Length; j++)
@@ -208,7 +214,7 @@ namespace LabManager
                     var rtlsTask = Task.Run(() => RequestServer_RTLS(rtlsURIArray[j], userName, password, objectIDsArray[j]));
                     tempReuslt_RTLS_list.Add(await rtlsTask);
                 }
-
+                
 
                 // Get coordinates of AGV
                 string[] tempReuslt_AGV = new string[3];
@@ -216,7 +222,7 @@ namespace LabManager
                 tempReuslt_AGV = await agvTask;
                 
 
-                // match RTLS point coordinatesand AGV point coordinates towards canvas coordinates system
+                // Create list type of RTLS PositionData for several TAGs
                 List<PositionData> subResult = new List<PositionData>();
                 
                 for (int j = 0; j < tempReuslt_RTLS_list.Count(); j++)
@@ -236,32 +242,32 @@ namespace LabManager
                     }
 
                     subResult[j].ObjectID = tempReuslt_RTLS_list[j][3]; // TAG ID
-
                     subResult[j].Type = "RTLS";
-
                 }
+                
 
-
+                // Create list type of AGV PositionData to append "subResult" list
                 List<PositionData> subResult_AGV = new List<PositionData>()
                 {
                     new PositionData()
                     {
                         TimeStamp = Convert.ToDateTime(timeStamp),
                         Coordinates = new Point(Convert.ToDouble(tempReuslt_AGV[1]), Convert.ToDouble(tempReuslt_AGV[2])),
-                        ObjectID = "12345678",
+                        ObjectID = "12345678", // AGV object ID?
                         Type = "AGV"
                     }
                 };
-          
+
+
+                // Append PositionData of AGV into "subReslut" list
                 subResult.AddRange(subResult_AGV);
                 
 
-                // store PositionData of RTLS tag and AGV into list
+                // Store PositionData of RTLS tag and AGV into "reslut" list
                 result.Add(subResult);
                 
-                
 
-                // show coordinates of RTLS tag and AGV
+                // Show coordinates of RTLS tag and AGV
                 string result_RTLS = "";
                 string result_AGV = "";
                 for (int j = 0; j < result[i].Count(); j++)
@@ -281,14 +287,12 @@ namespace LabManager
                     {
                         result_AGV = "Coordinates of MirAGV {Time: " + result[i][j].TimeStamp + ", X: " + result[i][j].Coordinates.X + ", Y: " + result[i][j].Coordinates.Y + "}" + "\r\n";
                     }
-
-                    
                 }
                 txtResponse.Text = txtResponse.Text + (i + 1).ToString() + ", " + timeStamp + "\r\n" + result_RTLS + result_AGV + "\r\n";
                 txtResponse.ScrollToEnd();
-
                 
-                // Show where the RTLS tag and AGV have been
+
+                // Visualize where the RTLS tag and AGV have been
                 for (int j = 0; j < result[i].Count(); j++)
                 {
                     int dotSizeRTLS = 5;
@@ -332,9 +336,8 @@ namespace LabManager
                         currentDotAGV.Margin = new Thickness(result[i][j].Coordinates.X * 15.0, result[i][j].Coordinates.Y * 15.0, 0, 0); // Set the position
                         myCanvas.Children.Add(currentDotAGV);
                     }
-
                 }
-                
+
                 await Task.Delay(TimeSpan.FromMilliseconds(intervalTime * 1000));
             }
 
@@ -347,7 +350,6 @@ namespace LabManager
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             WriteCSVfile(result);
-            //WriteCSVfile(position_AGV);
 
             string message = "Finish saving position data!";
             string caption = "Acquire module";
@@ -394,7 +396,9 @@ namespace LabManager
             return tempValues;
         }
 
+
         // 2. RemoveEmptyRows Function
+        // *** Need to adjust into more efficient way to find missing value ***
         public static string[,] RemoveEmptyRows(string[,] array)
         {
             // Find how many rows have an " NaN" value
@@ -426,6 +430,7 @@ namespace LabManager
             }
             return results;
         }
+
 
         // 3. RemoveDuplicateRows Function
         public string[,] RemoveDuplicateRows(string[,] array)
@@ -472,6 +477,8 @@ namespace LabManager
             return results;
         }
 
+
+        // 4. AddRow Function for RemoveDuplicateRows Function
         static string[,] AddRow(string[,] original, string[] added)
         {
             int lastRow = original.GetUpperBound(0);
@@ -495,17 +502,55 @@ namespace LabManager
         }
 
 
+        // 5. GetDistance Function
+        public double GetDistance(Point P1, Point P2) // string
+        {
+            double dist = 0.0;
+
+            double dist1 = P1.X - P2.X;
+            double dist2 = P1.Y - P2.Y;
+            dist = Math.Sqrt(dist1 * dist1 + dist2 * dist2);
+
+            return dist;
+        }
+
+        /*
+        // 6. ExtractPoint Function
+        public Point ExtractPoint(string[,] array) // string
+        {
+            Point[] coordinates = new Point[array.GetUpperBound(0) + 1]; // extract coordinates from rawdata
+
+            for (int i = 0; i < coordinates.Length; i++)
+            {
+                coordinates[i] = new Point(Convert.ToDouble(array[i, 2]), Convert.ToDouble(array[i, 3]));
+            }
+
+            return coordinates[coordinates.Length];
+        }
+        */
+
+        // Need to change for selecting input file by user
         private void BtnSelectFile_Click(object sender, RoutedEventArgs e)
         {
             string fileDir = Directory.GetCurrentDirectory();
-            txtInputPath.Text = fileDir + @"\experiment\PositionData_RTLS_2020-05-19 14-50-25_00000011.csv"; // need to change in the code
+            txtInputPath.Text = fileDir + @"\experiment\PositionData_RTLS_2020-05-19 14-50-25_00000013.csv"; // need to change in the code
         }
 
-        private void BtnFindPoint_Click(object sender, RoutedEventArgs e)
+
+        private void BtnFindDestination_Click(object sender, RoutedEventArgs e)
         {
             string[,] rawData = ReadCSVfile(txtInputPath.Text); // Read input CSV data
             string[,] rawData_v2 = RemoveEmptyRows(rawData); // Remove missing value rows
             string[,] rawData_v3 = RemoveDuplicateRows(rawData_v2); // Remove duplicate rows
+
+            Point[] rawdata_v4 = new Point[rawData_v3.GetUpperBound(0) + 1]; // extract coordinates from rawdata
+
+            for (int i = 0; i < rawdata_v4.Length; i++)
+            {
+                rawdata_v4[i] = new Point(Convert.ToDouble(rawData_v3[i, 2]), Convert.ToDouble(rawData_v3[i, 3]));
+            }
+
+            // Calculate distance between current and previous point from second point, Keep first point and distance = 0
         }
     }
 }
