@@ -34,24 +34,24 @@ namespace LabManager
             public string ObjectID { get; set; }
             public string Type { get; set; }
         }
-        
+
         List<List<PositionData>> result = new List<List<PositionData>>();
-        
-        
-        
+
+
+
         private string[] RequestServer_AGV(string agvURI)
         {
             string[] responseResult = new string[3];
 
             RESTClinet rClient = new RESTClinet();
-            
-            rClient.agvAddress = agvURI; 
+
+            rClient.agvAddress = agvURI;
 
             responseResult = rClient.MakeAGVRequest();
 
             return responseResult;
         }
-        
+
 
         private string[] RequestServer_RTLS(string rtlsURI, string username, string password, string objectID)
         {
@@ -59,7 +59,7 @@ namespace LabManager
 
             RESTClinet rClient = new RESTClinet();
 
-            rClient.rtlsAddress = rtlsURI; 
+            rClient.rtlsAddress = rtlsURI;
             rClient.userName = username;
             rClient.userPassword = password;
 
@@ -105,7 +105,7 @@ namespace LabManager
 
             for (int j = 0; j < jLength; j++)
             {
-                
+
                 filedir[j] = Directory.GetCurrentDirectory();
                 filedir[j] = filedir[j] + @"\PositionData_" + timeStamp + "_" + positionDatas[0][j].Type + "_" + positionDatas[0][j].ObjectID + ".csv";
                 file[j] = new StreamWriter(filedir[j]);
@@ -183,7 +183,7 @@ namespace LabManager
 
             string userName = txtUserName.Text;
             string password = txtPassword.Text;
-             
+
             int iterNum = Convert.ToInt32(txtIterationNum.Text); // iteration number
             double intervalTime = Convert.ToDouble(txtIntervalTime.Text); // interval time
 
@@ -198,7 +198,7 @@ namespace LabManager
             dotOrigin.Height = dotsizeOrigin;
             dotOrigin.Width = dotsizeOrigin;
             dotOrigin.Fill = new SolidColorBrush(colorOrigin);
-            dotOrigin.Margin = new Thickness(0, 0, 0, 0); 
+            dotOrigin.Margin = new Thickness(0, 0, 0, 0);
             myCanvas.Children.Add(dotOrigin);
 
             for (int i = 0; i < iterNum; i++)
@@ -214,8 +214,8 @@ namespace LabManager
                     var rtlsTask = Task.Run(() => RequestServer_RTLS(rtlsURIArray[j], userName, password, objectIDsArray[j]));
                     tempReuslt_RTLS_list.Add(await rtlsTask);
                 }
-                
 
+                
                 // Get coordinates of AGV
                 string[] tempReuslt_AGV = new string[3];
                 var agvTask = Task.Run(() => RequestServer_AGV(agvURI));
@@ -224,7 +224,7 @@ namespace LabManager
 
                 // Create list type of RTLS PositionData for several TAGs
                 List<PositionData> subResult = new List<PositionData>();
-                
+
                 for (int j = 0; j < tempReuslt_RTLS_list.Count(); j++)
                 {
                     subResult.Add(new PositionData());
@@ -244,8 +244,8 @@ namespace LabManager
                     subResult[j].ObjectID = tempReuslt_RTLS_list[j][3]; // TAG ID
                     subResult[j].Type = "RTLS";
                 }
-                
 
+                
                 // Create list type of AGV PositionData to append "subResult" list
                 List<PositionData> subResult_AGV = new List<PositionData>()
                 {
@@ -257,15 +257,16 @@ namespace LabManager
                         Type = "AGV"
                     }
                 };
+                
 
-
+                
                 // Append PositionData of AGV into "subReslut" list
                 subResult.AddRange(subResult_AGV);
                 
 
                 // Store PositionData of RTLS tag and AGV into "reslut" list
                 result.Add(subResult);
-                
+
 
                 // Show coordinates of RTLS tag and AGV
                 string result_RTLS = "";
@@ -290,7 +291,7 @@ namespace LabManager
                 }
                 txtResponse.Text = txtResponse.Text + (i + 1).ToString() + ", " + timeStamp + "\r\n" + result_RTLS + result_AGV + "\r\n";
                 txtResponse.ScrollToEnd();
-                
+
 
                 // Visualize where the RTLS tag and AGV have been
                 for (int j = 0; j < result[i].Count(); j++)
@@ -327,7 +328,7 @@ namespace LabManager
                         }
                         else
                         {
-                            currentDotRTLS.Margin = new Thickness(result[i][j].Coordinates.X * 15.0, result[i][j].Coordinates.Y * 15.0, 0, 0); // Set the position
+                            currentDotRTLS.Margin = new Thickness(result[i][j].Coordinates.X * -0.5, result[i][j].Coordinates.Y * 0.5, 0, 0); // Set the position
                             myCanvas.Children.Add(currentDotRTLS);
                         }
                     }
@@ -346,7 +347,7 @@ namespace LabManager
             System.Windows.MessageBox.Show(message, caption);
         }
 
-        
+
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             WriteCSVfile(result);
@@ -464,7 +465,7 @@ namespace LabManager
             }
 
             string[] added = new string[array.GetUpperBound(1) + 1];
-            
+
             if (array[array.GetUpperBound(0) - 1, 1] != array[array.GetUpperBound(0), 1])
             {
                 for (int i = 0; i <= array.GetUpperBound(1); i++)
@@ -514,10 +515,47 @@ namespace LabManager
             return dist;
         }
 
-        /*
-        // 6. ExtractPoint Function
-        public Point ExtractPoint(string[,] array) // string
+        // 6. Percentile Function to calculate Q1, Q3 etc. 
+        // Calculate percentile value
+        /// <summary>
+        /// Calculate percentile of a sorted data set
+        /// </summary>
+        /// <param name="sortedData"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        internal static double Percentile(double[] sortedData, double p)
         {
+            // algo derived from Aczel pg 15 bottom
+            if (p >= 100.0d) return sortedData[sortedData.Length - 1];
+
+            double position = (sortedData.Length + 1) * p / 100.0;
+            double leftNumber = 0.0d, rightNumber = 0.0d;
+
+            double n = p / 100.0d * (sortedData.Length - 1) + 1.0d;
+
+            if (position >= 1)
+            {
+                leftNumber = sortedData[(int)Math.Floor(n) - 1];
+                rightNumber = sortedData[(int)Math.Floor(n)];
+            }
+            else
+            {
+                leftNumber = sortedData[0]; // first data
+                rightNumber = sortedData[1]; // first data
+            }
+
+            //if (leftNumber == rightNumber)
+            if (Equals(leftNumber, rightNumber))
+                return leftNumber;
+            double part = n - Math.Floor(n);
+            return leftNumber + part * (rightNumber - leftNumber);
+        } // end of internal function percentile
+
+
+        // 7. FindFilter Function using pareto(histogram)
+        public double FindFilter(string[,] array)
+        {
+            double filter = 0;
             Point[] coordinates = new Point[array.GetUpperBound(0) + 1]; // extract coordinates from rawdata
 
             for (int i = 0; i < coordinates.Length; i++)
@@ -525,9 +563,71 @@ namespace LabManager
                 coordinates[i] = new Point(Convert.ToDouble(array[i, 2]), Convert.ToDouble(array[i, 3]));
             }
 
-            return coordinates[coordinates.Length];
+            double[] distArray = new double[array.GetUpperBound(0) + 1]; // calculate distance to find Filter value
+
+            distArray[0] = 0;
+            for (int i = 1; i < coordinates.Length; i++)
+            {
+                distArray[i] = GetDistance(coordinates[i - 1], coordinates[i]);
+            }
+
+            Array.Sort(distArray);
+            double q1 = Percentile(distArray, 25);
+            double q3 = Percentile(distArray, 75);
+            double IQR = q3 - q1;
+            double binWidth = 2 * IQR / Math.Pow(distArray.Length, 1.0 / 3.0); // Freedman–Diaconis rule
+            int binCount = Convert.ToInt32(Math.Ceiling((distArray.Max() - distArray.Min()) / binWidth));
+
+            // Create frequency distribution table, (binWidth, Freq, percentage, culmulative percentage)
+            double[,] hist = new double[binCount, 4];
+
+            // set binWidth
+            for (int i = 0; i < binCount; i++)
+            {
+                hist[i, 0] = binWidth * (i + 1);
+            }
+            // set frequency
+            for (int i = 0; i < distArray.Length; i++)
+            {
+                for (int j = 1; j < binCount; j++)
+                {
+                    if (0 <= distArray[i] && distArray[i] < hist[j - 1, 0])
+                    {
+                        hist[0, 1] = hist[0, 1] + 1;
+                        break;
+                    }
+                    else if (hist[j - 1, 0] <= distArray[i] && distArray[i] < hist[j, 0])
+                    {
+                        hist[j, 1] = hist[j, 1] + 1;
+                        break;
+                    }
+                }
+            }
+            // set percentage of frequency
+            for (int i = 0; i < binCount; i++)
+            {
+                hist[i, 2] = hist[i, 1] / distArray.Length;
+            }
+            // set cumulative percentage
+            hist[0, 3] = hist[0, 2];
+            for (int i = 1; i < binCount; i++)
+            {
+                hist[i, 3] = hist[i - 1, 3] + hist[i, 2];
+            }
+
+            filter = hist[0, 0]; // Need to change filter value to specific percentage 
+
+            return filter;
         }
-        */
+
+
+        public class CandidatePoint
+        {
+            public DateTime TimeStamp { get; set; }
+            public Point Coordinates { get; set; }
+            public string ObjectID { get; set; }
+            public int DataID { get; set; }
+        }
 
         // Need to change for selecting input file by user
         private void BtnSelectFile_Click(object sender, RoutedEventArgs e)
@@ -542,15 +642,32 @@ namespace LabManager
             string[,] rawData = ReadCSVfile(txtInputPath.Text); // Read input CSV data
             string[,] rawData_v2 = RemoveEmptyRows(rawData); // Remove missing value rows
             string[,] rawData_v3 = RemoveDuplicateRows(rawData_v2); // Remove duplicate rows
+            double filterDistance = FindFilter(rawData_v3);
+            
+            
 
-            Point[] rawdata_v4 = new Point[rawData_v3.GetUpperBound(0) + 1]; // extract coordinates from rawdata
+            /*
+            string[,] rawData_v4 = new string[rawData_v3.GetUpperBound(0) + 1, 4]; // points, distance, ID
 
-            for (int i = 0; i < rawdata_v4.Length; i++)
+            rawData_v4[0, 0] = rawData_v3[0, 0];
+            rawData_v4[0, 1] = rawData_v3[0, 1];
+            rawData_v4[0, 2] = 0.ToString();
+            rawData_v4[0, 3] = 1.ToString();
+
+            for (int i = 1; i < coordinates.Length; i++)
             {
-                rawdata_v4[i] = new Point(Convert.ToDouble(rawData_v3[i, 2]), Convert.ToDouble(rawData_v3[i, 3]));
+                for (int j = 0; j < 3; j++)
+                {
+                    rawData_v4[i, 0] = rawData_v3[i, 0];
+                    rawData_v4[i, 1] = rawData_v3[i, 1];
+                    rawData_v4[i, 2] = GetDistance(coordinates[i], coordinates[i - 1]).ToString();
+                    rawData_v4[i, 3] = (i + 1).ToString();
+                }
             }
+            */
+            
 
-            // Calculate distance between current and previous point from second point, Keep first point and distance = 0
+
         }
     }
 }

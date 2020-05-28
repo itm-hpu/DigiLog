@@ -7,7 +7,7 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="LabManager.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="869.314" Width="1034.285">
-    <Grid Margin="0,0,-5.429,0.571" HorizontalAlignment="Left" Width="1034">
+    <Grid Margin="0,0,-5.429,-4.429" HorizontalAlignment="Left" Width="1034">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1029*"/>
             <ColumnDefinition Width="5*"/>
