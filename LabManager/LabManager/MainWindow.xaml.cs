@@ -369,6 +369,21 @@ namespace LabManager
         // ############# 2. Post-processing ##################
         // ###################################################
 
+        public class ParetoFreqTable
+        {
+            public double RangeValue { get; set; }
+            public int Freq { get; set; }
+            public int CumulFreq{ get; set; }
+            public double CumulPercent { get; set; }
+        }
+
+        public class CandidatePoint
+        {
+            public DateTime TimeStamp { get; set; }
+            public Point Coordinates { get; set; }
+            public string ObjectID { get; set; }
+            public int DataID { get; set; }
+        }
 
         // 1. ReadCSVfile Function
         public static string[,] ReadCSVfile(string CSVdir)
@@ -578,57 +593,56 @@ namespace LabManager
             double binWidth = 2 * IQR / Math.Pow(distArray.Length, 1.0 / 3.0); // Freedman–Diaconis rule
             int binCount = Convert.ToInt32(Math.Ceiling((distArray.Max() - distArray.Min()) / binWidth));
 
-            // Create frequency distribution table, (binWidth, Freq, percentage, culmulative percentage)
-            double[,] hist = new double[binCount, 4];
-
-            // set binWidth
+            // Create frequency distribution table, (binWidth, frequency, cumulative frequency, cumulative percentage)
+            IList<ParetoFreqTable> freqTable = new List<ParetoFreqTable>();
             for (int i = 0; i < binCount; i++)
             {
-                hist[i, 0] = binWidth * (i + 1);
+                freqTable.Add(new ParetoFreqTable());
             }
+    
+            // set binWidth
+            for (int i = 0; i < freqTable.Count(); i++)
+            {
+                freqTable[i].RangeValue = binWidth * (i + 1);
+            }
+   
             // set frequency
             for (int i = 0; i < distArray.Length; i++)
             {
-                for (int j = 1; j < binCount; j++)
+                for(int j = 1; j < freqTable.Count(); j++)
                 {
-                    if (0 <= distArray[i] && distArray[i] < hist[j - 1, 0])
+                    if (0 <= distArray[i] && distArray[i] < freqTable[j - 1].RangeValue)
                     {
-                        hist[0, 1] = hist[0, 1] + 1;
+                        freqTable[0].Freq = freqTable[0].Freq + 1;
                         break;
                     }
-                    else if (hist[j - 1, 0] <= distArray[i] && distArray[i] < hist[j, 0])
+                    else if (freqTable[j-1].RangeValue <= distArray[i] && distArray[i] < freqTable[j].RangeValue)
                     {
-                        hist[j, 1] = hist[j, 1] + 1;
+                        freqTable[j].Freq = freqTable[j].Freq + 1;
                         break;
                     }
                 }
             }
-            // set percentage of frequency
-            for (int i = 0; i < binCount; i++)
+         
+            // calculate cumulative frequency
+            freqTable[0].CumulFreq = freqTable[0].Freq;
+            for (int i = 1; i < freqTable.Count(); i++)
             {
-                hist[i, 2] = hist[i, 1] / distArray.Length;
+                freqTable[i].CumulFreq = freqTable[i - 1].CumulFreq + freqTable[i].Freq;
             }
-            // set cumulative percentage
-            hist[0, 3] = hist[0, 2];
-            for (int i = 1; i < binCount; i++)
+           
+            // calculate cumulative percentage
+            for(int i = 0; i < freqTable.Count(); i++)
             {
-                hist[i, 3] = hist[i - 1, 3] + hist[i, 2];
+                freqTable[i].CumulPercent = freqTable[i].CumulFreq / Convert.ToDouble(distArray.Length);
             }
-
-            filter = hist[0, 0]; // Need to change filter value to specific percentage 
+           
+            filter = freqTable[0].RangeValue; // Need to change filter value to specific percentage 
 
             return filter;
         }
-
-
-        public class CandidatePoint
-        {
-            public DateTime TimeStamp { get; set; }
-            public Point Coordinates { get; set; }
-            public string ObjectID { get; set; }
-            public int DataID { get; set; }
-        }
-
+        
+    
         // Need to change for selecting input file by user
         private void BtnSelectFile_Click(object sender, RoutedEventArgs e)
         {
@@ -644,29 +658,6 @@ namespace LabManager
             string[,] rawData_v3 = RemoveDuplicateRows(rawData_v2); // Remove duplicate rows
             double filterDistance = FindFilter(rawData_v3);
             
-            
-
-            /*
-            string[,] rawData_v4 = new string[rawData_v3.GetUpperBound(0) + 1, 4]; // points, distance, ID
-
-            rawData_v4[0, 0] = rawData_v3[0, 0];
-            rawData_v4[0, 1] = rawData_v3[0, 1];
-            rawData_v4[0, 2] = 0.ToString();
-            rawData_v4[0, 3] = 1.ToString();
-
-            for (int i = 1; i < coordinates.Length; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    rawData_v4[i, 0] = rawData_v3[i, 0];
-                    rawData_v4[i, 1] = rawData_v3[i, 1];
-                    rawData_v4[i, 2] = GetDistance(coordinates[i], coordinates[i - 1]).ToString();
-                    rawData_v4[i, 3] = (i + 1).ToString();
-                }
-            }
-            */
-            
-
 
         }
     }
