@@ -23,9 +23,9 @@ namespace LabManager
             InitializeComponent();
         }
 
-        // ###################################################
-        // ############# 1. Acquire raw data #################
-        // ###################################################
+        // #######################################################################################
+        // ############################### 1. Acquire raw data ###################################
+        // #######################################################################################
 
         public class PositionData
         {
@@ -365,9 +365,9 @@ namespace LabManager
         }
 
 
-        // ###################################################
-        // ############# 2. Post-processing ##################
-        // ###################################################
+        // #######################################################################################
+        // ############################### 2. Post-processing ####################################
+        // #######################################################################################
 
         public class ParetoFreqTable
         {
@@ -377,15 +377,26 @@ namespace LabManager
             public double CumulPercent { get; set; }
         }
 
+        public class distancePoint
+        {
+            public DateTime TimeStamp { get; set; }
+            public Point Coordinates { get; set; }
+            public string ObjectID { get; set; }
+            public double Distance { get; set; }
+        }
+
         public class CandidatePoint
         {
             public DateTime TimeStamp { get; set; }
             public Point Coordinates { get; set; }
             public string ObjectID { get; set; }
-            public int DataID { get; set; }
         }
 
-        // 1. ReadCSVfile Function
+        /// <summary>
+        /// Read CSV rawdata file
+        /// </summary>
+        /// <param name="CSVdir"></param>
+        /// <returns></returns>
         public static string[,] ReadCSVfile(string CSVdir)
         {
             string whole_file = System.IO.File.ReadAllText(CSVdir);
@@ -412,9 +423,11 @@ namespace LabManager
             return tempValues;
         }
 
-
-        // 2. RemoveEmptyRows Function
-        // *** Need to adjust into more efficient way to find missing value ***
+        /// <summary>
+        /// Remove row which has a missing value, *** Need to adjust into more efficient way to find missing value ***
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
         public static string[,] RemoveEmptyRows(string[,] array)
         {
             // Find how many rows have an " NaN" value
@@ -447,8 +460,11 @@ namespace LabManager
             return results;
         }
 
-
-        // 3. RemoveDuplicateRows Function
+        /// <summary>
+        /// Remove duplicate row
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
         public string[,] RemoveDuplicateRows(string[,] array)
         {
             // Find how many rows have an " NaN" value
@@ -493,8 +509,12 @@ namespace LabManager
             return results;
         }
 
-
-        // 4. AddRow Function for RemoveDuplicateRows Function
+        /// <summary>
+        /// Add 1-D array into 2-D array as a row to reinitialize 2-D array
+        /// </summary>
+        /// <param name="original"></param>
+        /// <param name="added"></param>
+        /// <returns></returns>
         static string[,] AddRow(string[,] original, string[] added)
         {
             int lastRow = original.GetUpperBound(0);
@@ -517,8 +537,12 @@ namespace LabManager
             return result;
         }
 
-
-        // 5. GetDistance Function
+        /// <summary>
+        /// Calculate euclidean distance between two points
+        /// </summary>
+        /// <param name="P1"></param>
+        /// <param name="P2"></param>
+        /// <returns></returns>
         public double GetDistance(Point P1, Point P2) // string
         {
             double dist = 0.0;
@@ -530,10 +554,8 @@ namespace LabManager
             return dist;
         }
 
-        // 6. Percentile Function to calculate Q1, Q3 etc. 
-        // Calculate percentile value
         /// <summary>
-        /// Calculate percentile of a sorted data set
+        /// Calculate percentile of a sorted data set (Q1, Q3, etc.)
         /// </summary>
         /// <param name="sortedData"></param>
         /// <param name="p"></param>
@@ -565,12 +587,14 @@ namespace LabManager
             double part = n - Math.Floor(n);
             return leftNumber + part * (rightNumber - leftNumber);
         } // end of internal function percentile
-
-
-        // 7. FindFilter Function using pareto(histogram)
-        public double FindFilter(string[,] array)
+        
+        /// <summary>
+        /// Create 1-D distance array to manipulate other function more easily
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public double[] CreateDistArray(string[,] array)
         {
-            double filter = 0;
             Point[] coordinates = new Point[array.GetUpperBound(0) + 1]; // extract coordinates from rawdata
 
             for (int i = 0; i < coordinates.Length; i++)
@@ -578,7 +602,7 @@ namespace LabManager
                 coordinates[i] = new Point(Convert.ToDouble(array[i, 2]), Convert.ToDouble(array[i, 3]));
             }
 
-            double[] distArray = new double[array.GetUpperBound(0) + 1]; // calculate distance to find Filter value
+            double[] distArray = new double[array.GetUpperBound(0) + 1]; // calculate distance between current and previous points 
 
             distArray[0] = 0;
             for (int i = 1; i < coordinates.Length; i++)
@@ -586,15 +610,58 @@ namespace LabManager
                 distArray[i] = GetDistance(coordinates[i - 1], coordinates[i]);
             }
 
+            return distArray;
+        }
+        
+        /// <summary>
+        /// Create list data having "ObjectID", "TimeStamp", "Coordinates", "Distance" attributes
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public IList<distancePoint> CreateDistPointsList (string[,] array)
+        {
+            IList<distancePoint> distancePointsList = new List<distancePoint>();
+
+            double[] distArray = CreateDistArray(array);
+
+            for (int i = 0; i < distArray.Length; i++)
+            {
+                distancePointsList.Add(new distancePoint());
+            }
+
+            for (int i = 0; i < distArray.Length; i++)
+            {
+                distancePointsList[i].ObjectID = array[i, 0];
+                distancePointsList[i].TimeStamp = Convert.ToDateTime(array[i, 1]);
+                distancePointsList[i].Coordinates = new Point(Convert.ToDouble(array[i, 2]), Convert.ToDouble(array[i, 3]));
+                distancePointsList[i].Distance = distArray[i];
+            }
+
+            return distancePointsList;
+        }
+
+        /// <summary>
+        /// Calculate distance filter value in order to find destination candidates points
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public double FindFilter(string[,] array, double p)
+        {
+            double filter = 0;
+
+            double[] distArray = CreateDistArray(array);
+            
             Array.Sort(distArray);
-            double q1 = Percentile(distArray, 25);
-            double q3 = Percentile(distArray, 75);
+            double q1 = Percentile(distArray, 25.0);
+            double q3 = Percentile(distArray, 75.0);
             double IQR = q3 - q1;
             double binWidth = 2 * IQR / Math.Pow(distArray.Length, 1.0 / 3.0); // Freedman–Diaconis rule
             int binCount = Convert.ToInt32(Math.Ceiling((distArray.Max() - distArray.Min()) / binWidth));
 
             // Create frequency distribution table, (binWidth, frequency, cumulative frequency, cumulative percentage)
             IList<ParetoFreqTable> freqTable = new List<ParetoFreqTable>();
+            
             for (int i = 0; i < binCount; i++)
             {
                 freqTable.Add(new ParetoFreqTable());
@@ -632,17 +699,51 @@ namespace LabManager
             }
            
             // calculate cumulative percentage
-            for(int i = 0; i < freqTable.Count(); i++)
+            for (int i = 0; i < freqTable.Count(); i++)
             {
                 freqTable[i].CumulPercent = freqTable[i].CumulFreq / Convert.ToDouble(distArray.Length);
             }
            
-            filter = freqTable[0].RangeValue; // Need to change filter value to specific percentage 
-
+            // find filter value according to TOP percengtage
+            for (int i = 0; i < freqTable.Count(); i++)
+            {
+                if (freqTable[i].CumulPercent < (p / 100.0) && (p / 100.0) < freqTable[i + 1].CumulPercent)
+                {
+                    filter = freqTable[i + 1].RangeValue;
+                }
+            }
+            
             return filter;
         }
-        
-    
+
+        /// <summary>
+        /// Find destination candidates points
+        /// </summary>
+        /// <param name="distancePointsList"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public IList<CandidatePoint> FindCandidatesPoints(IList<distancePoint> distancePointsList, double filter)
+        {
+            IList<CandidatePoint> candidatesPointsList = new List<CandidatePoint>();
+            
+            for (int i = 0; i < distancePointsList.Count(); i++)
+            {
+                if (distancePointsList[i].Distance < filter)
+                {
+                    candidatesPointsList.Add(new CandidatePoint()
+                    {
+                        ObjectID = distancePointsList[i].ObjectID,
+                        TimeStamp = distancePointsList[i].TimeStamp,
+                        Coordinates = distancePointsList[i].Coordinates
+                    });
+                    
+                }
+            }
+
+            return candidatesPointsList;
+        }
+
+
         // Need to change for selecting input file by user
         private void BtnSelectFile_Click(object sender, RoutedEventArgs e)
         {
@@ -656,9 +757,12 @@ namespace LabManager
             string[,] rawData = ReadCSVfile(txtInputPath.Text); // Read input CSV data
             string[,] rawData_v2 = RemoveEmptyRows(rawData); // Remove missing value rows
             string[,] rawData_v3 = RemoveDuplicateRows(rawData_v2); // Remove duplicate rows
-            double filterDistance = FindFilter(rawData_v3);
-            
 
+            IList<distancePoint> distancePointsList = CreateDistPointsList(rawData_v3); // Create coordinates data with distance 
+            double filterDistance = FindFilter(rawData_v3, 60.0); // Find distance filter value for setting cadidates of destination
+
+            IList<CandidatePoint> candidatePointsList = FindCandidatesPoints(distancePointsList, filterDistance);
+            
         }
     }
 }
