@@ -1,0 +1,13 @@
+﻿<Window x:Class="LabManager.ParetoCanvas"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LabManager"
+        mc:Ignorable="d"
+        Title="ParetoCanvas" Height="600" Width="800">
+    <Grid Margin="10,303,22.286,10.429" Background="#FFCCCCCC">
+        <Canvas x:Name="paretoCanvas" HorizontalAlignment="Center" VerticalAlignment="Center" Width="0" Height="0" RenderTransform="1 0 0 -1 0 0"/>
+        <Grid HorizontalAlignment="Left" Height="282" Margin="-2,-291,-7,0" VerticalAlignment="Top" Width="771"/>
+    </Grid>
+</Window>

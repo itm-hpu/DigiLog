@@ -752,17 +752,26 @@ namespace LabManager
         }
 
 
-        private void BtnFindDestination_Click(object sender, RoutedEventArgs e)
+        private void BtnPareto_Click(object sender, RoutedEventArgs e)
         {
             string[,] rawData = ReadCSVfile(txtInputPath.Text); // Read input CSV data
             string[,] rawData_v2 = RemoveEmptyRows(rawData); // Remove missing value rows
             string[,] rawData_v3 = RemoveDuplicateRows(rawData_v2); // Remove duplicate rows
 
             IList<distancePoint> distancePointsList = CreateDistPointsList(rawData_v3); // Create coordinates data with distance 
-            double filterDistance = FindFilter(rawData_v3, 60.0); // Find distance filter value for setting cadidates of destination
 
-            IList<CandidatePoint> candidatePointsList = FindCandidatesPoints(distancePointsList, filterDistance);
+            ParetoCanvas pareto = new ParetoCanvas(distancePointsList);
+            pareto.Show();
+
+            //double filterDistance = FindFilter(rawData_v3, 60.0); // Find distance filter value for setting cadidates of destination
+            //IList<CandidatePoint> candidatePointsList = FindCandidatesPoints(distancePointsList, filterDistance);
+
+        }
+        
+        private void BtnCandidates_Click(object sender, RoutedEventArgs e)
+        {
             
         }
+        
     }
 }

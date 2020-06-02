@@ -43,7 +43,8 @@
         <Button x:Name="btnSelectFile" Content="Select File" HorizontalAlignment="Left" Height="40" Margin="709,725,0,0" VerticalAlignment="Top" Width="70" Click="BtnSelectFile_Click"/>
         <Label Content="Input Path" HorizontalAlignment="Left" Margin="10,724,0,0" VerticalAlignment="Top" Width="79" Height="26"/>
         <TextBox x:Name="txtInputPath" HorizontalAlignment="Left" Height="40" Margin="99,725,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591"/>
-        <Button x:Name="btnFindPoint" Content="Find Destination" HorizontalAlignment="Left" Margin="799,725,0,0" VerticalAlignment="Top" Width="116" Height="40" Click="BtnFindDestination_Click"/>
+        <Button x:Name="btnPareto" Content="Pareto" HorizontalAlignment="Left" Margin="799,725,0,0" VerticalAlignment="Top" Width="70" Height="40" Click="BtnPareto_Click"/>
+        <Button x:Name="btnCandidates" Content="Candidates" HorizontalAlignment="Left" Margin="891,725,0,0" VerticalAlignment="Top" Width="70" Height="40" Click="BtnCandidates_Click"/>
 
     </Grid>
 </Window>
