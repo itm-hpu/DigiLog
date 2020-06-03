@@ -32,44 +32,45 @@ namespace LabManager
         {
             InitializeComponent();
             source = candidatePointsList;
-            createDistribution(candidatePointsList);
+            createDistribution(source);
         }
 
-        public void SaveCandidatesPoints(IList<MainWindow.CandidatePoint> candidatePointsList)
+        public void SaveCandidatesPoints(IList<MainWindow.CandidatePoint> source)
         {
-            int iLength = candidatePointsList.Count();
+            int iLength = source.Count();
 
             string filedir = Directory.GetCurrentDirectory();
-            filedir = filedir + @"\CandidatesPoints_" + candidatePointsList[0].ObjectID + ".csv";
+            filedir = filedir + @"\CandidatesPoints_" + source[0].ObjectID + ".csv";
             StreamWriter file = new StreamWriter(filedir);
 
             for (int i = 0; i < iLength; i++)
             {
-                file.Write("\t" + candidatePointsList[i].ObjectID + "," + candidatePointsList[i].TimeStamp + "," + candidatePointsList[i].Coordinates.X + "," + candidatePointsList[i].Coordinates.Y);
+                file.Write((i+1) + "," + "\t" + source[i].ObjectID + "," + source[i].TimeStamp + "," + source[i].Coordinates.X + "," + source[i].Coordinates.Y);
                 file.Write("\n");
             }
+            file.Close();
 
             return;
         }
 
-        public void createDistribution(IList<MainWindow.CandidatePoint> candidatePointsList)
+        public void createDistribution(IList<MainWindow.CandidatePoint> source)
         {
             //distribution.ChartAreas[0].AxisX.Enabled = AxisEnabled.False;
             //distribution.ChartAreas[0].AxisY.Enabled = AxisEnabled.False;
 
-            double AxisXmax = candidatePointsList.Max(r => r.Coordinates.X);
-            double AxisXmin = candidatePointsList.Min(r => r.Coordinates.X);
-            double AxisYmax = candidatePointsList.Max(r => r.Coordinates.Y);
-            double AxisYmin = candidatePointsList.Min(r => r.Coordinates.Y);
+            double AxisXmax = source.Max(r => r.Coordinates.X);
+            double AxisXmin = source.Min(r => r.Coordinates.X);
+            double AxisYmax = source.Max(r => r.Coordinates.Y);
+            double AxisYmin = source.Min(r => r.Coordinates.Y);
 
             distribution.ChartAreas[0].AxisX.Maximum = AxisXmax;
             distribution.ChartAreas[0].AxisX.Minimum = AxisXmin;
             distribution.ChartAreas[0].AxisY.Maximum = AxisYmax;
             distribution.ChartAreas[0].AxisY.Minimum = AxisYmin;
 
-            for (int i = 0; i < candidatePointsList.Count(); i++)
+            for (int i = 0; i < source.Count(); i++)
             {
-                distribution.Series["Series1"].Points.AddXY(candidatePointsList[i].Coordinates.X, candidatePointsList[i].Coordinates.Y);
+                distribution.Series["Series1"].Points.AddXY(source[i].Coordinates.X, source[i].Coordinates.Y);
             }
         }
 
