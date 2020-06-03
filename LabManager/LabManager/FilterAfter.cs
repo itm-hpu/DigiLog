@@ -11,15 +11,45 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace LabManager
 {
     public partial class FilterAfter : Form
     {
+
+        public class CandidatePoint
+        {
+            public DateTime TimeStamp { get; set; }
+            public System.Windows.Point Coordinates { get; set; } // ?
+            public string ObjectID { get; set; }
+        }
+
+        IList<MainWindow.CandidatePoint> source = new List<MainWindow.CandidatePoint>();
+
+
         public FilterAfter(IList<MainWindow.CandidatePoint> candidatePointsList)
         {
             InitializeComponent();
+            source = candidatePointsList;
             createDistribution(candidatePointsList);
+        }
+
+        public void SaveCandidatesPoints(IList<MainWindow.CandidatePoint> candidatePointsList)
+        {
+            int iLength = candidatePointsList.Count();
+
+            string filedir = Directory.GetCurrentDirectory();
+            filedir = filedir + @"\CandidatesPoints_" + candidatePointsList[0].ObjectID + ".csv";
+            StreamWriter file = new StreamWriter(filedir);
+
+            for (int i = 0; i < iLength; i++)
+            {
+                file.Write("\t" + candidatePointsList[i].ObjectID + "," + candidatePointsList[i].TimeStamp + "," + candidatePointsList[i].Coordinates.X + "," + candidatePointsList[i].Coordinates.Y);
+                file.Write("\n");
+            }
+
+            return;
         }
 
         public void createDistribution(IList<MainWindow.CandidatePoint> candidatePointsList)
@@ -41,6 +71,20 @@ namespace LabManager
             {
                 distribution.Series["Series1"].Points.AddXY(candidatePointsList[i].Coordinates.X, candidatePointsList[i].Coordinates.Y);
             }
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            SaveCandidatesPoints(source);
+
+            string message = "Finish saving candidates points!";
+            string caption = "Post-processing";
+            System.Windows.MessageBox.Show(message, caption);
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
