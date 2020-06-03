@@ -720,7 +720,7 @@ namespace LabManager
         /// <returns></returns>
         public double FindFilter(IList<ParetoFreqTable> freqTable, double p)
         {
-            double filter = 0;
+            double filter = freqTable[0].RangeValue;
 
             // find filter value according to TOP percengtage
             for (int i = 0; i < freqTable.Count(); i++)
@@ -800,7 +800,6 @@ namespace LabManager
             FilterAfter distribution = new FilterAfter(candidatePointsList);
             distribution.WindowState = FormWindowState.Maximized;
             distribution.Show();
-
         }
 
     }

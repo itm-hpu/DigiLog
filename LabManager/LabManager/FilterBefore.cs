@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace LabManager
 {
@@ -25,35 +26,22 @@ namespace LabManager
 
         public void createDistribution(IList<MainWindow.distancePoint> distancePointsList)
         {
-            /*
-            int dotsize = 7;
-            Ellipse dotOrigin = new Ellipse();
-            dotOrigin.Stroke = new SolidColorBrush(Colors.Black);
-            dotOrigin.StrokeThickness = 3;
-            Canvas.SetZIndex(dotOrigin, 3);
-            dotOrigin.Height = dotsize;
-            dotOrigin.Width = dotsize;
-            dotOrigin.Fill = new SolidColorBrush(Colors.Black);
-            dotOrigin.Margin = new Thickness(0, 0, 0, 0);
-            distribution.Series["Series1"].Points.AddXY(dotOrigin.Margin.Left, dotOrigin.Margin.Top);
-            */
+            //distribution.ChartAreas[0].AxisX.Enabled = AxisEnabled.False;
+            //distribution.ChartAreas[0].AxisY.Enabled = AxisEnabled.False;
 
-            distribution.ChartAreas[0].AxisX.Minimum = -1100;
-            distribution.ChartAreas[0].AxisX.Maximum = 600;
-            distribution.ChartAreas[0].AxisY.Minimum = 1000;
+            double AxisXmax = distancePointsList.Max(r => r.Coordinates.X);
+            double AxisXmin = distancePointsList.Min(r => r.Coordinates.X);
+            double AxisYmax = distancePointsList.Max(r => r.Coordinates.Y);
+            double AxisYmin = distancePointsList.Min(r => r.Coordinates.Y);
+
+            distribution.ChartAreas[0].AxisX.Maximum = AxisXmax;
+            distribution.ChartAreas[0].AxisX.Minimum = AxisXmin;
+            distribution.ChartAreas[0].AxisY.Maximum = AxisYmax;
+            distribution.ChartAreas[0].AxisY.Minimum = AxisYmin;
 
             for (int i = 0; i < distancePointsList.Count(); i++)
             {
-                int dotSize = 3;
-                Ellipse currentDot = new Ellipse();
-                currentDot.Stroke = new SolidColorBrush(Colors.Green);
-                currentDot.StrokeThickness = 3;
-                Canvas.SetZIndex(currentDot, 3);
-                currentDot.Height = dotSize;
-                currentDot.Width = dotSize;
-                currentDot.Fill = new SolidColorBrush(Colors.Green);
-                currentDot.Margin = new Thickness(distancePointsList[i].Coordinates.X , distancePointsList[i].Coordinates.Y , 0, 0); // Sets the position.
-                distribution.Series["Series1"].Points.AddXY(currentDot.Margin.Left, currentDot.Margin.Top);
+                distribution.Series["Series1"].Points.AddXY(distancePointsList[i].Coordinates.X, distancePointsList[i].Coordinates.Y);
             }
         }
 

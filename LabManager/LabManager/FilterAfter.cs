@@ -24,35 +24,22 @@ namespace LabManager
 
         public void createDistribution(IList<MainWindow.CandidatePoint> candidatePointsList)
         {
-            /*
-            int dotsize = 7;
-            Ellipse dotOrigin = new Ellipse();
-            dotOrigin.Stroke = new SolidColorBrush(Colors.Black);
-            dotOrigin.StrokeThickness = 3;
-            Canvas.SetZIndex(dotOrigin, 3);
-            dotOrigin.Height = dotsize;
-            dotOrigin.Width = dotsize;
-            dotOrigin.Fill = new SolidColorBrush(Colors.Black);
-            dotOrigin.Margin = new Thickness(0, 0, 0, 0);
-            distribution.Series["Series1"].Points.AddXY(dotOrigin.Margin.Left, dotOrigin.Margin.Top);
-            */
+            //distribution.ChartAreas[0].AxisX.Enabled = AxisEnabled.False;
+            //distribution.ChartAreas[0].AxisY.Enabled = AxisEnabled.False;
 
-            distribution.ChartAreas[0].AxisX.Minimum = -870;
-            distribution.ChartAreas[0].AxisX.Maximum = 100;
-            distribution.ChartAreas[0].AxisY.Minimum = 1000;
+            double AxisXmax = candidatePointsList.Max(r => r.Coordinates.X);
+            double AxisXmin = candidatePointsList.Min(r => r.Coordinates.X);
+            double AxisYmax = candidatePointsList.Max(r => r.Coordinates.Y);
+            double AxisYmin = candidatePointsList.Min(r => r.Coordinates.Y);
+
+            distribution.ChartAreas[0].AxisX.Maximum = AxisXmax;
+            distribution.ChartAreas[0].AxisX.Minimum = AxisXmin;
+            distribution.ChartAreas[0].AxisY.Maximum = AxisYmax;
+            distribution.ChartAreas[0].AxisY.Minimum = AxisYmin;
 
             for (int i = 0; i < candidatePointsList.Count(); i++)
             {
-                int dotSize = 3;
-                Ellipse currentDot = new Ellipse();
-                currentDot.Stroke = new SolidColorBrush(Colors.Green);
-                currentDot.StrokeThickness = 3;
-                Canvas.SetZIndex(currentDot, 3);
-                currentDot.Height = dotSize;
-                currentDot.Width = dotSize;
-                currentDot.Fill = new SolidColorBrush(Colors.Green);
-                currentDot.Margin = new Thickness(candidatePointsList[i].Coordinates.X, candidatePointsList[i].Coordinates.Y, 0, 0); // Sets the position.
-                distribution.Series["Series1"].Points.AddXY(currentDot.Margin.Left, currentDot.Margin.Top);
+                distribution.Series["Series1"].Points.AddXY(candidatePointsList[i].Coordinates.X, candidatePointsList[i].Coordinates.Y);
             }
         }
     }

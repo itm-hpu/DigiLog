@@ -37,16 +37,18 @@
             // 
             // distribution
             // 
+            this.distribution.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             chartArea1.Name = "ChartArea1";
             this.distribution.ChartAreas.Add(chartArea1);
             legend1.Enabled = false;
             legend1.Name = "Legend1";
             this.distribution.Legends.Add(legend1);
-            this.distribution.Location = new System.Drawing.Point(36, 37);
+            this.distribution.Location = new System.Drawing.Point(40, 44);
             this.distribution.Name = "distribution";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series1.IsXValueIndexed = true;
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.distribution.Series.Add(series1);

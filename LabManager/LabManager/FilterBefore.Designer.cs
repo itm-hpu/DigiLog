@@ -43,6 +43,8 @@
             // 
             // pareto
             // 
+            this.pareto.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             chartArea1.Name = "ChartArea1";
             this.pareto.ChartAreas.Add(chartArea1);
             legend1.Enabled = false;
@@ -51,7 +53,7 @@
             legend2.Name = "Percent";
             this.pareto.Legends.Add(legend1);
             this.pareto.Legends.Add(legend2);
-            this.pareto.Location = new System.Drawing.Point(21, 22);
+            this.pareto.Location = new System.Drawing.Point(21, 19);
             this.pareto.Name = "pareto";
             series1.ChartArea = "ChartArea1";
             series1.Color = System.Drawing.Color.Navy;
@@ -74,12 +76,15 @@
             series2.YValuesPerPoint = 10;
             this.pareto.Series.Add(series1);
             this.pareto.Series.Add(series2);
-            this.pareto.Size = new System.Drawing.Size(1983, 553);
+            this.pareto.Size = new System.Drawing.Size(1983, 570);
             this.pareto.TabIndex = 0;
             this.pareto.Text = "chart1";
             // 
             // distribution
             // 
+            this.distribution.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             chartArea2.Name = "ChartArea1";
             this.distribution.ChartAreas.Add(chartArea2);
             this.distribution.Location = new System.Drawing.Point(21, 598);
@@ -88,18 +93,18 @@
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
             series3.Name = "Series1";
             this.distribution.Series.Add(series3);
-            this.distribution.Size = new System.Drawing.Size(1983, 479);
+            this.distribution.Size = new System.Drawing.Size(1983, 629);
             this.distribution.TabIndex = 1;
             this.distribution.Text = "chart2";
             // 
-            // BeforeFiltered
+            // FilterBefore
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2041, 1089);
+            this.ClientSize = new System.Drawing.Size(2041, 1239);
             this.Controls.Add(this.distribution);
             this.Controls.Add(this.pareto);
-            this.Name = "BeforeFiltered";
+            this.Name = "FilterBefore";
             this.Text = "BeforeFiltered";
             ((System.ComponentModel.ISupportInitialize)(this.pareto)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.distribution)).EndInit();
