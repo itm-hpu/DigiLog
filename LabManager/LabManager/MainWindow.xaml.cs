@@ -369,12 +369,13 @@ namespace LabManager
         // ############################### 2. Post-processing ####################################
         // #######################################################################################
 
-        public class ParetoFreqTable
+        public class ParetoFreqTable 
         {
             public double RangeValue { get; set; }
             public int Freq { get; set; }
             public int CumulFreq{ get; set; }
             public double CumulPercent { get; set; }
+            public string Section { get; set; }
         }
 
         public class distancePoint
@@ -641,17 +642,14 @@ namespace LabManager
         }
 
         /// <summary>
-        /// Calculate distance filter value in order to find destination candidates points
+        /// Create frequency table for pareto chart
         /// </summary>
         /// <param name="array"></param>
-        /// <param name="p"></param>
         /// <returns></returns>
-        public double FindFilter(string[,] array, double p)
+        public IList<ParetoFreqTable> CreateFreqTable(string[,] array)
         {
-            double filter = 0;
-
             double[] distArray = CreateDistArray(array);
-            
+
             Array.Sort(distArray);
             double q1 = Percentile(distArray, 25.0);
             double q3 = Percentile(distArray, 75.0);
@@ -661,49 +659,69 @@ namespace LabManager
 
             // Create frequency distribution table, (binWidth, frequency, cumulative frequency, cumulative percentage)
             IList<ParetoFreqTable> freqTable = new List<ParetoFreqTable>();
-            
+
             for (int i = 0; i < binCount; i++)
             {
                 freqTable.Add(new ParetoFreqTable());
             }
-    
-            // set binWidth
+
+            // set section name
+            freqTable[0].Section = "[0, " + binWidth.ToString("F2") + ")";
+            for (int i = 1; i < freqTable.Count(); i++)
+            {
+                freqTable[i].Section = "[" + (binWidth * i).ToString("F2") + ", " + (binWidth * (i+1)).ToString("F2") + ")";
+            }
+
+            // set range value
             for (int i = 0; i < freqTable.Count(); i++)
             {
                 freqTable[i].RangeValue = binWidth * (i + 1);
             }
-   
+
             // set frequency
             for (int i = 0; i < distArray.Length; i++)
             {
-                for(int j = 1; j < freqTable.Count(); j++)
+                for (int j = 1; j < freqTable.Count(); j++)
                 {
                     if (0 <= distArray[i] && distArray[i] < freqTable[j - 1].RangeValue)
                     {
                         freqTable[0].Freq = freqTable[0].Freq + 1;
                         break;
                     }
-                    else if (freqTable[j-1].RangeValue <= distArray[i] && distArray[i] < freqTable[j].RangeValue)
+                    else if (freqTable[j - 1].RangeValue <= distArray[i] && distArray[i] < freqTable[j].RangeValue)
                     {
                         freqTable[j].Freq = freqTable[j].Freq + 1;
                         break;
                     }
                 }
             }
-         
+
             // calculate cumulative frequency
             freqTable[0].CumulFreq = freqTable[0].Freq;
             for (int i = 1; i < freqTable.Count(); i++)
             {
                 freqTable[i].CumulFreq = freqTable[i - 1].CumulFreq + freqTable[i].Freq;
             }
-           
+
             // calculate cumulative percentage
             for (int i = 0; i < freqTable.Count(); i++)
             {
                 freqTable[i].CumulPercent = freqTable[i].CumulFreq / Convert.ToDouble(distArray.Length);
             }
-           
+
+            return freqTable;
+        }
+
+        /// <summary>
+        /// Calculate distance filter value in order to find destination candidates points
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public double FindFilter(IList<ParetoFreqTable> freqTable, double p)
+        {
+            double filter = 0;
+
             // find filter value according to TOP percengtage
             for (int i = 0; i < freqTable.Count(); i++)
             {
@@ -759,19 +777,31 @@ namespace LabManager
             string[,] rawData_v3 = RemoveDuplicateRows(rawData_v2); // Remove duplicate rows
 
             IList<distancePoint> distancePointsList = CreateDistPointsList(rawData_v3); // Create coordinates data with distance 
+            IList<ParetoFreqTable> freqTable = CreateFreqTable(rawData_v3);
 
-            ParetoCanvas pareto = new ParetoCanvas(distancePointsList);
+            FilterBefore pareto = new FilterBefore(distancePointsList, freqTable);
+            pareto.WindowState = FormWindowState.Maximized;
             pareto.Show();
-
-            //double filterDistance = FindFilter(rawData_v3, 60.0); // Find distance filter value for setting cadidates of destination
-            //IList<CandidatePoint> candidatePointsList = FindCandidatesPoints(distancePointsList, filterDistance);
-
+            
         }
         
         private void BtnCandidates_Click(object sender, RoutedEventArgs e)
         {
-            
+            string[,] rawData = ReadCSVfile(txtInputPath.Text); // Read input CSV data
+            string[,] rawData_v2 = RemoveEmptyRows(rawData); // Remove missing value rows
+            string[,] rawData_v3 = RemoveDuplicateRows(rawData_v2); // Remove duplicate rows
+
+            IList<distancePoint> distancePointsList = CreateDistPointsList(rawData_v3); // Create coordinates data with distance 
+            IList<ParetoFreqTable> freqTable = CreateFreqTable(rawData_v3);
+
+            double filterDistance = FindFilter(freqTable, Convert.ToDouble(txtPercent.Text)); // Find distance filter value for setting cadidates of destination
+            IList<CandidatePoint> candidatePointsList = FindCandidatesPoints(distancePointsList, filterDistance);
+
+            FilterAfter distribution = new FilterAfter(candidatePointsList);
+            distribution.WindowState = FormWindowState.Maximized;
+            distribution.Show();
+
         }
-        
+
     }
 }

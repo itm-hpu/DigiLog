@@ -1,28 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace LabManager
 {
-    /// <summary>
-    /// Interaction logic for PostProcessing.xaml
-    /// </summary>
-    public partial class ParetoCanvas : Window
+    public partial class FilterAfter : Form
     {
-        public ParetoCanvas(IList<MainWindow.distancePoint> distancePointsList)
+        public FilterAfter(IList<MainWindow.CandidatePoint> candidatePointsList)
         {
             InitializeComponent();
+            createDistribution(candidatePointsList);
+        }
 
+        public void createDistribution(IList<MainWindow.CandidatePoint> candidatePointsList)
+        {
+            /*
             int dotsize = 7;
             Ellipse dotOrigin = new Ellipse();
             dotOrigin.Stroke = new SolidColorBrush(Colors.Black);
@@ -32,9 +34,14 @@ namespace LabManager
             dotOrigin.Width = dotsize;
             dotOrigin.Fill = new SolidColorBrush(Colors.Black);
             dotOrigin.Margin = new Thickness(0, 0, 0, 0);
-            paretoCanvas.Children.Add(dotOrigin);
-            
-            for (int i = 0; i < distancePointsList.Count(); i++)
+            distribution.Series["Series1"].Points.AddXY(dotOrigin.Margin.Left, dotOrigin.Margin.Top);
+            */
+
+            distribution.ChartAreas[0].AxisX.Minimum = -870;
+            distribution.ChartAreas[0].AxisX.Maximum = 100;
+            distribution.ChartAreas[0].AxisY.Minimum = 1000;
+
+            for (int i = 0; i < candidatePointsList.Count(); i++)
             {
                 int dotSize = 3;
                 Ellipse currentDot = new Ellipse();
@@ -44,8 +51,8 @@ namespace LabManager
                 currentDot.Height = dotSize;
                 currentDot.Width = dotSize;
                 currentDot.Fill = new SolidColorBrush(Colors.Green);
-                currentDot.Margin = new Thickness(distancePointsList[i].Coordinates.X / 3.0, distancePointsList[i].Coordinates.Y / 15.0, 0, 0); // Sets the position.
-                paretoCanvas.Children.Add(currentDot);
+                currentDot.Margin = new Thickness(candidatePointsList[i].Coordinates.X, candidatePointsList[i].Coordinates.Y, 0, 0); // Sets the position.
+                distribution.Series["Series1"].Points.AddXY(currentDot.Margin.Left, currentDot.Margin.Top);
             }
         }
     }
