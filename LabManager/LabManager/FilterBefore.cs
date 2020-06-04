@@ -17,14 +17,14 @@ namespace LabManager
 {
     public partial class FilterBefore : Form
     {
-        public FilterBefore(IList<MainWindow.distancePoint> distancePointsList, IList<MainWindow.ParetoFreqTable> freqTable)
+        public FilterBefore(IList<MainWindow.DistancePoint> distancePointsList, IList<MainWindow.ParetoFreqTable> freqTable)
         {
             InitializeComponent();
             createDistribution(distancePointsList);
             createPareto(freqTable);
         }
 
-        public void createDistribution(IList<MainWindow.distancePoint> distancePointsList)
+        public void createDistribution(IList<MainWindow.DistancePoint> distancePointsList)
         {
             //distribution.ChartAreas[0].AxisX.Enabled = AxisEnabled.False;
             //distribution.ChartAreas[0].AxisY.Enabled = AxisEnabled.False;
