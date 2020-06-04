@@ -378,7 +378,7 @@ namespace LabManager
             public string Section { get; set; }
         }
 
-        public class distancePoint
+        public class DistancePoint
         {
             public DateTime TimeStamp { get; set; }
             public Point Coordinates { get; set; }
@@ -619,15 +619,15 @@ namespace LabManager
         /// </summary>
         /// <param name="array"></param>
         /// <returns></returns>
-        public IList<distancePoint> CreateDistPointsList (string[,] array)
+        public IList<DistancePoint> CreateDistPointsList (string[,] array)
         {
-            IList<distancePoint> distancePointsList = new List<distancePoint>();
+            IList<DistancePoint> distancePointsList = new List<DistancePoint>();
 
             double[] distArray = CreateDistArray(array);
 
             for (int i = 0; i < distArray.Length; i++)
             {
-                distancePointsList.Add(new distancePoint());
+                distancePointsList.Add(new DistancePoint());
             }
 
             for (int i = 0; i < distArray.Length; i++)
@@ -740,7 +740,7 @@ namespace LabManager
         /// <param name="distancePointsList"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public IList<CandidatePoint> FindCandidatesPoints(IList<distancePoint> distancePointsList, double filter)
+        public IList<CandidatePoint> FindCandidatesPoints(IList<DistancePoint> distancePointsList, double filter)
         {
             IList<CandidatePoint> candidatesPointsList = new List<CandidatePoint>();
             
@@ -776,7 +776,7 @@ namespace LabManager
             string[,] rawData_v2 = RemoveEmptyRows(rawData); // Remove missing value rows
             string[,] rawData_v3 = RemoveDuplicateRows(rawData_v2); // Remove duplicate rows
 
-            IList<distancePoint> distancePointsList = CreateDistPointsList(rawData_v3); // Create coordinates data with distance 
+            IList<DistancePoint> distancePointsList = CreateDistPointsList(rawData_v3); // Create coordinates data with distance 
             IList<ParetoFreqTable> freqTable = CreateFreqTable(rawData_v3);
 
             FilterBefore pareto = new FilterBefore(distancePointsList, freqTable);
@@ -791,7 +791,7 @@ namespace LabManager
             string[,] rawData_v2 = RemoveEmptyRows(rawData); // Remove missing value rows
             string[,] rawData_v3 = RemoveDuplicateRows(rawData_v2); // Remove duplicate rows
 
-            IList<distancePoint> distancePointsList = CreateDistPointsList(rawData_v3); // Create coordinates data with distance 
+            IList<DistancePoint> distancePointsList = CreateDistPointsList(rawData_v3); // Create coordinates data with distance 
             IList<ParetoFreqTable> freqTable = CreateFreqTable(rawData_v3);
 
             double filterDistance = FindFilter(freqTable, Convert.ToDouble(txtPercent.Text)); // Find distance filter value for setting cadidates of destination
