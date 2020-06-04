@@ -619,7 +619,7 @@ namespace LabManager
         /// </summary>
         /// <param name="array"></param>
         /// <returns></returns>
-        public IList<DistancePoint> CreateDistPointsList (string[,] array)
+        public IList<DistancePoint> CreateDistPointsList(string[,] array)
         {
             IList<DistancePoint> distancePointsList = new List<DistancePoint>();
 
@@ -740,7 +740,7 @@ namespace LabManager
         /// <param name="distancePointsList"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public IList<CandidatePoint> FindCandidatesPoints(IList<DistancePoint> distancePointsList, double filter)
+        public IList<CandidatePoint> CreateCandidatesPointsList(IList<DistancePoint> distancePointsList, double filter)
         {
             IList<CandidatePoint> candidatesPointsList = new List<CandidatePoint>();
             
@@ -795,7 +795,7 @@ namespace LabManager
             IList<ParetoFreqTable> freqTable = CreateFreqTable(rawData_v3);
 
             double filterDistance = FindFilter(freqTable, Convert.ToDouble(txtPercent.Text)); // Find distance filter value for setting cadidates of destination
-            IList<CandidatePoint> candidatePointsList = FindCandidatesPoints(distancePointsList, filterDistance);
+            IList<CandidatePoint> candidatePointsList = CreateCandidatesPointsList(distancePointsList, filterDistance);
 
             FilterAfter distribution = new FilterAfter(candidatePointsList);
             distribution.WindowState = FormWindowState.Maximized;
