@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LabManager"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="LabManager.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="881.028" Width="928.857">
+        Title="MainWindow" Height="979.599" Width="928.857">
     <Grid Margin="10,0,0,25.571" HorizontalAlignment="Left" Width="909">
         <Label Content="RTLS Address&#xA;" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Height="32" Width="81"/>
         <Label Content="UserName" HorizontalAlignment="Left" Margin="307,46,0,0" VerticalAlignment="Top" Width="89" Height="26"/>
@@ -42,6 +42,9 @@
         <Button x:Name="btnPareto" Content="Pareto" HorizontalAlignment="Left" Margin="799,725,0,0" VerticalAlignment="Top" Width="70" Height="40" Click="BtnPareto_Click"/>
         <Button x:Name="btnCandidates" Content="Candidates" HorizontalAlignment="Left" Margin="799,770,0,0" VerticalAlignment="Top" Width="70" Height="40" Click="BtnCandidates_Click" RenderTransformOrigin="1.244,0.477"/>
         <TextBox x:Name="txtPercent" HorizontalAlignment="Left" Height="19" Margin="710,792,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70"/>
-        <Label Content="Percentage?" HorizontalAlignment="Left" Margin="708,765,0,0" VerticalAlignment="Top" Width="84" Height="26"/>
+        <Label Content="% of Pareto" HorizontalAlignment="Left" Margin="708,768,0,0" VerticalAlignment="Top" Width="84" Height="26"/>
+        <Button x:Name="btnCluster" Content="Cluster" HorizontalAlignment="Left" Margin="799,815,0,0" VerticalAlignment="Top" Width="70" Height="40" Click="BtnCluster_Click" RenderTransformOrigin="1.244,0.477"/>
+        <TextBox x:Name="txtCluster" HorizontalAlignment="Left" Height="19" Margin="710,835,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70"/>
+        <Label Content="# of Cluster" HorizontalAlignment="Left" Margin="708,811,0,0" VerticalAlignment="Top" Width="84" Height="26"/>
     </Grid>
 </Window>

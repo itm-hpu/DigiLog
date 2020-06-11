@@ -20,11 +20,11 @@ namespace LabManager
         public FilterBefore(IList<MainWindow.DistancePoint> distancePointsList, IList<MainWindow.ParetoFreqTable> freqTable)
         {
             InitializeComponent();
-            createDistribution(distancePointsList);
-            createPareto(freqTable);
+            CreateDistribution(distancePointsList);
+            CreatePareto(freqTable);
         }
 
-        public void createDistribution(IList<MainWindow.DistancePoint> distancePointsList)
+        public void CreateDistribution(IList<MainWindow.DistancePoint> distancePointsList)
         {
             //distribution.ChartAreas[0].AxisX.Enabled = AxisEnabled.False;
             //distribution.ChartAreas[0].AxisY.Enabled = AxisEnabled.False;
@@ -45,7 +45,7 @@ namespace LabManager
             }
         }
 
-        public void createPareto(IList<MainWindow.ParetoFreqTable> freqTable)
+        public void CreatePareto(IList<MainWindow.ParetoFreqTable> freqTable)
         {
             pareto.ChartAreas[0].AxisX.LabelStyle.Interval = 1;
 

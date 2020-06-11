@@ -8,6 +8,9 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Forms;
 using System.IO;
+using Microsoft.ML;
+using Microsoft.ML.Data;
+
 
 
 namespace LabManager
@@ -388,6 +391,7 @@ namespace LabManager
 
         public class CandidatePoint
         {
+            public int ClusterNum { get; set; }
             public DateTime TimeStamp { get; set; }
             public Point Coordinates { get; set; }
             public string ObjectID { get; set; }
@@ -761,6 +765,8 @@ namespace LabManager
             return candidatesPointsList;
         }
 
+        
+
 
         // Need to change for selecting input file by user
         private void BtnSelectFile_Click(object sender, RoutedEventArgs e)
@@ -768,6 +774,7 @@ namespace LabManager
             string fileDir = Directory.GetCurrentDirectory();
             txtInputPath.Text = fileDir + @"\experiment\PositionData_RTLS_2020-05-19 14-50-25_00000013.csv"; // need to change in the code
         }
+
 
 
         private void BtnPareto_Click(object sender, RoutedEventArgs e)
@@ -784,7 +791,9 @@ namespace LabManager
             pareto.Show();
             
         }
-        
+
+        IList<CandidatePoint> candidatePointsList = new List<CandidatePoint>();
+
         private void BtnCandidates_Click(object sender, RoutedEventArgs e)
         {
             string[,] rawData = ReadCSVfile(txtInputPath.Text); // Read input CSV data
@@ -795,12 +804,99 @@ namespace LabManager
             IList<ParetoFreqTable> freqTable = CreateFreqTable(rawData_v3);
 
             double filterDistance = FindFilter(freqTable, Convert.ToDouble(txtPercent.Text)); // Find distance filter value for setting cadidates of destination
-            IList<CandidatePoint> candidatePointsList = CreateCandidatesPointsList(distancePointsList, filterDistance);
+            //IList<CandidatePoint> candidatePointsList = CreateCandidatesPointsList(distancePointsList, filterDistance);
+            candidatePointsList = CreateCandidatesPointsList(distancePointsList, filterDistance);
 
             FilterAfter distribution = new FilterAfter(candidatePointsList);
             distribution.WindowState = FormWindowState.Maximized;
             distribution.Show();
         }
 
+        // ########################################################################################
+        // #################################### For clustering ####################################
+        // ########################################################################################
+
+        public class CoordinatesData
+        {
+            [LoadColumn(0)]
+            public int ObjectID;
+
+            [LoadColumn(1)]
+            public DateTime TimeStamp;
+
+            [LoadColumn(0)]
+            public Single X;
+
+            [LoadColumn(1)]
+            public Single Y;
+        }
+
+        public class ClusterPrediction
+        {
+            [ColumnName("PredictedLabel")]
+            public uint PredictedClusterId;
+
+            [ColumnName("Score")]
+            public float[] Distances;
+        }
+        
+
+        public IList<CandidatePoint> CreateClusterPointsList(IList<CandidatePoint> source, int numOfCluster)
+        {
+            IList<CandidatePoint> clusterPointsList = source;
+
+            string filedir = Directory.GetCurrentDirectory();
+            filedir = filedir + @"\CandidatesPoints_" + source[0].ObjectID + ".csv";
+
+            var mlContext = new MLContext(seed: 0);
+            
+            var textLoader = mlContext.Data.CreateTextLoader(new[]
+            {
+                new TextLoader.Column("ObjectID", DataKind.Single, 0),
+                new TextLoader.Column("TimeStamp", DataKind.Single, 1),
+                new TextLoader.Column("X", DataKind.Single, 2),
+                new TextLoader.Column("Y", DataKind.Single, 3),
+            },
+            hasHeader: false,
+            separatorChar: ',');
+
+            IDataView dataView = textLoader.Load(filedir);
+            
+            string featuresColumnName = "Features";
+
+            var pipeline = (mlContext.Transforms.Concatenate(featuresColumnName, "X", "Y"))
+            .Append(mlContext.Clustering.Trainers.KMeans(featuresColumnName, numberOfClusters: numOfCluster));
+            
+            var model = pipeline.Fit(dataView);
+
+            var predictor = mlContext.Model.CreatePredictionEngine<CoordinatesData, ClusterPrediction>(model);
+
+            int iLength = source.Count();
+
+            for (int i = 0; i < iLength; i++)
+            {
+                CoordinatesData input = new CoordinatesData();
+                input.ObjectID = Convert.ToInt32(source[i].ObjectID);
+                input.TimeStamp = source[i].TimeStamp;
+                input.X = Convert.ToSingle(source[i].Coordinates.X);
+                input.Y = Convert.ToSingle(source[i].Coordinates.Y);
+
+                var prediction = predictor.Predict(input);
+                clusterPointsList[i].ClusterNum = Convert.ToInt32(prediction.PredictedClusterId);
+            }
+            return clusterPointsList;
+        }
+
+        IList<CandidatePoint> clusterPointsList = new List<CandidatePoint>();
+
+        private void BtnCluster_Click(object sender, RoutedEventArgs e)
+        {
+            int numOfCluster = Convert.ToInt32(txtCluster.Text);
+            clusterPointsList = CreateClusterPointsList(candidatePointsList, numOfCluster);
+
+            Cluster distribution = new Cluster(clusterPointsList);
+            distribution.WindowState = FormWindowState.Maximized;
+            distribution.Show();
+        }
     }
 }
