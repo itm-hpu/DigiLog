@@ -36,6 +36,7 @@ namespace LabManager
             public Point Coordinates { get; set; }
             public string ObjectID { get; set; }
             public string Type { get; set; }
+            public string Zone { get; set; }
         }
 
         List<List<PositionData>> result = new List<List<PositionData>>();
@@ -115,7 +116,7 @@ namespace LabManager
 
                 for (int i = 0; i < iLength; i++)
                 {
-                    file[j].Write(positionDatas[i][j].Type + "," + "\t" + positionDatas[i][j].ObjectID + "," + positionDatas[i][j].TimeStamp + "," + positionDatas[i][j].Coordinates.X + "," + positionDatas[i][j].Coordinates.Y);
+                    file[j].Write(positionDatas[i][j].Type + "," + "\t" + positionDatas[i][j].ObjectID + "," + positionDatas[i][j].TimeStamp + "," + positionDatas[i][j].Coordinates.X + "," + positionDatas[i][j].Coordinates.Y + "," + positionDatas[i][j].Zone);
                     file[j].Write("\n");
                 }
                 file[j].Close();
@@ -220,9 +221,9 @@ namespace LabManager
 
                 
                 // Get coordinates of AGV
-                string[] tempReuslt_AGV = new string[3];
-                var agvTask = Task.Run(() => RequestServer_AGV(agvURI));
-                tempReuslt_AGV = await agvTask;
+                //string[] tempReuslt_AGV = new string[3];
+                //var agvTask = Task.Run(() => RequestServer_AGV(agvURI));
+                //tempReuslt_AGV = await agvTask;
                 
 
                 // Create list type of RTLS PositionData for several TAGs
@@ -246,9 +247,10 @@ namespace LabManager
 
                     subResult[j].ObjectID = tempReuslt_RTLS_list[j][3]; // TAG ID
                     subResult[j].Type = "RTLS";
+                    subResult[j].Zone = tempReuslt_RTLS_list[j][4]; // Zone
                 }
 
-                
+                /*
                 // Create list type of AGV PositionData to append "subResult" list
                 List<PositionData> subResult_AGV = new List<PositionData>()
                 {
@@ -257,14 +259,15 @@ namespace LabManager
                         TimeStamp = Convert.ToDateTime(timeStamp),
                         Coordinates = new Point(Convert.ToDouble(tempReuslt_AGV[1]), Convert.ToDouble(tempReuslt_AGV[2])),
                         ObjectID = "12345678", // AGV object ID?
-                        Type = "AGV"
+                        Type = "AGV", // Type AGV
+                        Zone = "0" // AGV default zone = 0
                     }
                 };
-                
+                */
 
                 
                 // Append PositionData of AGV into "subReslut" list
-                subResult.AddRange(subResult_AGV);
+                //subResult.AddRange(subResult_AGV);
                 
 
                 // Store PositionData of RTLS tag and AGV into "reslut" list

@@ -112,7 +112,9 @@ namespace LabManager
         {
             string strResponseValue = string.Empty;
             string result = string.Empty;
-            string[] tempResult = new string[4];
+
+            // Xvalue, Yvalue, TimeStamp, ObjectID, Zone
+            string[] tempResult = new string[5];
             
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(rtlsAddress);
 
@@ -151,6 +153,7 @@ namespace LabManager
                 tempResult[2] = string.Empty;
                 string[] splitAddress = this.rtlsAddress.Split(new char[] { '/' });
                 tempResult[3] = splitAddress[4];
+                tempResult[4] = string.Empty;
             }
             finally
             {
@@ -174,19 +177,24 @@ namespace LabManager
             string Yvalue = "";
             string TimeStamp = "";
             string ObjectID = "";
+            string Zone = "";
 
-            string[] returnValue = new string[4];
+            // Xvalue, Yvalue, TimeStamp, ObjectID, Zone
+            string[] returnValue = new string[5];
 
+            // Longitude, Latitude instead of X, Y ?
             ObjectID = (string)json.SelectToken("Object");
             Xvalue = (string)json.SelectToken("X");
             Yvalue = (string)json.SelectToken("Y");
             TimeStamp = (string)json.SelectToken("Timestamp");
+            Zone = (string)json.SelectToken("Zone");
 
             returnValue[0] = Xvalue;
             returnValue[1] = Yvalue;
             returnValue[2] = TimeStamp;
             returnValue[3] = ObjectID;
-            
+            returnValue[4] = Zone;
+
             return returnValue;
         }
 
