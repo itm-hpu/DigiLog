@@ -221,9 +221,9 @@ namespace LabManager
 
                 
                 // Get coordinates of AGV
-                //string[] tempReuslt_AGV = new string[3];
-                //var agvTask = Task.Run(() => RequestServer_AGV(agvURI));
-                //tempReuslt_AGV = await agvTask;
+                string[] tempReuslt_AGV = new string[3];
+                var agvTask = Task.Run(() => RequestServer_AGV(agvURI));
+                tempReuslt_AGV = await agvTask;
                 
 
                 // Create list type of RTLS PositionData for several TAGs
@@ -250,7 +250,7 @@ namespace LabManager
                     subResult[j].Zone = tempReuslt_RTLS_list[j][4]; // Zone
                 }
 
-                /*
+                
                 // Create list type of AGV PositionData to append "subResult" list
                 List<PositionData> subResult_AGV = new List<PositionData>()
                 {
@@ -263,11 +263,11 @@ namespace LabManager
                         Zone = "0" // AGV default zone = 0
                     }
                 };
-                */
+                
 
                 
                 // Append PositionData of AGV into "subReslut" list
-                //subResult.AddRange(subResult_AGV);
+                subResult.AddRange(subResult_AGV);
                 
 
                 // Store PositionData of RTLS tag and AGV into "reslut" list
