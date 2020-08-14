@@ -35,7 +35,7 @@
         <TextBox x:Name="txtTAGIDs" HorizontalAlignment="Left" Height="84" Margin="99,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89"/>
         <Label Content="RTLS TAG IDs" HorizontalAlignment="Left" Margin="10,18,0,0" VerticalAlignment="Top" Width="79" Height="26"/>
         <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="799,110,0,0" VerticalAlignment="Top" Width="70" Height="55" Click="btnSave_Click"/>
-        <Button x:Name="btnReset" Content="Reset" HorizontalAlignment="Left" Margin="799,175,0,0" VerticalAlignment="Top" Width="70" Height="55" Click="BtnReset_Click"/>
+        <Button x:Name="btnRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="799,175,0,0" VerticalAlignment="Top" Width="70" Height="55" Click="BtnRefresh_Click"/>
         <Button x:Name="btnSelectFile" Content="Select File" HorizontalAlignment="Left" Height="40" Margin="709,725,0,0" VerticalAlignment="Top" Width="70" Click="BtnSelectFile_Click"/>
         <Label Content="Input Path" HorizontalAlignment="Left" Margin="10,724,0,0" VerticalAlignment="Top" Width="79" Height="26"/>
         <TextBox x:Name="txtInputPath" HorizontalAlignment="Left" Height="40" Margin="99,725,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591"/>

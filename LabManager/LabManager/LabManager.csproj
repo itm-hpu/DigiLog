@@ -156,6 +156,7 @@
     <Compile Include="Cluster.Designer.cs">
       <DependentUpon>Cluster.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controller.cs" />
     <Compile Include="FilterAfter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -168,6 +169,7 @@
     <Compile Include="FilterBefore.Designer.cs">
       <DependentUpon>FilterBefore.cs</DependentUpon>
     </Compile>
+    <Compile Include="PositionData.cs" />
     <Compile Include="RESTClinet.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
