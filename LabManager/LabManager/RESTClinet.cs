@@ -114,7 +114,7 @@ namespace LabManager
             string result = string.Empty;
 
             // Xvalue, Yvalue, TimeStamp, ObjectID, Zone
-            string[] tempResult = new string[5];
+            string[] tempResult = new string[7];
             
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(rtlsAddress);
 
@@ -154,6 +154,8 @@ namespace LabManager
                 string[] splitAddress = this.rtlsAddress.Split(new char[] { '/' });
                 tempResult[3] = splitAddress[4];
                 tempResult[4] = string.Empty;
+                tempResult[5] = string.Empty;
+                tempResult[6] = string.Empty;
             }
             finally
             {
@@ -178,22 +180,28 @@ namespace LabManager
             string TimeStamp = "";
             string ObjectID = "";
             string Zone = "";
+            string longitude = "";
+            string latitude = "";
 
             // Xvalue, Yvalue, TimeStamp, ObjectID, Zone
-            string[] returnValue = new string[5];
+            string[] returnValue = new string[7];
 
             // Longitude, Latitude instead of X, Y ?
-            ObjectID = (string)json.SelectToken("Object");
-            Xvalue = (string)json.SelectToken("X");
-            Yvalue = (string)json.SelectToken("Y");
-            TimeStamp = (string)json.SelectToken("Timestamp");
-            Zone = (string)json.SelectToken("Zone");
+            ObjectID = (string)json.SelectToken("Object"); //0
+            Xvalue = (string)json.SelectToken("X");//1
+            Yvalue = (string)json.SelectToken("Y");//2
+            TimeStamp = (string)json.SelectToken("Timestamp");//3
+            Zone = (string)json.SelectToken("Zone");//4
+            longitude = (string)json.SelectToken("Longitude");//5
+            latitude = (string)json.SelectToken("Latitude");//6
 
             returnValue[0] = Xvalue;
             returnValue[1] = Yvalue;
             returnValue[2] = TimeStamp;
             returnValue[3] = ObjectID;
             returnValue[4] = Zone;
+            returnValue[5] = longitude;
+            returnValue[6] = latitude;
 
             return returnValue;
         }

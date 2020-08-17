@@ -99,8 +99,10 @@ namespace LabManager
             dotOrigin.Margin = new Thickness(0, 0, 0, 0);
             myCanvas.Children.Add(dotOrigin);
 
-            string temp = "Seq, TimeStamp, ObjectID CoordinateX, CoordinateY, Zone" + "\r\n";
+            string temp = "Seq, TimeStamp, ObjectID, CoordinateX, CoordinateY, Zone, Longitude, Latitude" + "\r\n";
             txtResponse.Text = temp;
+            txtResponse_Copy.Text = temp;
+            txtResponse_Copy1.Text = temp;
 
             for (int i = 0; i < iterNum; i++)
             {
@@ -142,6 +144,8 @@ namespace LabManager
                     subResult[j].ObjectID = tempReuslt_RTLS_list[j][3]; // TAG ID
                     subResult[j].Type = "RTLS";
                     subResult[j].Zone = tempReuslt_RTLS_list[j][4]; // Zone
+                    subResult[j].Longitude = tempReuslt_RTLS_list[j][5];
+                    subResult[j].Latitude = tempReuslt_RTLS_list[j][6];
                 }
                
                 // Create list type of AGV PositionData to append "subResult" list
@@ -166,7 +170,7 @@ namespace LabManager
                 // Show coordinates of RTLS tag and AGV
                 for (int j = 0; j < result[i].Count(); j++)
                 {
-                    if (result[i][j].Type == "RTLS")
+                    if (result[i][j].Type == "RTLS" && result[i][j].ObjectID == "00000011")
                     {
                         if ( !double.IsNaN(result[i][j].Coordinates.X))
                         {
@@ -177,7 +181,9 @@ namespace LabManager
                                 result[i][j].ObjectID + ", " +
                                 result[i][j].Coordinates.X + ", " +
                                 result[i][j].Coordinates.Y + ", " +
-                                result[i][j].Zone;
+                                result[i][j].Zone + ", " +
+                                result[i][j].Longitude + ", " +
+                                result[i][j].Latitude;
 
                             txtResponse.Text = txtResponse.Text + result_RTLS + "\r\n";
                         }
@@ -190,11 +196,14 @@ namespace LabManager
                                result[i][j].ObjectID + ", " +
                                "NaN" + ", " +
                                "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
                                "NaN";
 
                             txtResponse.Text = txtResponse.Text + result_RTLS + "\r\n";
                         }
                     }
+                    /*
                     else if (result[i][j].Type == "AGV")
                     {
                         string result_AGV =
@@ -208,8 +217,119 @@ namespace LabManager
 
                         txtResponse.Text = txtResponse.Text + result_AGV + "\r\n";
                     }
+                    */
                     txtResponse.ScrollToEnd();
                 }
+
+
+                for (int j = 0; j < result[i].Count(); j++)
+                {
+                    if (result[i][j].Type == "RTLS" && result[i][j].ObjectID == "00000012")
+                    {
+                        if (!double.IsNaN(result[i][j].Coordinates.X))
+                        {
+                            string result_RTLS =
+                                i.ToString() + ", " +
+                                result[i][j].TimeStamp + ", " +
+                                result[i][j].Type + ", " +
+                                result[i][j].ObjectID + ", " +
+                                result[i][j].Coordinates.X + ", " +
+                                result[i][j].Coordinates.Y + ", " +
+                                result[i][j].Zone + ", " +
+                                result[i][j].Longitude + ", " +
+                                result[i][j].Latitude;
+
+                            txtResponse_Copy.Text = txtResponse_Copy.Text + result_RTLS + "\r\n";
+                        }
+                        else
+                        {
+                            string result_RTLS =
+                                i.ToString() + ", " +
+                               "NaN" + ", " +
+                               result[i][j].Type + ", " +
+                               result[i][j].ObjectID + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN";
+
+                            txtResponse_Copy.Text = txtResponse_Copy.Text + result_RTLS + "\r\n";
+                        }
+                    }
+                    /*
+                    else if (result[i][j].Type == "AGV")
+                    {
+                        string result_AGV =
+                            i.ToString() + ", " +
+                            result[i][j].TimeStamp + ", " +
+                            result[i][j].Type + ", " +
+                            result[i][j].ObjectID + ", " +
+                            result[i][j].Coordinates.X + ", " +
+                            result[i][j].Coordinates.Y + ", " +
+                            result[i][j].Zone;
+
+                        txtResponse.Text = txtResponse.Text + result_AGV + "\r\n";
+                    }
+                    */
+                    txtResponse_Copy.ScrollToEnd();
+                }
+
+
+                for (int j = 0; j < result[i].Count(); j++)
+                {
+                    if (result[i][j].Type == "RTLS" && result[i][j].ObjectID == "00000013")
+                    {
+                        if (!double.IsNaN(result[i][j].Coordinates.X))
+                        {
+                            string result_RTLS =
+                                i.ToString() + ", " +
+                                result[i][j].TimeStamp + ", " +
+                                result[i][j].Type + ", " +
+                                result[i][j].ObjectID + ", " +
+                                result[i][j].Coordinates.X + ", " +
+                                result[i][j].Coordinates.Y + ", " +
+                                result[i][j].Zone + ", " +
+                                result[i][j].Longitude + ", " +
+                                result[i][j].Latitude;
+
+                            txtResponse_Copy1.Text = txtResponse_Copy1.Text + result_RTLS + "\r\n";
+                        }
+                        else
+                        {
+                            string result_RTLS =
+                                i.ToString() + ", " +
+                               "NaN" + ", " +
+                               result[i][j].Type + ", " +
+                               result[i][j].ObjectID + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN";
+
+                            txtResponse_Copy1.Text = txtResponse_Copy1.Text + result_RTLS + "\r\n";
+                        }
+                        txtResponse_Copy1.ScrollToEnd();
+                    }
+                    /*
+                    else if (result[i][j].Type == "AGV")
+                    {
+                        string result_AGV =
+                            i.ToString() + ", " +
+                            result[i][j].TimeStamp + ", " +
+                            result[i][j].Type + ", " +
+                            result[i][j].ObjectID + ", " +
+                            result[i][j].Coordinates.X + ", " +
+                            result[i][j].Coordinates.Y + ", " +
+                            result[i][j].Zone;
+
+                        txtResponse.Text = txtResponse.Text + result_AGV + "\r\n";
+                    }
+                    */
+                    txtResponse_Copy1.ScrollToEnd();
+                }
+
 
                 // Visualize where the RTLS tag and AGV have been
                 for (int j = 0; j < result[i].Count(); j++)

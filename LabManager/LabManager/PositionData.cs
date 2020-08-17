@@ -14,5 +14,7 @@ namespace LabManager
         public string ObjectID { get; set; }
         public string Type { get; set; }
         public string Zone { get; set; }
+        public string Longitude { get; set; }
+        public string Latitude { get; set; }
     }
 }
