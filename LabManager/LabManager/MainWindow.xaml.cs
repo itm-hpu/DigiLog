@@ -310,7 +310,6 @@ namespace LabManager
 
                             txtResponse_Copy1.Text = txtResponse_Copy1.Text + result_RTLS + "\r\n";
                         }
-                        txtResponse_Copy1.ScrollToEnd();
                     }
                     /*
                     else if (result[i][j].Type == "AGV")
