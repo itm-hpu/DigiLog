@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using Microsoft.ML;
 using Microsoft.ML.Data;
-
+using System.Threading;
 
 
 namespace LabManager
@@ -99,7 +99,7 @@ namespace LabManager
             dotOrigin.Margin = new Thickness(0, 0, 0, 0);
             myCanvas.Children.Add(dotOrigin);
 
-            string temp = "Seq, TimeStamp, ObjectID, CoordinateX, CoordinateY, Zone, Longitude, Latitude" + "\r\n";
+            string temp = "Seq, TimeStamp, Type, ObjectID, CoordinateX, CoordinateY, Zone, Longitude, Latitude" + "\r\n";
             txtResponse.Text = temp;
             txtResponse_Copy.Text = temp;
             txtResponse_Copy1.Text = temp;

@@ -126,7 +126,5 @@ namespace LabManager
             else return ZoneID;
 
         }
-
-        
     }
 }
