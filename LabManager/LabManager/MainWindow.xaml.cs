@@ -104,6 +104,10 @@ namespace LabManager
             txtResponse_Copy.Text = temp;
             txtResponse_Copy1.Text = temp;
 
+            List<string> temp00000011 = new List<string>();
+            List<string> temp00000012 = new List<string>();
+            List<string> temp00000013 = new List<string>();
+
             for (int i = 0; i < iterNum; i++)
             {
                 // https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
@@ -181,11 +185,12 @@ namespace LabManager
                                 result[i][j].ObjectID + ", " +
                                 result[i][j].Coordinates.X + ", " +
                                 result[i][j].Coordinates.Y + ", " +
-                                result[i][j].Zone + ", " +
+                                controller.ConvertZoneIDtoStationName(result[i][j].Zone) + ", " +
                                 result[i][j].Longitude + ", " +
                                 result[i][j].Latitude;
 
                             txtResponse.Text = txtResponse.Text + result_RTLS + "\r\n";
+                            temp00000011.Add(result_RTLS);
                         }
                         else
                         {
@@ -201,6 +206,7 @@ namespace LabManager
                                "NaN";
 
                             txtResponse.Text = txtResponse.Text + result_RTLS + "\r\n";
+                            temp00000011.Add(result_RTLS);
                         }
                     }
                     /*
@@ -235,11 +241,12 @@ namespace LabManager
                                 result[i][j].ObjectID + ", " +
                                 result[i][j].Coordinates.X + ", " +
                                 result[i][j].Coordinates.Y + ", " +
-                                result[i][j].Zone + ", " +
+                                controller.ConvertZoneIDtoStationName(result[i][j].Zone) + ", " +
                                 result[i][j].Longitude + ", " +
                                 result[i][j].Latitude;
 
                             txtResponse_Copy.Text = txtResponse_Copy.Text + result_RTLS + "\r\n";
+                            temp00000012.Add(result_RTLS);
                         }
                         else
                         {
@@ -255,6 +262,7 @@ namespace LabManager
                                "NaN";
 
                             txtResponse_Copy.Text = txtResponse_Copy.Text + result_RTLS + "\r\n";
+                            temp00000012.Add(result_RTLS);
                         }
                     }
                     /*
@@ -289,11 +297,12 @@ namespace LabManager
                                 result[i][j].ObjectID + ", " +
                                 result[i][j].Coordinates.X + ", " +
                                 result[i][j].Coordinates.Y + ", " +
-                                result[i][j].Zone + ", " +
+                                controller.ConvertZoneIDtoStationName(result[i][j].Zone) + ", " +
                                 result[i][j].Longitude + ", " +
                                 result[i][j].Latitude;
 
                             txtResponse_Copy1.Text = txtResponse_Copy1.Text + result_RTLS + "\r\n";
+                            temp00000013.Add(result_RTLS);
                         }
                         else
                         {
@@ -309,6 +318,7 @@ namespace LabManager
                                "NaN";
 
                             txtResponse_Copy1.Text = txtResponse_Copy1.Text + result_RTLS + "\r\n";
+                            temp00000013.Add(result_RTLS);
                         }
                     }
                     /*

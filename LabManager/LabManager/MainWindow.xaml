@@ -20,7 +20,7 @@
         <TextBox x:Name="txtIntervalTime" HorizontalAlignment="Left" Height="23" Margin="709,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
         <Button x:Name="btnAcquire" Content="Acquire" HorizontalAlignment="Left" Margin="709,175,0,0" VerticalAlignment="Top" Width="70" Height="55" Click="ButtonAcquire_Click"/>
         <Label Content="URI Response&#xA;" HorizontalAlignment="Left" Margin="10,239,0,0" VerticalAlignment="Top" Height="32" Width="82"/>
-        <TextBox x:Name="txtResponse" HorizontalAlignment="Left" Height="140" Margin="99,241,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213"/>
+        <TextBox x:Name="txtResponse" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="140" Margin="99,241,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213"/>
         <Canvas x:Name="myCanvas" HorizontalAlignment="Left" Height="301" Margin="99,391,0,0" VerticalAlignment="Top" Width="770">
             <Canvas.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
@@ -46,7 +46,7 @@
         <Button x:Name="btnCluster" Content="Cluster" HorizontalAlignment="Left" Margin="799,815,0,0" VerticalAlignment="Top" Width="70" Height="40" Click="BtnCluster_Click" RenderTransformOrigin="1.244,0.477"/>
         <TextBox x:Name="txtCluster" HorizontalAlignment="Left" Height="19" Margin="710,835,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70"/>
         <Label Content="# of Cluster" HorizontalAlignment="Left" Margin="708,811,0,0" VerticalAlignment="Top" Width="84" Height="26"/>
-        <TextBox x:Name="txtResponse_Copy" HorizontalAlignment="Left" Height="140" Margin="344,241,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213"/>
-        <TextBox x:Name="txtResponse_Copy1" HorizontalAlignment="Left" Height="140" Margin="595,241,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213"/>
+        <TextBox x:Name="txtResponse_Copy" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="140" Margin="344,241,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213"/>
+        <TextBox x:Name="txtResponse_Copy1" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="140" Margin="595,241,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213"/>
     </Grid>
 </Window>

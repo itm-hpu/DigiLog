@@ -109,6 +109,24 @@ namespace LabManager
             }
         }
 
+        public string ConvertZoneIDtoStationName(string ZoneID)
+        {
+            if (ZoneID == "10") return "W1";
+            else if (ZoneID == "11") return "A";
+            else if (ZoneID == "12") return "C";
+            else if (ZoneID == "13") return "B";
+            else if (ZoneID == "14") return "W3";
+            else if (ZoneID == "15") return "W2";
+            else if (ZoneID == "16") return "FH1";
+            else if (ZoneID == "17") return "B";
+            else if (ZoneID == "18") return "D";
+            else if (ZoneID == "19") return "FH2";
+            else if (ZoneID == "20") return "F";
+            else if (ZoneID == "21") return "FH3";
+            else return ZoneID;
+
+        }
+
         
     }
 }
