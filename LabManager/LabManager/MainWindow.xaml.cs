@@ -122,11 +122,13 @@ namespace LabManager
                     tempReuslt_RTLS_list.Add(await rtlsTask);
                 }
                 
+                /*
                 // Get coordinates of AGV
                 string[] tempReuslt_AGV = new string[3];
                 var agvTask = Task.Run(() => controller.RequestServer_AGV(agvURI));
                 tempReuslt_AGV = await agvTask;
-                
+                */
+
                 // Create list type of RTLS PositionData for several TAGs
                 List<PositionData> subResult = new List<PositionData>();
 
@@ -152,6 +154,7 @@ namespace LabManager
                     subResult[j].Latitude = tempReuslt_RTLS_list[j][6];
                 }
                
+                /*
                 // Create list type of AGV PositionData to append "subResult" list
                 List<PositionData> subResult_AGV = new List<PositionData>()
                 {
@@ -167,9 +170,11 @@ namespace LabManager
                 
                 // Append PositionData of AGV into "subReslut" list
                 subResult.AddRange(subResult_AGV);
+                */
 
                 // Store PositionData of RTLS tag and AGV into "reslut" list
                 result.Add(subResult);
+
 
                 // Show coordinates of RTLS tag and AGV
                 for (int j = 0; j < result[i].Count(); j++)
@@ -209,24 +214,9 @@ namespace LabManager
                             temp00000011.Add(result_RTLS);
                         }
                     }
-                    /*
-                    else if (result[i][j].Type == "AGV")
-                    {
-                        string result_AGV =
-                            i.ToString() + ", " +
-                            result[i][j].TimeStamp + ", " +
-                            result[i][j].Type + ", " +
-                            result[i][j].ObjectID + ", " +
-                            result[i][j].Coordinates.X + ", " +
-                            result[i][j].Coordinates.Y + ", " +
-                            result[i][j].Zone;
-
-                        txtResponse.Text = txtResponse.Text + result_AGV + "\r\n";
-                    }
-                    */
                     txtResponse.ScrollToEnd();
                 }
-
+                
 
                 for (int j = 0; j < result[i].Count(); j++)
                 {
@@ -265,21 +255,6 @@ namespace LabManager
                             temp00000012.Add(result_RTLS);
                         }
                     }
-                    /*
-                    else if (result[i][j].Type == "AGV")
-                    {
-                        string result_AGV =
-                            i.ToString() + ", " +
-                            result[i][j].TimeStamp + ", " +
-                            result[i][j].Type + ", " +
-                            result[i][j].ObjectID + ", " +
-                            result[i][j].Coordinates.X + ", " +
-                            result[i][j].Coordinates.Y + ", " +
-                            result[i][j].Zone;
-
-                        txtResponse.Text = txtResponse.Text + result_AGV + "\r\n";
-                    }
-                    */
                     txtResponse_Copy.ScrollToEnd();
                 }
 
