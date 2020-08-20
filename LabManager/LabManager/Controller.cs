@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace LabManager
 {
@@ -140,6 +142,57 @@ namespace LabManager
             else if (ZoneID == "21") return "FH3";
             else return ZoneID;
 
+        }
+
+        public Ellipse CreateDotofCoordinates(int dotsize, Color dotcolor, double X, double Y)
+        {
+            Ellipse dot = new Ellipse();
+            Color color = new Color();
+            color = dotcolor;
+            dot.Height = dotsize;
+            dot.Width = dotsize;
+            dot.Fill = new SolidColorBrush(color);
+            dot.Margin = new Thickness(X, Y, 0, 0);
+            return dot;
+        }
+
+
+        public string PrintPositionData(List<List<PositionData>> result, int i, int j, string type, string objectID)
+        {
+            if (result[i][j].Type == type && result[i][j].ObjectID == objectID)
+            {
+                if (!double.IsNaN(result[i][j].Coordinates.X))
+                {
+                    string result_RTLS =
+                        i.ToString() + ", " +
+                        result[i][j].TimeStamp + ", " +
+                        result[i][j].Type + ", " +
+                        result[i][j].ObjectID + ", " +
+                        result[i][j].Coordinates.X + ", " +
+                        result[i][j].Coordinates.Y + ", " +
+                        ConvertZoneIDtoStationName(result[i][j].Zone) + ", " +
+                        result[i][j].Longitude + ", " +
+                        result[i][j].Latitude;
+
+                    return result_RTLS;
+                }
+                else
+                {
+                    string result_RTLS =
+                        i.ToString() + ", " +
+                       "NaN" + ", " +
+                       result[i][j].Type + ", " +
+                       result[i][j].ObjectID + ", " +
+                       "NaN" + ", " +
+                       "NaN" + ", " +
+                       "NaN" + ", " +
+                       "NaN" + ", " +
+                       "NaN";
+
+                    return result_RTLS;
+                }
+            }
+            else return null;
         }
     }
 }

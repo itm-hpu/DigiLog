@@ -102,15 +102,8 @@ namespace LabManager
             double intervalTime = Convert.ToDouble(txtIntervalTime.Text); // interval time
 
             // Show origin point on canvas
-            int dotsizeOrigin = 7;
-            Ellipse dotOrigin = new Ellipse();
-            Color colorOrigin = new Color();
-            colorOrigin = Colors.Black;
-            dotOrigin.Height = dotsizeOrigin;
-            dotOrigin.Width = dotsizeOrigin;
-            dotOrigin.Fill = new SolidColorBrush(colorOrigin);
-            dotOrigin.Margin = new Thickness(0, 0, 0, 0);
-            myCanvas.Children.Add(dotOrigin);
+            Ellipse dot = controller.CreateDotofCoordinates(7, Colors.Black, 0, 0);
+            myCanvas.Children.Add(dot);
 
             string temp = "Seq, TimeStamp, Type, ObjectID, CoordinateX, CoordinateY, Zone, Longitude, Latitude" + "\r\n";
             txtResponseObj11.Text = temp;
@@ -236,6 +229,10 @@ namespace LabManager
                 // Show coordinates of RTLS tag and AGV
                 for (int j = 0; j < result[i].Count(); j++)
                 {
+                    //string result_RTLS = controller.PrintPositionData(result, i, j, "RTLS", "00000011");
+                    //txtResponseObj11.Text = txtResponseObj11.Text + result_RTLS + "\r\n";
+                    //temp00000011.Add(result_RTLS);
+                    
                     if (result[i][j].Type == "RTLS" && result[i][j].ObjectID == "00000011")
                     {
                         if ( !double.IsNaN(result[i][j].Coordinates.X))
@@ -496,22 +493,6 @@ namespace LabManager
                 // Visualize where the RTLS tag and AGV have been
                 for (int j = 0; j < result[i].Count(); j++)
                 {
-                    int dotSizeRTLS = 5;
-                    Ellipse currentDotRTLS = new Ellipse();
-                    Color colorRTLS = new Color();
-                    colorRTLS = Colors.Red;
-                    currentDotRTLS.Height = dotSizeRTLS;
-                    currentDotRTLS.Width = dotSizeRTLS;
-                    currentDotRTLS.Fill = new SolidColorBrush(colorRTLS);
-
-                    int dotSizeAGV = 3;
-                    Ellipse currentDotAGV = new Ellipse();
-                    Color colorAGV = new Color();
-                    colorAGV = Colors.Blue;
-                    currentDotAGV.Height = dotSizeAGV;
-                    currentDotAGV.Width = dotSizeAGV;
-                    currentDotAGV.Fill = new SolidColorBrush(colorAGV);
-
                     if (result[i][j].Type == "RTLS")
                     {
                         if (Double.IsNaN(result[i][j].Coordinates.X))
@@ -520,14 +501,14 @@ namespace LabManager
                         }
                         else
                         {
-                            currentDotRTLS.Margin = new Thickness(result[i][j].Coordinates.X * -0.5, result[i][j].Coordinates.Y * 0.5, 0, 0); // Set the position
-                            myCanvas.Children.Add(currentDotRTLS);
+                            Ellipse dotRTLS = controller.CreateDotofCoordinates(5, Colors.Red, result[i][j].Coordinates.X * -0.5, result[i][j].Coordinates.Y * 0.5);
+                            myCanvas.Children.Add(dotRTLS);
                         }
                     }
                     else if (result[i][j].Type == "AGV")
                     {
-                        currentDotAGV.Margin = new Thickness(result[i][j].Coordinates.X * 15.0, result[i][j].Coordinates.Y * 15.0, 0, 0); // Set the position
-                        myCanvas.Children.Add(currentDotAGV);
+                        Ellipse dotAGV = controller.CreateDotofCoordinates(3, Colors.Blue, result[i][j].Coordinates.X * -15.0, result[i][j].Coordinates.Y * 15.0);
+                        myCanvas.Children.Add(dotAGV);
                     }
                 }
                 await Task.Delay(TimeSpan.FromMilliseconds(intervalTime * 1000));
