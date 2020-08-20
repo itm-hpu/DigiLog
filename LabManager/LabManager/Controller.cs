@@ -24,9 +24,9 @@ namespace LabManager
         }
 
 
-        public string[] RequestServer_RTLS(string rtlsURI, string username, string password, string objectID)
+        public string[] RequestServer_RTLS(string rtlsURI, string username, string password)
         {
-            string[] responseResult = new string[4];
+            string[] responseResult;
 
             RESTClinet rClient = new RESTClinet();
 
@@ -35,6 +35,21 @@ namespace LabManager
             rClient.userPassword = password;
 
             responseResult = rClient.MakeRTLSRequest();
+
+            return responseResult;
+        }
+
+        public string[] RequestServer_RTLS_pos(string rtlsURI, string username, string password)
+        {
+            string[] responseResult;
+
+            RESTClinet rClient = new RESTClinet();
+
+            rClient.rtlsAddress = rtlsURI;
+            rClient.userName = username;
+            rClient.userPassword = password;
+
+            responseResult = rClient.MakeRTLSposRequest();
 
             return responseResult;
         }

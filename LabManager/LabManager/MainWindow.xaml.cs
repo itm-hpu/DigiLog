@@ -33,6 +33,7 @@ namespace LabManager
         // #######################################################################################
 
         List<List<PositionData>> result = new List<List<PositionData>>();
+        List<List<PositionData>> result_pos = new List<List<PositionData>>();
 
         private void BtnGetID_Click(object sender, RoutedEventArgs e)
         {
@@ -63,6 +64,13 @@ namespace LabManager
                 txtRTLSuri.Text = txtRTLSuri.Text + rtlsAddressArray[i] + '\n';
             }
 
+            string[] rtlsPosAddressArray = new string[objectIDsArray.Length];
+            for (int i = 0; i < objectIDsArray.Length; i++)
+            {
+                rtlsPosAddressArray[i] = "https://p186-geps-production-api.hd-rtls.com/positions?object=" + objectIDsArray[i] + "&count=1&max_age=60000";
+                txtRTLSuri_Pos.Text = txtRTLSuri_Pos.Text + rtlsPosAddressArray[i] + '\n';
+            }
+
             // defined userName and password
             string userName = "KTH";
             string password = "!Test4KTH";
@@ -70,6 +78,7 @@ namespace LabManager
             txtPassword.Text = password;
         }
 
+        
         private async void ButtonAcquire_Click(object sender, RoutedEventArgs e)
         {
             string agvURI = txtAGVuri.Text;
@@ -81,6 +90,10 @@ namespace LabManager
             string rtlsURI = txtRTLSuri.Text;
             string[] rtlsURIArray = rtlsURI.Split(new char[] { '\n' });
             Array.Resize(ref rtlsURIArray, rtlsURIArray.Length - 1);
+
+            string rtlsURI_Pos = txtRTLSuri_Pos.Text;
+            string[] rtlsURIPosArray = rtlsURI_Pos.Split(new char[] { '\n' });
+            Array.Resize(ref rtlsURIPosArray, rtlsURIPosArray.Length - 1);
 
             string userName = txtUserName.Text;
             string password = txtPassword.Text;
@@ -100,13 +113,19 @@ namespace LabManager
             myCanvas.Children.Add(dotOrigin);
 
             string temp = "Seq, TimeStamp, Type, ObjectID, CoordinateX, CoordinateY, Zone, Longitude, Latitude" + "\r\n";
-            txtResponse.Text = temp;
-            txtResponse_Copy.Text = temp;
-            txtResponse_Copy1.Text = temp;
+            txtResponseObj11.Text = temp;
+            txtResponseObj12.Text = temp;
+            txtResponseObj13.Text = temp;
+            txtResponsePos11.Text = temp;
+            txtResponsePos12.Text = temp;
+            txtResponsePos13.Text = temp;
 
             List<string> temp00000011 = new List<string>();
             List<string> temp00000012 = new List<string>();
             List<string> temp00000013 = new List<string>();
+            List<string> tempPos00000011 = new List<string>();
+            List<string> tempPos00000012 = new List<string>();
+            List<string> tempPos00000013 = new List<string>();
 
             for (int i = 0; i < iterNum; i++)
             {
@@ -114,14 +133,26 @@ namespace LabManager
                 string timeStamp = System.DateTime.Now.ToString("M/dd/yyyy");
 
 
-                // Get coordinates of HDW tags
+                // Get coordinates of HDW tags - /object/(objectID)/pos
                 List<string[]> tempReuslt_RTLS_list = new List<string[]>();
                 for (int j = 0; j < rtlsURIArray.Length; j++)
                 {
-                    var rtlsTask = Task.Run(() => controller.RequestServer_RTLS(rtlsURIArray[j], userName, password, objectIDsArray[j]));
+                    var rtlsTask = Task.Run(
+                        () => controller.RequestServer_RTLS(rtlsURIArray[j], userName, password)
+                        );
                     tempReuslt_RTLS_list.Add(await rtlsTask);
                 }
-                
+
+                // Get coordinates of HDW tags - /position
+                List<string[]> tempReuslt_RTLS_Pos_list = new List<string[]>();
+                for (int j = 0; j < rtlsURIPosArray.Length; j++)
+                {
+                    var rtlsTask = Task.Run(
+                        () => controller.RequestServer_RTLS_pos(rtlsURIPosArray[j], userName, password)
+                        );
+                    tempReuslt_RTLS_Pos_list.Add(await rtlsTask);
+                }
+
                 /*
                 // Get coordinates of AGV
                 string[] tempReuslt_AGV = new string[3];
@@ -153,7 +184,32 @@ namespace LabManager
                     subResult[j].Longitude = tempReuslt_RTLS_list[j][5];
                     subResult[j].Latitude = tempReuslt_RTLS_list[j][6];
                 }
-               
+
+                // Create list type of RTLS PositionData for several TAGs
+                List<PositionData> subPosResult = new List<PositionData>();
+
+                for (int j = 0; j < tempReuslt_RTLS_Pos_list.Count(); j++)
+                {
+                    subPosResult.Add(new PositionData());
+
+                    if (tempReuslt_RTLS_Pos_list[j][0] == "") subPosResult[j].TimeStamp = null;
+                    else subPosResult[j].TimeStamp = Convert.ToDateTime(tempReuslt_RTLS_Pos_list[j][2]);
+
+                    if (tempReuslt_RTLS_Pos_list[j][1] != "" && tempReuslt_RTLS_Pos_list[j][2] != "")
+                    {
+                        subPosResult[j].Coordinates = new Point(-Convert.ToDouble(tempReuslt_RTLS_Pos_list[j][1]), Convert.ToDouble(tempReuslt_RTLS_Pos_list[j][0]));
+                    }
+                    else
+                    {
+                        subPosResult[j].Coordinates = new Point(double.NaN, double.NaN);
+                    }
+                    subPosResult[j].ObjectID = tempReuslt_RTLS_Pos_list[j][3]; // TAG ID
+                    subPosResult[j].Type = "RTLS";
+                    subPosResult[j].Zone = tempReuslt_RTLS_Pos_list[j][4]; // Zone
+                    subPosResult[j].Longitude = tempReuslt_RTLS_Pos_list[j][5];
+                    subPosResult[j].Latitude = tempReuslt_RTLS_Pos_list[j][6];
+                }
+
                 /*
                 // Create list type of AGV PositionData to append "subResult" list
                 List<PositionData> subResult_AGV = new List<PositionData>()
@@ -174,6 +230,7 @@ namespace LabManager
 
                 // Store PositionData of RTLS tag and AGV into "reslut" list
                 result.Add(subResult);
+                result_pos.Add(subPosResult);
 
 
                 // Show coordinates of RTLS tag and AGV
@@ -194,7 +251,7 @@ namespace LabManager
                                 result[i][j].Longitude + ", " +
                                 result[i][j].Latitude;
 
-                            txtResponse.Text = txtResponse.Text + result_RTLS + "\r\n";
+                            txtResponseObj11.Text = txtResponseObj11.Text + result_RTLS + "\r\n";
                             temp00000011.Add(result_RTLS);
                         }
                         else
@@ -210,11 +267,11 @@ namespace LabManager
                                "NaN" + ", " +
                                "NaN";
 
-                            txtResponse.Text = txtResponse.Text + result_RTLS + "\r\n";
+                            txtResponseObj11.Text = txtResponseObj11.Text + result_RTLS + "\r\n";
                             temp00000011.Add(result_RTLS);
                         }
                     }
-                    txtResponse.ScrollToEnd();
+                    txtResponseObj11.ScrollToEnd();
                 }
                 
 
@@ -235,7 +292,7 @@ namespace LabManager
                                 result[i][j].Longitude + ", " +
                                 result[i][j].Latitude;
 
-                            txtResponse_Copy.Text = txtResponse_Copy.Text + result_RTLS + "\r\n";
+                            txtResponseObj12.Text = txtResponseObj12.Text + result_RTLS + "\r\n";
                             temp00000012.Add(result_RTLS);
                         }
                         else
@@ -251,11 +308,11 @@ namespace LabManager
                                "NaN" + ", " +
                                "NaN";
 
-                            txtResponse_Copy.Text = txtResponse_Copy.Text + result_RTLS + "\r\n";
+                            txtResponseObj12.Text = txtResponseObj12.Text + result_RTLS + "\r\n";
                             temp00000012.Add(result_RTLS);
                         }
                     }
-                    txtResponse_Copy.ScrollToEnd();
+                    txtResponseObj12.ScrollToEnd();
                 }
 
 
@@ -276,7 +333,7 @@ namespace LabManager
                                 result[i][j].Longitude + ", " +
                                 result[i][j].Latitude;
 
-                            txtResponse_Copy1.Text = txtResponse_Copy1.Text + result_RTLS + "\r\n";
+                            txtResponseObj13.Text = txtResponseObj13.Text + result_RTLS + "\r\n";
                             temp00000013.Add(result_RTLS);
                         }
                         else
@@ -292,7 +349,7 @@ namespace LabManager
                                "NaN" + ", " +
                                "NaN";
 
-                            txtResponse_Copy1.Text = txtResponse_Copy1.Text + result_RTLS + "\r\n";
+                            txtResponseObj13.Text = txtResponseObj13.Text + result_RTLS + "\r\n";
                             temp00000013.Add(result_RTLS);
                         }
                     }
@@ -311,7 +368,128 @@ namespace LabManager
                         txtResponse.Text = txtResponse.Text + result_AGV + "\r\n";
                     }
                     */
-                    txtResponse_Copy1.ScrollToEnd();
+                    txtResponseObj13.ScrollToEnd();
+                }
+
+
+                for (int j = 0; j < result_pos[i].Count(); j++)
+                {
+                    if (result_pos[i][j].Type == "RTLS" && result_pos[i][j].ObjectID == "00000011")
+                    {
+                        if (!double.IsNaN(result_pos[i][j].Coordinates.X))
+                        {
+                            string result_pos_RTLS =
+                                i.ToString() + ", " +
+                                result_pos[i][j].TimeStamp + ", " +
+                                result_pos[i][j].Type + ", " +
+                                result_pos[i][j].ObjectID + ", " +
+                                result_pos[i][j].Coordinates.X + ", " +
+                                result_pos[i][j].Coordinates.Y + ", " +
+                                controller.ConvertZoneIDtoStationName(result_pos[i][j].Zone) + ", " +
+                                result_pos[i][j].Longitude + ", " +
+                                result_pos[i][j].Latitude;
+
+                            txtResponsePos11.Text = txtResponsePos11.Text + result_pos_RTLS + "\r\n";
+                            tempPos00000011.Add(result_pos_RTLS);
+                        }
+                        else
+                        {
+                            string result_pos_RTLS =
+                                i.ToString() + ", " +
+                               "NaN" + ", " +
+                               result_pos[i][j].Type + ", " +
+                               result_pos[i][j].ObjectID + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN";
+
+                            txtResponsePos11.Text = txtResponsePos11.Text + result_pos_RTLS + "\r\n";
+                            tempPos00000011.Add(result_pos_RTLS);
+                        }
+                    }
+                    txtResponsePos11.ScrollToEnd();
+                }
+
+                for (int j = 0; j < result_pos[i].Count(); j++)
+                {
+                    if (result_pos[i][j].Type == "RTLS" && result_pos[i][j].ObjectID == "00000012")
+                    {
+                        if (!double.IsNaN(result_pos[i][j].Coordinates.X))
+                        {
+                            string result_pos_RTLS =
+                                i.ToString() + ", " +
+                                result_pos[i][j].TimeStamp + ", " +
+                                result_pos[i][j].Type + ", " +
+                                result_pos[i][j].ObjectID + ", " +
+                                result_pos[i][j].Coordinates.X + ", " +
+                                result_pos[i][j].Coordinates.Y + ", " +
+                                controller.ConvertZoneIDtoStationName(result_pos[i][j].Zone) + ", " +
+                                result_pos[i][j].Longitude + ", " +
+                                result_pos[i][j].Latitude;
+
+                            txtResponsePos12.Text = txtResponsePos12.Text + result_pos_RTLS + "\r\n";
+                            tempPos00000012.Add(result_pos_RTLS);
+                        }
+                        else
+                        {
+                            string result_pos_RTLS =
+                                i.ToString() + ", " +
+                               "NaN" + ", " +
+                               result_pos[i][j].Type + ", " +
+                               result_pos[i][j].ObjectID + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN";
+
+                            txtResponsePos12.Text = txtResponsePos12.Text + result_pos_RTLS + "\r\n";
+                            tempPos00000012.Add(result_pos_RTLS);
+                        }
+                    }
+                    txtResponsePos12.ScrollToEnd();
+                }
+
+                for (int j = 0; j < result_pos[i].Count(); j++)
+                {
+                    if (result_pos[i][j].Type == "RTLS" && result_pos[i][j].ObjectID == "00000013")
+                    {
+                        if (!double.IsNaN(result_pos[i][j].Coordinates.X))
+                        {
+                            string result_pos_RTLS =
+                                i.ToString() + ", " +
+                                result_pos[i][j].TimeStamp + ", " +
+                                result_pos[i][j].Type + ", " +
+                                result_pos[i][j].ObjectID + ", " +
+                                result_pos[i][j].Coordinates.X + ", " +
+                                result_pos[i][j].Coordinates.Y + ", " +
+                                controller.ConvertZoneIDtoStationName(result_pos[i][j].Zone) + ", " +
+                                result_pos[i][j].Longitude + ", " +
+                                result_pos[i][j].Latitude;
+
+                            txtResponsePos13.Text = txtResponsePos13.Text + result_pos_RTLS + "\r\n";
+                            tempPos00000013.Add(result_pos_RTLS);
+                        }
+                        else
+                        {
+                            string result_pos_RTLS =
+                                i.ToString() + ", " +
+                               "NaN" + ", " +
+                               result_pos[i][j].Type + ", " +
+                               result_pos[i][j].ObjectID + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN" + ", " +
+                               "NaN";
+
+                            txtResponsePos13.Text = txtResponsePos13.Text + result_pos_RTLS + "\r\n";
+                            tempPos00000013.Add(result_pos_RTLS);
+                        }
+                    }
+                    txtResponsePos13.ScrollToEnd();
                 }
 
 
@@ -377,9 +555,17 @@ namespace LabManager
             txtIntervalTime.Clear();
             txtUserName.Clear();
             txtPassword.Clear();
+
             txtRTLSuri.Clear();
             txtAGVuri.Clear();
-            txtResponse.Clear();
+
+            txtResponseObj11.Clear();
+            txtResponseObj12.Clear();
+            txtResponseObj13.Clear();
+            txtResponsePos11.Clear();
+            txtResponsePos12.Clear();
+            txtResponsePos13.Clear();
+
             myCanvas.Children.Clear();
         }
         
@@ -913,5 +1099,7 @@ namespace LabManager
             distribution.WindowState = FormWindowState.Maximized;
             distribution.Show();
         }
+
+        
     }
 }
