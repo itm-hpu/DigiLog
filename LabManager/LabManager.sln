@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabManager", "LabManager\La
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR", "SignalR\SignalR.csproj", "{E465C6C3-8184-412F-815B-B0EADA3F65EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewSignalR", "NewSignalR\NewSignalR.csproj", "{8C9AD420-E72F-4A7D-8545-61F366033E54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{E465C6C3-8184-412F-815B-B0EADA3F65EB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E465C6C3-8184-412F-815B-B0EADA3F65EB}.Release|x64.ActiveCfg = Release|Any CPU
 		{E465C6C3-8184-412F-815B-B0EADA3F65EB}.Release|x64.Build.0 = Release|Any CPU
+		{8C9AD420-E72F-4A7D-8545-61F366033E54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C9AD420-E72F-4A7D-8545-61F366033E54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C9AD420-E72F-4A7D-8545-61F366033E54}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8C9AD420-E72F-4A7D-8545-61F366033E54}.Debug|x64.Build.0 = Debug|Any CPU
+		{8C9AD420-E72F-4A7D-8545-61F366033E54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C9AD420-E72F-4A7D-8545-61F366033E54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C9AD420-E72F-4A7D-8545-61F366033E54}.Release|x64.ActiveCfg = Release|Any CPU
+		{8C9AD420-E72F-4A7D-8545-61F366033E54}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
