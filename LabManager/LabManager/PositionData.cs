@@ -9,7 +9,7 @@ namespace LabManager
 {
     class PositionData
     {
-        public DateTime? TimeStamp { get; set; }
+        public string TimeStamp { get; set; }
         public Point Coordinates { get; set; }
         public string ObjectID { get; set; }
         public string Type { get; set; }

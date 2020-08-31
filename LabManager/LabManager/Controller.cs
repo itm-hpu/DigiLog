@@ -56,6 +56,22 @@ namespace LabManager
             return responseResult;
         }
 
+        public List<string[]> RequestServer_RTLS_pos(string rtlsURI, string username, string password, int requiringNumofPoints)
+        {
+            List<string[]> responseResult = new List<string[]>(requiringNumofPoints);
+
+            RESTClinet rClient = new RESTClinet();
+
+            rClient.rtlsAddress = rtlsURI;
+            rClient.userName = username;
+            rClient.userPassword = password;
+
+            responseResult = rClient.MakeRTLSposRequest(requiringNumofPoints); //requiringNumofPoints
+
+            return responseResult;
+        }
+
+
         public string GetID(string rtlsURI, string userName, string password)
         {
             string result_IDs = "";
@@ -95,7 +111,7 @@ namespace LabManager
 
                 for (int i = 0; i < iLength; i++)
                 {
-                    file[j].Write(positionDatas[i][j].Type + "," + "\t" + positionDatas[i][j].ObjectID + "," + positionDatas[i][j].TimeStamp + "," + positionDatas[i][j].Coordinates.X + "," + positionDatas[i][j].Coordinates.Y + "," + positionDatas[i][j].Zone);
+                    file[j].Write(positionDatas[i][j].Type + "," + "\t" + positionDatas[i][j].ObjectID + "," + positionDatas[i][j].TimeStamp + "," + positionDatas[i][j].Coordinates.X + "," + positionDatas[i][j].Coordinates.Y + "," + ConvertZoneIDtoStationName(positionDatas[i][j].Zone) + "," + positionDatas[i][j].Longitude + "," + positionDatas[i][j].Latitude);
                     file[j].Write("\n");
                 }
                 file[j].Close();

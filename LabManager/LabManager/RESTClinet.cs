@@ -306,6 +306,135 @@ namespace LabManager
         }
 
 
+        public List<string[]> MakeRTLSposRequest(int requiringNumofPoints)
+        {
+            string strResponseValue = string.Empty;
+            //string result = string.Empty;
+
+            List<string[]> result = new List<string[]>(requiringNumofPoints);
+
+            // ObjID, Coordinate.X, Coordinate.Y, TimeStamp, Zone, Longitude, Latitude
+            string[] tempResult = new string[7];
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(rtlsAddress);
+
+            request.Accept = "application/json";
+            request.Headers.Add("X-Authenticate-User", userName);
+            request.Headers.Add("X-Authenticate-Password", userPassword);
+            request.Method = httpMethod.ToString();
+
+            HttpWebResponse response = null;
+
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+
+                var statuscode = response.StatusCode;
+
+                //Proecess the resppnse stream... (could be JSON, XML or HTML etc...)
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    if (responseStream != null)
+                    {
+                        using (StreamReader reader = new StreamReader(responseStream))
+                        {
+                            strResponseValue = reader.ReadToEnd();
+
+                            result = ReadRTLSposJson(strResponseValue, "RootObject", requiringNumofPoints);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                for (int i = 0; i < requiringNumofPoints; i++)
+                {
+                    strResponseValue = "{\"errorMessages\":[\"" + ex.Message.ToString() + "\"],\"errors\":{}}";
+                    result[i][0] = string.Empty;
+                    result[i][1] = string.Empty;
+                    result[i][2] = string.Empty;
+                    string[] splitAddress = this.rtlsAddress.Split(new char[] { '/', '=' });
+                    result[i][3] = splitAddress[4];
+                    result[i][4] = string.Empty;
+                    result[i][5] = string.Empty;
+                    result[i][6] = string.Empty;
+                }
+            }
+            finally
+            {
+                if (response != null)
+                {
+                    ((IDisposable)response).Dispose();
+                }
+            }
+
+            //return result;
+            return result;
+        }
+
+
+        public List<string[]> ReadRTLSposJson(string jsonStr, string keyNameParent, int requiringNumofPoints)
+        {
+            JArray jarray = JArray.Parse(jsonStr);
+            
+            List<string[]> result = new List<string[]>(requiringNumofPoints);
+            //JObject json = JObject.Parse(jsonStr);
+
+            string Xvalue = "";
+            string Yvalue = "";
+            string TimeStamp = "";
+            string ObjectID = "";
+            string Zone = "";
+            string longitude = "";
+            string latitude = "";
+
+            // Xvalue, Yvalue, TimeStamp, ObjectID, Zone
+            string[] returnValue = new string[7];
+
+            for (int i = 0; i < requiringNumofPoints; i++)
+            {
+                var json = jarray[i]; // first element of json array
+
+                ObjectID = (string)json.SelectToken("Object"); //0
+                Xvalue = (string)json.SelectToken("X");//1
+                Yvalue = (string)json.SelectToken("Y");//2
+                TimeStamp = (string)json.SelectToken("Timestamp");//3
+                Zone = (string)json.SelectToken("Zone");//4
+                longitude = (string)json.SelectToken("Longitude");//5
+                latitude = (string)json.SelectToken("Latitude");//6
+
+                returnValue[0] = Xvalue;
+                returnValue[1] = Yvalue;
+                returnValue[2] = TimeStamp;
+                returnValue[3] = ObjectID;
+                returnValue[4] = Zone;
+                returnValue[5] = longitude;
+                returnValue[6] = latitude;
+
+                result.Add(returnValue);
+            }
+            /*
+            // Longitude, Latitude instead of X, Y ?
+            ObjectID = (string)json.SelectToken("Object"); //0
+            Xvalue = (string)json.SelectToken("X");//1
+            Yvalue = (string)json.SelectToken("Y");//2
+            TimeStamp = (string)json.SelectToken("Timestamp");//3
+            Zone = (string)json.SelectToken("Zone");//4
+            longitude = (string)json.SelectToken("Longitude");//5
+            latitude = (string)json.SelectToken("Latitude");//6
+
+            returnValue[0] = Xvalue;
+            returnValue[1] = Yvalue;
+            returnValue[2] = TimeStamp;
+            returnValue[3] = ObjectID;
+            returnValue[4] = Zone;
+            returnValue[5] = longitude;
+            returnValue[6] = latitude;
+            */
+            return result;
+        }
+
+
         /// <summary>
         /// Get TAG IDs in RTLS system
         /// </summary>

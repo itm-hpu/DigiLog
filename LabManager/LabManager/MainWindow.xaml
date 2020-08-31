@@ -18,7 +18,7 @@
         <Label Content="* IntervalTime" HorizontalAlignment="Left" Margin="595,69,0,0" VerticalAlignment="Top" Width="95" Height="26"/>
         <TextBox x:Name="txtIterationNum" HorizontalAlignment="Left" Height="23" Margin="709,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
         <TextBox x:Name="txtIntervalTime" HorizontalAlignment="Left" Height="23" Margin="709,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
-        <Button x:Name="btnAcquire" Content="Acquire" HorizontalAlignment="Left" Margin="709,143,0,0" VerticalAlignment="Top" Width="70" Height="31" Click="ButtonAcquire_Click"/>
+        <Button x:Name="btnAcquire" Content="Acquire" HorizontalAlignment="Left" Margin="709,208,0,0" VerticalAlignment="Top" Width="70" Height="31" Click="ButtonAcquire_Click"/>
         <Label Content="URI Response&#xA;" HorizontalAlignment="Left" Margin="10,239,0,0" VerticalAlignment="Top" Height="32" Width="82"/>
         <TextBox x:Name="txtResponseObj11" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="117" Margin="99,264,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="243"/>
         <Canvas x:Name="myCanvas" HorizontalAlignment="Left" Height="210" Margin="99,510,0,0" VerticalAlignment="Top" Width="770">
@@ -28,14 +28,14 @@
         </Canvas>
         <Label Content="AGV Address&#xA;" HorizontalAlignment="Left" Margin="10,211,0,0" VerticalAlignment="Top" Height="32" Width="79"/>
         <TextBox x:Name="txtAGVuri" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="24" Margin="99,215,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591"/>
-        <Button x:Name="btnCheck" Content="Check" HorizontalAlignment="Left" Margin="709,101,0,0" VerticalAlignment="Top" Width="70" Height="31" Click="ButtonCheck_Click"/>
+        <Button x:Name="btnCheck" Content="Check" HorizontalAlignment="Left" Margin="709,166,0,0" VerticalAlignment="Top" Width="70" Height="31" Click="ButtonCheck_Click"/>
         <Label Content="* How many seconds do you want to check the position of RTLS tags?" HorizontalAlignment="Left" Margin="307,16,0,0" VerticalAlignment="Top" Width="418" Height="26"/>
         <TextBox x:Name="txtCheckSeconds" HorizontalAlignment="Left" Height="23" Margin="709,19,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
         <Button x:Name="btnGetID" Content="Get TAG IDs" HorizontalAlignment="Left" Margin="206,18,0,0" VerticalAlignment="Top" Width="84" Height="75" Click="BtnGetID_Click"/>
         <TextBox x:Name="txtTAGIDs" HorizontalAlignment="Left" Height="75" Margin="99,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89"/>
         <Label Content="RTLS TAG IDs" HorizontalAlignment="Left" Margin="10,18,0,0" VerticalAlignment="Top" Width="79" Height="26"/>
-        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="799,101,0,0" VerticalAlignment="Top" Width="70" Height="31" Click="btnSave_Click"/>
-        <Button x:Name="btnRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="799,143,0,0" VerticalAlignment="Top" Width="70" Height="31" Click="BtnRefresh_Click"/>
+        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="799,166,0,0" VerticalAlignment="Top" Width="70" Height="31" Click="btnSave_Click"/>
+        <Button x:Name="btnRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="799,208,0,0" VerticalAlignment="Top" Width="70" Height="31" Click="BtnRefresh_Click"/>
         <Button x:Name="btnSelectFile" Content="Select File" HorizontalAlignment="Left" Height="40" Margin="709,725,0,0" VerticalAlignment="Top" Width="70" Click="BtnSelectFile_Click"/>
         <Label Content="Input Path" HorizontalAlignment="Left" Margin="10,724,0,0" VerticalAlignment="Top" Width="79" Height="26"/>
         <TextBox x:Name="txtInputPath" HorizontalAlignment="Left" Height="40" Margin="99,725,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591"/>
@@ -57,5 +57,7 @@
         <TextBox x:Name="txtResponsePos13" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="117" Margin="623,388,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="246"/>
         <Label Content="/positions" HorizontalAlignment="Left" Margin="25,388,0,0" VerticalAlignment="Top" Width="69"/>
         <TextBox x:Name="txtRTLSuri_Pos" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="49" Margin="99,161,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591"/>
+        <Label Content="Number of Requiring Points" HorizontalAlignment="Left" Margin="710,101,0,0" VerticalAlignment="Top" Width="178"/>
+        <TextBox x:Name="txtNumofPoints" HorizontalAlignment="Left" Height="23" Margin="718,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>
