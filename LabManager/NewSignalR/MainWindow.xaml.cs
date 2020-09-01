@@ -29,13 +29,17 @@ namespace NewSignalR
         public static System.Net.Http.HttpClient client;
         public HubConnection connection;
 
-        public static List<string> positionList;
+        public static List<string> positionList11;
+        public static List<string> positionList12;
+        public static List<string> positionList13;
 
         public MainWindow()
         {
             InitializeComponent();
             korigang(); //SignalR
-            positionList = new List<string>();
+            positionList11 = new List<string>();
+            positionList12 = new List<string>();
+            positionList13 = new List<string>();
         }
 
         public async void korigang()
@@ -80,7 +84,19 @@ namespace NewSignalR
 
         public static void Poskommer(string server, pos p)
         {
-            positionList.Add(p.latitude + ", " + p.longitude);
+            if (p.Object.ToString() == "00000011")
+            {
+                positionList11.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+            }
+            else if (p.Object.ToString() == "00000012")
+            {
+                positionList12.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+            }
+            else if (p.Object.ToString() == "00000013")
+            {
+                positionList13.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+            }
+            
         }
 
         public async Task<string> login(string server, string user, string passw)
@@ -97,14 +113,32 @@ namespace NewSignalR
 
         private void BtnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            string temp = "";
+            string temp11 = "";
+            string temp12 = "";
+            string temp13 = "";
 
-            for (int i = 0; i < positionList.Count; i++)
+            for (int i = 0; i < positionList11.Count; i++)
             {
-                temp = temp + positionList[i] + "\n";
+                temp11 = temp11 + positionList11[i] + "\n";
             }
 
-            txtLog.Text = temp;
+            for (int i = 0; i < positionList12.Count; i++)
+            {
+                temp12 = temp12 + positionList12[i] + "\n";
+            }
+
+            for (int i = 0; i < positionList13.Count; i++)
+            {
+                temp13 = temp13 + positionList13[i] + "\n";
+            }
+
+            txtLog11.Text = temp11;
+            txtLog12.Text = temp12;
+            txtLog13.Text = temp13;
+
+            txtLog11.ScrollToEnd();
+            txtLog12.ScrollToEnd();
+            txtLog13.ScrollToEnd();
         }
     }
 
