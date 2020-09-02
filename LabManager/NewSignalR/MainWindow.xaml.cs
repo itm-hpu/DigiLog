@@ -28,6 +28,7 @@ namespace NewSignalR
 
         public static System.Net.Http.HttpClient client;
         public HubConnection connection;
+        Controller controller = new Controller();
 
         public static List<string> positionList11;
         public static List<string> positionList12;
@@ -44,6 +45,18 @@ namespace NewSignalR
 
         public async void korigang()
         {
+            string server = "p184-geps-production-api.hd-rtls.com";
+            string userName = "cpal";
+            string password = "cpal";
+
+            string objectIDsAddress = "https://" + server + "/objects";
+            txtTagID.Text = controller.GetID(objectIDsAddress, userName, password);
+
+            string[] objectIDs = controller.DivideIDs(txtTagID.Text);
+            cmbTagID1.ItemsSource = objectIDs;
+            cmbTagID2.ItemsSource = objectIDs;
+            cmbTagID3.ItemsSource = objectIDs;
+
             //client = new System.Net.Http.HttpClient();
             //client.DefaultRequestHeaders.Add("Accept", "application/x-www-form-urlencoded");
             //client.DefaultRequestHeaders.Add("X-Authenticate-User", "per.astrom@hd-wireless.se");
@@ -51,7 +64,7 @@ namespace NewSignalR
 
             //Microsoft.AspNet.SignalR.Client.ConnectionState _hub_state = await PrenPos("p186-geps-production-api.hd-rtls.com", "per.astrom@hd-wireless.se", "!Test4All", "2600000000009d40");
 
-            string Token = await login("p186-geps-production-api.hd-rtls.com", "KTH", "!Test4KTH");
+            string Token = await login(server, userName, password);
 
             //var q = "?X-Authenticate-Token=" + Token;
             //var hubConnection = new HubConnection("https://p186-geps-production-api.hd-rtls.com");
@@ -61,7 +74,7 @@ namespace NewSignalR
 
             //string Token = await login("p186-geps-production-api.hd-rtls.com", "fill in your user", "your passw");
             connection = new HubConnectionBuilder()
-               .WithUrl("https://p186-geps-production-api.hd-rtls.com/signalr/beaconPosition", options =>
+               .WithUrl("https://" + server + "/signalr/beaconPosition", options =>
                {
 
                    options.Headers.Add("X-Authenticate-Token", Token);
@@ -71,7 +84,7 @@ namespace NewSignalR
 
             connection.On<pos>("onEvent", Data =>
             {
-                Poskommer("kkK", Data);
+                Poskommer("kkK", Data, objectIDs);
             });
 
             await connection.StartAsync();
@@ -96,7 +109,22 @@ namespace NewSignalR
             {
                 positionList13.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
             }
-            
+        }
+
+        public static void Poskommer(string server, pos p, string[] objectIDs)
+        {
+            if (p.Object.ToString() == objectIDs[0])
+            {
+                positionList11.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+            }
+            else if (p.Object.ToString() == objectIDs[1])
+            {
+                positionList12.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+            }
+            else if (p.Object.ToString() == objectIDs[2])
+            {
+                positionList13.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+            }
         }
 
         public async Task<string> login(string server, string user, string passw)
@@ -113,23 +141,34 @@ namespace NewSignalR
 
         private void BtnUpdate_Click(object sender, RoutedEventArgs e)
         {
+            string[] objectIDs = controller.DivideIDs(txtTagID.Text);
+
             string temp11 = "";
             string temp12 = "";
             string temp13 = "";
 
-            for (int i = 0; i < positionList11.Count; i++)
+            if (cmbTagID1.Text == objectIDs[0])
             {
-                temp11 = temp11 + positionList11[i] + "\n";
+                for (int j = 0; j < positionList11.Count; j++)
+                {
+                    temp11 = temp11 + positionList11[j] + "\n";
+                }
             }
 
-            for (int i = 0; i < positionList12.Count; i++)
+            if (cmbTagID2.Text == objectIDs[1])
             {
-                temp12 = temp12 + positionList12[i] + "\n";
+                for (int j = 0; j < positionList12.Count; j++)
+                {
+                    temp12 = temp12 + positionList12[j] + "\n";
+                }
             }
 
-            for (int i = 0; i < positionList13.Count; i++)
+            if (cmbTagID3.Text == objectIDs[2])
             {
-                temp13 = temp13 + positionList13[i] + "\n";
+                for (int j = 0; j < positionList13.Count; j++)
+                {
+                    temp13 = temp13 + positionList13[j] + "\n";
+                }
             }
 
             txtLog11.Text = temp11;
