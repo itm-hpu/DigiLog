@@ -37,13 +37,12 @@ namespace NewSignalR
         public MainWindow()
         {
             InitializeComponent();
-            korigang(); //SignalR
             positionList11 = new List<string>();
             positionList12 = new List<string>();
             positionList13 = new List<string>();
         }
 
-        public async void korigang()
+        public async void StartSignalR()
         {
             string server = "p184-geps-production-api.hd-rtls.com";
             string userName = "cpal";
@@ -57,22 +56,8 @@ namespace NewSignalR
             cmbTagID2.ItemsSource = objectIDs;
             cmbTagID3.ItemsSource = objectIDs;
 
-            //client = new System.Net.Http.HttpClient();
-            //client.DefaultRequestHeaders.Add("Accept", "application/x-www-form-urlencoded");
-            //client.DefaultRequestHeaders.Add("X-Authenticate-User", "per.astrom@hd-wireless.se");
-            //client.DefaultRequestHeaders.Add("X-Authenticate-Password", "!Test4All");
-
-            //Microsoft.AspNet.SignalR.Client.ConnectionState _hub_state = await PrenPos("p186-geps-production-api.hd-rtls.com", "per.astrom@hd-wireless.se", "!Test4All", "2600000000009d40");
-
             string Token = await login(server, userName, password);
 
-            //var q = "?X-Authenticate-Token=" + Token;
-            //var hubConnection = new HubConnection("https://p186-geps-production-api.hd-rtls.com");
-            //connection = new HubConnectionBuilder()
-            //   .WithUrl("https://p174-geps-production-api.hd-rtls.com" + "/signalr/objectPosition" + q)
-            //   .Build();
-
-            //string Token = await login("p186-geps-production-api.hd-rtls.com", "fill in your user", "your passw");
             connection = new HubConnectionBuilder()
                .WithUrl("https://" + server + "/signalr/beaconPosition", options =>
                {
@@ -89,10 +74,6 @@ namespace NewSignalR
 
             await connection.StartAsync();
             await connection.InvokeAsync("subscribe", null);
-
-            //System.Net.Http.HttpResponseMessage responseGet = await client.GetAsync("https://p178-geps-production-metrics.hd-rtls.com/api/v1/labels");
-            //var response = await responseGet.Content.ReadAsStringAsync();
-
         }
 
         public static void Poskommer(string server, pos p)
@@ -178,6 +159,11 @@ namespace NewSignalR
             txtLog11.ScrollToEnd();
             txtLog12.ScrollToEnd();
             txtLog13.ScrollToEnd();
+        }
+
+        private void BtnStart_Click(object sender, RoutedEventArgs e)
+        {
+            StartSignalR();
         }
     }
 
