@@ -37,6 +37,11 @@ namespace NewSignalR
         public MainWindow()
         {
             InitializeComponent();
+
+            txtServer.Text = "p184-geps-production-api.hd-rtls.com";
+            txtUserName.Text = "cpal";
+            txtPassword.Text = "cpal";
+
             positionList11 = new List<string>();
             positionList12 = new List<string>();
             positionList13 = new List<string>();
@@ -44,26 +49,17 @@ namespace NewSignalR
 
         public async void StartSignalR()
         {
-            string server = "p184-geps-production-api.hd-rtls.com";
-            string userName = "cpal";
-            string password = "cpal";
-
-            string objectIDsAddress = "https://" + server + "/objects";
-            txtTagID.Text = controller.GetID(objectIDsAddress, userName, password);
-
+            string server = txtServer.Text;
+            string userName = txtUserName.Text;
+            string password = txtPassword.Text;
             string[] objectIDs = controller.DivideIDs(txtTagID.Text);
-            cmbTagID1.ItemsSource = objectIDs;
-            cmbTagID2.ItemsSource = objectIDs;
-            cmbTagID3.ItemsSource = objectIDs;
 
             string Token = await login(server, userName, password);
 
             connection = new HubConnectionBuilder()
                .WithUrl("https://" + server + "/signalr/beaconPosition", options =>
                {
-
                    options.Headers.Add("X-Authenticate-Token", Token);
-
                })
                .Build();
 
@@ -164,6 +160,17 @@ namespace NewSignalR
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             StartSignalR();
+        }
+
+        private void btnCheck_Click(object sender, RoutedEventArgs e)
+        {
+            string objectIDsAddress = "https://" + txtServer.Text + "/objects";
+            txtTagID.Text = controller.GetID(objectIDsAddress, txtUserName.Text, txtPassword.Text);
+
+            string[] objectIDs = controller.DivideIDs(txtTagID.Text);
+            cmbTagID1.ItemsSource = objectIDs;
+            cmbTagID2.ItemsSource = objectIDs;
+            cmbTagID3.ItemsSource = objectIDs;
         }
     }
 
