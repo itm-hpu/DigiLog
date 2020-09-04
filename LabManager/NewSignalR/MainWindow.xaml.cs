@@ -30,9 +30,9 @@ namespace NewSignalR
         public HubConnection connection;
         Controller controller = new Controller();
 
-        public static List<string> positionList11;
-        public static List<string> positionList12;
-        public static List<string> positionList13;
+        public static List<string> positionList1;
+        public static List<string> positionList2;
+        public static List<string> positionList3;
 
         public MainWindow()
         {
@@ -42,9 +42,9 @@ namespace NewSignalR
             txtUserName.Text = "cpal";
             txtPassword.Text = "cpal";
 
-            positionList11 = new List<string>();
-            positionList12 = new List<string>();
-            positionList13 = new List<string>();
+            positionList1 = new List<string>();
+            positionList2 = new List<string>();
+            positionList3 = new List<string>();
         }
 
         public async void StartSignalR()
@@ -76,15 +76,15 @@ namespace NewSignalR
         {
             if (p.Object.ToString() == "00000011")
             {
-                positionList11.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+                positionList1.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
             }
             else if (p.Object.ToString() == "00000012")
             {
-                positionList12.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+                positionList2.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
             }
             else if (p.Object.ToString() == "00000013")
             {
-                positionList13.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+                positionList3.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
             }
         }
 
@@ -92,15 +92,15 @@ namespace NewSignalR
         {
             if (p.Object.ToString() == objectIDs[0])
             {
-                positionList11.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+                positionList1.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
             }
             else if (p.Object.ToString() == objectIDs[1])
             {
-                positionList12.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+                positionList2.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
             }
             else if (p.Object.ToString() == objectIDs[2])
             {
-                positionList13.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+                positionList3.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
             }
         }
 
@@ -120,41 +120,41 @@ namespace NewSignalR
         {
             string[] objectIDs = controller.DivideIDs(txtTagID.Text);
 
-            string temp11 = "";
-            string temp12 = "";
-            string temp13 = "";
+            string temp1 = "";
+            string temp2 = "";
+            string temp3 = "";
 
             if (cmbTagID1.Text == objectIDs[0])
             {
-                for (int j = 0; j < positionList11.Count; j++)
+                for (int j = 0; j < positionList1.Count; j++)
                 {
-                    temp11 = temp11 + positionList11[j] + "\n";
+                    temp1 = temp1 + positionList1[j] + "\n";
                 }
             }
 
             if (cmbTagID2.Text == objectIDs[1])
             {
-                for (int j = 0; j < positionList12.Count; j++)
+                for (int j = 0; j < positionList2.Count; j++)
                 {
-                    temp12 = temp12 + positionList12[j] + "\n";
+                    temp2 = temp2 + positionList2[j] + "\n";
                 }
             }
 
             if (cmbTagID3.Text == objectIDs[2])
             {
-                for (int j = 0; j < positionList13.Count; j++)
+                for (int j = 0; j < positionList3.Count; j++)
                 {
-                    temp13 = temp13 + positionList13[j] + "\n";
+                    temp3 = temp3 + positionList3[j] + "\n";
                 }
             }
 
-            txtLog11.Text = temp11;
-            txtLog12.Text = temp12;
-            txtLog13.Text = temp13;
+            txtLog1.Text = temp1;
+            txtLog2.Text = temp2;
+            txtLog3.Text = temp3;
 
-            txtLog11.ScrollToEnd();
-            txtLog12.ScrollToEnd();
-            txtLog13.ScrollToEnd();
+            txtLog1.ScrollToEnd();
+            txtLog2.ScrollToEnd();
+            txtLog3.ScrollToEnd();
         }
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
