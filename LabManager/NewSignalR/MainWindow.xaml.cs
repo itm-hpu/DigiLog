@@ -38,9 +38,9 @@ namespace NewSignalR
         {
             InitializeComponent();
 
-            txtServer.Text = "p184-geps-production-api.hd-rtls.com";
-            txtUserName.Text = "cpal";
-            txtPassword.Text = "cpal";
+            txtServer.Text = "p186-geps-production-api.hd-rtls.com";
+            txtUserName.Text = "KTH";
+            txtPassword.Text = "!Test4KTH";
 
             positionList1 = new List<string>();
             positionList2 = new List<string>();
@@ -52,7 +52,12 @@ namespace NewSignalR
             string server = txtServer.Text;
             string userName = txtUserName.Text;
             string password = txtPassword.Text;
-            string[] objectIDs = controller.DivideIDs(txtTagID.Text);
+            //string[] objectIDs = controller.DivideIDs(txtTagID.Text);
+
+            string[] id4require = new string[3];
+            id4require[0] = cmbTagID1.Text;
+            id4require[1] = cmbTagID2.Text;
+            id4require[2] = cmbTagID3.Text;
 
             string Token = await login(server, userName, password);
 
@@ -65,12 +70,14 @@ namespace NewSignalR
 
             connection.On<pos>("onEvent", Data =>
             {
-                Poskommer("kkK", Data, objectIDs);
+                Poskommer("kkK", Data, id4require);
             });
 
             await connection.StartAsync();
             await connection.InvokeAsync("subscribe", null);
         }
+
+
 
         public static void Poskommer(string server, pos p)
         {
@@ -88,20 +95,64 @@ namespace NewSignalR
             }
         }
 
-        public static void Poskommer(string server, pos p, string[] objectIDs)
+        public static void Poskommer(string server, pos p, string[] id4require)
         {
-            if (p.Object.ToString() == objectIDs[0])
+            if (p.Object.ToString() == id4require[0])
             {
                 positionList1.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
             }
-            else if (p.Object.ToString() == objectIDs[1])
+            else if (p.Object.ToString() == id4require[1])
             {
                 positionList2.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
             }
-            else if (p.Object.ToString() == objectIDs[2])
+            else if (p.Object.ToString() == id4require[2])
             {
                 positionList3.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
             }
+        }
+        
+        public void Print()
+        {
+            string[] id4require = new string[3];
+            id4require[0] = cmbTagID1.Text;
+            id4require[1] = cmbTagID2.Text;
+            id4require[2] = cmbTagID3.Text;
+
+            string temp1 = "";
+            string temp2 = "";
+            string temp3 = "";
+
+            if (cmbTagID1.Text == id4require[0])
+            {
+                for (int j = 0; j < positionList1.Count; j++)
+                {
+                    temp1 = temp1 + positionList1[j] + "\n";
+                }
+            }
+
+            if (cmbTagID2.Text == id4require[1])
+            {
+                for (int j = 0; j < positionList2.Count; j++)
+                {
+                    temp2 = temp2 + positionList2[j] + "\n";
+                }
+            }
+
+            if (cmbTagID3.Text == id4require[2])
+            {
+                for (int j = 0; j < positionList3.Count; j++)
+                {
+                    temp3 = temp3 + positionList3[j] + "\n";
+                }
+            }
+
+            txtLog1.Text = temp1;
+            txtLog2.Text = temp2;
+            txtLog3.Text = temp3;
+
+            txtLog1.ScrollToEnd();
+            txtLog2.ScrollToEnd();
+            txtLog3.ScrollToEnd();
         }
 
         public async Task<string> login(string server, string user, string passw)
@@ -118,43 +169,7 @@ namespace NewSignalR
 
         private void BtnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            string[] objectIDs = controller.DivideIDs(txtTagID.Text);
-
-            string temp1 = "";
-            string temp2 = "";
-            string temp3 = "";
-
-            if (cmbTagID1.Text == objectIDs[0])
-            {
-                for (int j = 0; j < positionList1.Count; j++)
-                {
-                    temp1 = temp1 + positionList1[j] + "\n";
-                }
-            }
-
-            if (cmbTagID2.Text == objectIDs[1])
-            {
-                for (int j = 0; j < positionList2.Count; j++)
-                {
-                    temp2 = temp2 + positionList2[j] + "\n";
-                }
-            }
-
-            if (cmbTagID3.Text == objectIDs[2])
-            {
-                for (int j = 0; j < positionList3.Count; j++)
-                {
-                    temp3 = temp3 + positionList3[j] + "\n";
-                }
-            }
-
-            txtLog1.Text = temp1;
-            txtLog2.Text = temp2;
-            txtLog3.Text = temp3;
-
-            txtLog1.ScrollToEnd();
-            txtLog2.ScrollToEnd();
-            txtLog3.ScrollToEnd();
+            Print();
         }
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
