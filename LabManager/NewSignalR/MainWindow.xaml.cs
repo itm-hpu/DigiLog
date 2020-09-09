@@ -127,7 +127,7 @@ namespace NewSignalR
             return result.AuthenticateToken;
         }
 
-
+        /*
         public async Task Print1()
         {
             var cancellationToken = cancellationTokenSource.Token;
@@ -184,8 +184,8 @@ namespace NewSignalR
                 }
             }, cancellationTokenSource.Token);
         }
-
-        /*
+        */
+        
         public async Task Print1()
         {
             string result = "";
@@ -221,7 +221,7 @@ namespace NewSignalR
                 txtLog3.ScrollToEnd();
             }
         }
-        */
+        
 
         private async void BtnStart_Click(object sender, RoutedEventArgs e)
         {
