@@ -14,10 +14,11 @@ namespace NewSignalR
     
     class Controller
     {
+        RESTfulClient rClient = new RESTfulClient();
         public string GetID(string uriAddress, string userName, string password)
         {
             string result_IDs = "";
-            RESTfulClient rClient = new RESTfulClient();
+            //RESTfulClient rClient = new RESTfulClient();
             rClient.uriAddress = uriAddress;
             rClient.userName = userName;
             rClient.userPassword = password;
@@ -37,9 +38,8 @@ namespace NewSignalR
             return objectIDsArray;
         }
 
-        public string ExtractLastInfo(List<position> positionlist)
+        public string ExtractLastInfo(List<Position> positionlist)
         {
-            //string temp = "Object, Timestamp, X, Y, Latitude, Longitude, Zone";
             string temp = positionlist[positionlist.Count() - 1].Object + ", " +
                     positionlist[positionlist.Count() - 1].Timestamp + ", " +
                     positionlist[positionlist.Count() - 1].X + ", " +
@@ -47,24 +47,31 @@ namespace NewSignalR
                     positionlist[positionlist.Count() - 1].latitude + ", " +
                     positionlist[positionlist.Count() - 1].longitude + ", " +
                     positionlist[positionlist.Count() - 1].Zone;
-
-            /*
-            for (int i = 0; i < positionlist.Count; i++)
-            {
-                temp = temp + "\n" +
-                    positionlist[i].Object + ", " +
-                    positionlist[i].Timestamp + ", " +
-                    positionlist[i].X + ", " +
-                    positionlist[i].Y + ", " +
-                    positionlist[i].latitude + ", " +
-                    positionlist[i].longitude + ", " +
-                    positionlist[i].Zone;
-            }
-            */
             return temp;
         }
+
+        public List<Distance> GetDistance(string uriAddress, string userName, string password, string objectID, int max_age)
+        {
+            rClient.uriAddress = uriAddress + "&object=" + objectID + "&max_age=" + max_age.ToString();
+            rClient.userName = userName;
+            rClient.userPassword = password;
+
+            string[] responseResult = rClient.GetDistance();
+
+            List<Distance> distances = new List<Distance>()
+            {
+                new Distance()
+                {
+                    Object = objectID,
+                    Tiemstamp = DateTime.ParseExact(responseResult[0], "yyyy-MM-dd HH:mm:ss.fff", null),
+                    Value = responseResult[1]
+                }
+            };
+
+            return distances;
+        }
         
-        public double CalcDist(List<position> positionlist)
+        public double CalcDist(List<Position> positionlist)
         {
             double sum = 0;
 

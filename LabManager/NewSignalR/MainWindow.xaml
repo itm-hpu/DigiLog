@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NewSignalR"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="563.143" Width="800">
     <Grid>
         <TextBox x:Name="txtLog1" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="89" Margin="105,107,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="581"/>
         <Button x:Name="btnUpdate" Content="Update" HorizontalAlignment="Left" Margin="707,191,0,0" VerticalAlignment="Top" Width="75" Click="BtnUpdate_Click"/>
@@ -26,5 +26,10 @@
         <Button x:Name="btnCheck" Content="CheckID" HorizontalAlignment="Left" Margin="423,10,0,0" VerticalAlignment="Top" Width="62" Height="88" Click="btnCheck_Click"/>
         <Button x:Name="BtnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="707,217,0,0" VerticalAlignment="Top" Width="75" Click="BtnDisconnect_Click"/>
         <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="707,133,0,0" VerticalAlignment="Top" Width="75" Click="BtnStop_Click"/>
+        <Button x:Name="btnDistance" Content="Distance" HorizontalAlignment="Left" Margin="707,400,0,0" VerticalAlignment="Top" Width="75" Click="BtnDistance_Click"/>
+        <ComboBox x:Name="cmbObjectForDistance" HorizontalAlignment="Left" Margin="10,400,0,0" VerticalAlignment="Top" Width="87"/>
+        <TextBox x:Name="txtObjectForDistance" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="114" Margin="105,399,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="581"/>
+        <Label Content="max age (min)" HorizontalAlignment="Left" Margin="10,436,0,0" VerticalAlignment="Top" Width="87"/>
+        <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="10,462,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
     </Grid>
 </Window>

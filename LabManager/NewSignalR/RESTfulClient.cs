@@ -55,7 +55,7 @@ namespace NewSignalR
                         using (StreamReader reader = new StreamReader(responseStream))
                         {
                             strResponseValue = reader.ReadToEnd();
-                            tempResult = ReadStringJson(strResponseValue, "RootObject");
+                            tempResult = ReadObjectIDJson(strResponseValue, "RootObject");
                         }
                     }
                 }
@@ -74,7 +74,7 @@ namespace NewSignalR
             return tempResult;
         }
 
-        public string[] ReadStringJson(string jsonStr, string keyNameParent)
+        public string[] ReadObjectIDJson(string jsonStr, string keyNameParent)
         {
             var jarray = JsonConvert.DeserializeObject<JArray>(jsonStr);
             string[] returnValue = new string[jarray.Count()];
@@ -82,6 +82,69 @@ namespace NewSignalR
             {
                 returnValue[i] = jarray[i].ToString();
             }
+            return returnValue;
+        }
+
+
+        public string[] GetDistance()
+        {
+            string strResponseValue = string.Empty;
+            string[] tempResult = new string[0];
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uriAddress);
+
+            request.Accept = "application/json";
+            request.Headers.Add("X-Authenticate-User", userName);
+            request.Headers.Add("X-Authenticate-Password", userPassword);
+            request.Method = httpMethod.ToString();
+
+            HttpWebResponse response = null;
+
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                var statuscode = response.StatusCode;
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    if (responseStream != null)
+                    {
+                        using (StreamReader reader = new StreamReader(responseStream))
+                        {
+                            strResponseValue = reader.ReadToEnd();
+                            tempResult = ReadDistanceJson(strResponseValue, "RootObject");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                strResponseValue = "{\"errorMessages\":[\"" + ex.Message.ToString() + "\"],\"errors\":{}}";
+            }
+            finally
+            {
+                if (response != null)
+                {
+                    ((IDisposable)response).Dispose();
+                }
+            }
+            return tempResult;
+        }
+
+        public string[] ReadDistanceJson(string jsonStr, string keyNameParent)
+        {
+            //JObject json = JObject.Parse(jsonStr);
+
+            JArray jarray = JArray.Parse(jsonStr);
+            var json = jarray[0];
+
+            string Timestamp = (string)json.SelectToken("Timestamp");
+            string Value = (string)json.SelectToken("Value");
+
+            string[] returnValue = new string[2];
+
+            returnValue[0] = Timestamp;
+            returnValue[1] = Value;
+
             return returnValue;
         }
     }

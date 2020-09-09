@@ -32,9 +32,11 @@ namespace NewSignalR
         Controller controller = new Controller();
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-        public static List<position> positionList1;
-        public static List<position> positionList2;
-        public static List<position> positionList3;
+        public static List<Position> positionList1;
+        public static List<Position> positionList2;
+        public static List<Position> positionList3;
+
+        public List<Distance> distances;
 
         public MainWindow()
         {
@@ -43,10 +45,13 @@ namespace NewSignalR
             txtServer.Text = "p186-geps-production-api.hd-rtls.com";
             txtUserName.Text = "KTH";
             txtPassword.Text = "!Test4KTH";
+            txtmax_age.Text = "1440";
 
-            positionList1 = new List<position>();
-            positionList2 = new List<position>();
-            positionList3 = new List<position>();
+            positionList1 = new List<Position>();
+            positionList2 = new List<Position>();
+            positionList3 = new List<Position>();
+
+            distances = new List<Distance>();
         }
 
 
@@ -89,7 +94,7 @@ namespace NewSignalR
 
         public static void Poskommer(string server, pos p, string[] id4require)
         {
-            position inputforlist = new position
+            Position inputforlist = new Position
             {
                 Object = p.Object,
                 X = p.X,
@@ -270,9 +275,23 @@ namespace NewSignalR
             cmbTagID1.ItemsSource = objectIDs;
             cmbTagID2.ItemsSource = objectIDs;
             cmbTagID3.ItemsSource = objectIDs;
+
+            cmbObjectForDistance.ItemsSource = objectIDs;
         }
 
+        private void BtnDistance_Click(object sender, RoutedEventArgs e)
+        {
+            string distanceAddress = "https://" + txtServer.Text + "/time-series/distance/points?aggregation=Sum&order_by=Id&order=Ascending";
 
+            string objectID = cmbObjectForDistance.Text;
+            int max_age = Convert.ToInt32(txtmax_age.Text);
+
+            distances = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID, max_age);
+
+            txtObjectForDistance.Text = "Object, Timestamp, Distance" + "\n";
+            txtObjectForDistance.Text = txtObjectForDistance.Text + distances[0].Object + ", " + distances[0].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances[0].Value;
+
+        }
     }
 
 
@@ -301,7 +320,7 @@ namespace NewSignalR
         public string Radio { get; set; }
     }
 
-    public class position
+    public class Position
     {
         public float longitude { get; set; }
         public float latitude { get; set; }
@@ -321,5 +340,12 @@ namespace NewSignalR
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public DateTime Timespan { get; set; }
+    }
+
+    public class Distance
+    {
+        public object Object { get; set; }
+        public DateTime Tiemstamp { get; set; }
+        public string Value { get; set; }
     }
 }
