@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Diagnostics;
 using Microsoft.AspNetCore.SignalR.Client;
+using System.Threading;
 
 namespace NewSignalR
 {
@@ -29,10 +30,11 @@ namespace NewSignalR
         public static System.Net.Http.HttpClient client;
         public HubConnection connection;
         Controller controller = new Controller();
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-        public static List<string> positionList1;
-        public static List<string> positionList2;
-        public static List<string> positionList3;
+        public static List<position> positionList1;
+        public static List<position> positionList2;
+        public static List<position> positionList3;
 
         public MainWindow()
         {
@@ -42,17 +44,17 @@ namespace NewSignalR
             txtUserName.Text = "KTH";
             txtPassword.Text = "!Test4KTH";
 
-            positionList1 = new List<string>();
-            positionList2 = new List<string>();
-            positionList3 = new List<string>();
+            positionList1 = new List<position>();
+            positionList2 = new List<position>();
+            positionList3 = new List<position>();
         }
 
-        public async void StartSignalR()
+
+        public async void ConnectSignalR()
         {
             string server = txtServer.Text;
             string userName = txtUserName.Text;
             string password = txtPassword.Text;
-            //string[] objectIDs = controller.DivideIDs(txtTagID.Text);
 
             string[] id4require = new string[3];
             id4require[0] = cmbTagID1.Text;
@@ -79,81 +81,39 @@ namespace NewSignalR
 
 
 
-        public static void Poskommer(string server, pos p)
+        public async void DisconnectSignalR()
         {
-            if (p.Object.ToString() == "00000011")
-            {
-                positionList1.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
-            }
-            else if (p.Object.ToString() == "00000012")
-            {
-                positionList2.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
-            }
-            else if (p.Object.ToString() == "00000013")
-            {
-                positionList3.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
-            }
+            await connection.StopAsync();
         }
+
 
         public static void Poskommer(string server, pos p, string[] id4require)
         {
-            if (p.Object.ToString() == id4require[0])
+            position inputforlist = new position
             {
-                positionList1.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+                Object = p.Object,
+                X = p.X,
+                Y = p.Y,
+                latitude = p.latitude,
+                longitude = p.longitude,
+                Timestamp = p.Timestamp,
+                Zone = p.Zone
+            };
+
+            if (inputforlist.Object.ToString() == id4require[0])
+            {
+                positionList1.Add(inputforlist);
             }
-            else if (p.Object.ToString() == id4require[1])
+            else if (inputforlist.Object.ToString() == id4require[1])
             {
-                positionList2.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+                positionList2.Add(inputforlist);
             }
-            else if (p.Object.ToString() == id4require[2])
+            else if (inputforlist.Object.ToString() == id4require[2])
             {
-                positionList3.Add(p.Object + ", " + p.Timestamp + ", " + p.X + ", " + p.Y + ", " + p.latitude + ", " + p.longitude);
+                positionList3.Add(inputforlist);
             }
         }
-        
-        public void Print()
-        {
-            string[] id4require = new string[3];
-            id4require[0] = cmbTagID1.Text;
-            id4require[1] = cmbTagID2.Text;
-            id4require[2] = cmbTagID3.Text;
 
-            string temp1 = "";
-            string temp2 = "";
-            string temp3 = "";
-
-            if (cmbTagID1.Text == id4require[0])
-            {
-                for (int j = 0; j < positionList1.Count; j++)
-                {
-                    temp1 = temp1 + positionList1[j] + "\n";
-                }
-            }
-
-            if (cmbTagID2.Text == id4require[1])
-            {
-                for (int j = 0; j < positionList2.Count; j++)
-                {
-                    temp2 = temp2 + positionList2[j] + "\n";
-                }
-            }
-
-            if (cmbTagID3.Text == id4require[2])
-            {
-                for (int j = 0; j < positionList3.Count; j++)
-                {
-                    temp3 = temp3 + positionList3[j] + "\n";
-                }
-            }
-
-            txtLog1.Text = temp1;
-            txtLog2.Text = temp2;
-            txtLog3.Text = temp3;
-
-            txtLog1.ScrollToEnd();
-            txtLog2.ScrollToEnd();
-            txtLog3.ScrollToEnd();
-        }
 
         public async Task<string> login(string server, string user, string passw)
         {
@@ -167,14 +127,138 @@ namespace NewSignalR
             return result.AuthenticateToken;
         }
 
-        private void BtnUpdate_Click(object sender, RoutedEventArgs e)
+
+        public async Task Print1()
         {
-            Print();
+            var cancellationToken = cancellationTokenSource.Token;
+            await Task.Factory.StartNew(() =>
+            {
+                string result = "";
+                for (int i = 0; i < positionList1.Count(); i++)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        result = controller.ExtractLastInfo(positionList1);
+                        //await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
+                        txtLog1.Text = txtLog1.Text + result + "\n";
+                        txtLog1.ScrollToEnd();
+                    });
+                }
+            }, cancellationTokenSource.Token);
         }
 
-        private void BtnStart_Click(object sender, RoutedEventArgs e)
+        public async Task Print2()
         {
-            StartSignalR();
+            var cancellationToken = cancellationTokenSource.Token;
+            await Task.Factory.StartNew(() =>
+            {
+                string result = "";
+                for (int i = 0; i < positionList2.Count(); i++)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        result = controller.ExtractLastInfo(positionList2);
+                        //await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
+                        txtLog2.Text = txtLog2.Text + result + "\n";
+                        txtLog2.ScrollToEnd();
+                    });
+                }
+            }, cancellationTokenSource.Token);
+        }
+
+        public async Task Print3()
+        {
+            var cancellationToken = cancellationTokenSource.Token;
+            await Task.Factory.StartNew(() =>
+            {
+                string result = "";
+                for (int i = 0; i < positionList3.Count(); i++)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        result = controller.ExtractLastInfo(positionList3);
+                        //await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
+                        txtLog3.Text = txtLog3.Text + result + "\n";
+                        txtLog3.ScrollToEnd();
+                    });
+                }
+            }, cancellationTokenSource.Token);
+        }
+
+        /*
+        public async Task Print1()
+        {
+            string result = "";
+            for (int i = 0; i < positionList1.Count(); i++)
+            {
+                result = controller.ExtractLastInfo(positionList1);
+                await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
+                txtLog1.Text = txtLog1.Text + result + "\n";
+                txtLog1.ScrollToEnd();
+            }
+        } 
+        
+        public async Task Print2()
+        {
+            string result = "";
+            for (int i = 0; i < positionList2.Count(); i++)
+            {
+                result = controller.ExtractLastInfo(positionList2);
+                await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
+                txtLog2.Text = txtLog2.Text + result + "\n";
+                txtLog2.ScrollToEnd();
+            }
+        }
+
+        public async Task Print3()
+        {
+            string result = "";
+            for (int i = 0; i < positionList3.Count(); i++)
+            {
+                result = controller.ExtractLastInfo(positionList3);
+                await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
+                txtLog3.Text = txtLog3.Text + result + "\n";
+                txtLog3.ScrollToEnd();
+            }
+        }
+        */
+
+        private async void BtnStart_Click(object sender, RoutedEventArgs e)
+        {
+            ConnectSignalR();
+
+            txtLog1.Text = "Object, Timestamp, X, Y, Latitude, Longitude, Zone" + "\n";
+            txtLog2.Text = "Object, Timestamp, X, Y, Latitude, Longitude, Zone" + "\n";
+            txtLog3.Text = "Object, Timestamp, X, Y, Latitude, Longitude, Zone" + "\n";
+
+            while (((positionList1.Count < 5) && (positionList1.Count < 5)) && (positionList1.Count < 5))
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
+            }
+
+            Task t1 = Print1();
+            Task t2 = Print2();
+            Task t3 = Print3();
+
+            await t1;
+            await t2;
+            await t3;
+
+        }
+
+        private void BtnStop_Click(object sender, RoutedEventArgs e)
+        {
+            cancellationTokenSource.Cancel();
+        }
+
+        private void BtnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnDisconnect_Click(object sender, RoutedEventArgs e)
+        {
+            DisconnectSignalR();
         }
 
         private void btnCheck_Click(object sender, RoutedEventArgs e)
@@ -187,6 +271,8 @@ namespace NewSignalR
             cmbTagID2.ItemsSource = objectIDs;
             cmbTagID3.ItemsSource = objectIDs;
         }
+
+
     }
 
 
@@ -213,6 +299,27 @@ namespace NewSignalR
         public object Frames { get; set; }
         public string Type { get; set; }
         public string Radio { get; set; }
+    }
 
+    public class position
+    {
+        public float longitude { get; set; }
+        public float latitude { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Zone { get; set; }
+        public object Object { get; set; }
+        public DateTime Timestamp { get; set; }
+    }
+
+    public class Movement
+    {
+        public object Object { get; set; }
+        public string Type { get; set; }
+        public double Distance { get; set; }
+        public string Zone { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public DateTime Timespan { get; set; }
     }
 }
