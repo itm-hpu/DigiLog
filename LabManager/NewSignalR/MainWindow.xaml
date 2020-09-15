@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NewSignalR"
-        mc:Ignorable="d"
         Title="MainWindow" Height="563.143" Width="800">
     <Grid>
         <TextBox x:Name="txtLog1" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="89" Margin="105,107,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="581"/>
@@ -29,7 +28,15 @@
         <Button x:Name="btnDistance" Content="Distance" HorizontalAlignment="Left" Margin="707,400,0,0" VerticalAlignment="Top" Width="75" Click="BtnDistance_Click"/>
         <ComboBox x:Name="cmbObjectForDistance" HorizontalAlignment="Left" Margin="10,400,0,0" VerticalAlignment="Top" Width="87"/>
         <TextBox x:Name="txtObjectForDistance" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="114" Margin="105,399,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="581"/>
-        <Label Content="max age (min)" HorizontalAlignment="Left" Margin="10,436,0,0" VerticalAlignment="Top" Width="87"/>
-        <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="10,462,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
+        <Label Content="max age (min)" HorizontalAlignment="Left" Margin="13,464,0,0" VerticalAlignment="Top" Width="87"/>
+        <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="13,490,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
+        <ComboBox x:Name="cmbAggregation" HorizontalAlignment="Left" Margin="10,437,0,0" VerticalAlignment="Top" Width="87" RenderTransformOrigin="0.048,-0.138"/>
+        <ListBox x:Name="listbox1" ItemsSource="{Binding positionList1}" HorizontalAlignment="Left" Height="89" Margin="180,107,0,0" VerticalAlignment="Top" Width="426">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Timestamp}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>

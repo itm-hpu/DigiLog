@@ -18,6 +18,8 @@ using System.Net.Http;
 using System.Diagnostics;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Threading;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace NewSignalR
 {
@@ -26,35 +28,36 @@ namespace NewSignalR
     /// </summary>
     public partial class MainWindow : Window
     {
+        
 
         public static System.Net.Http.HttpClient client;
         public HubConnection connection;
         Controller controller = new Controller();
-        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-        public static List<Position> positionList1;
-        public static List<Position> positionList2;
-        public static List<Position> positionList3;
+        public static ObservableCollection<Position> positionList1;
+        public static ObservableCollection<Position> positionList2;
+        public static ObservableCollection<Position> positionList3; 
 
         public List<Distance> distances;
 
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
 
             txtServer.Text = "p186-geps-production-api.hd-rtls.com";
             txtUserName.Text = "KTH";
             txtPassword.Text = "!Test4KTH";
             txtmax_age.Text = "1440";
 
-            positionList1 = new List<Position>();
-            positionList2 = new List<Position>();
-            positionList3 = new List<Position>();
+            positionList1 = new ObservableCollection<Position>();
+            positionList2 = new ObservableCollection<Position>();
+            positionList3 = new ObservableCollection<Position>();
 
             distances = new List<Distance>();
         }
 
-
+        
         public async void ConnectSignalR()
         {
             string server = txtServer.Text;
@@ -84,8 +87,7 @@ namespace NewSignalR
             await connection.InvokeAsync("subscribe", null);
         }
 
-
-
+        
         public async void DisconnectSignalR()
         {
             await connection.StopAsync();
@@ -117,8 +119,9 @@ namespace NewSignalR
             {
                 positionList3.Add(inputforlist);
             }
+            
         }
-
+        
 
         public async Task<string> login(string server, string user, string passw)
         {
@@ -190,7 +193,8 @@ namespace NewSignalR
             }, cancellationTokenSource.Token);
         }
         */
-        
+
+        /*
         public async Task Print1()
         {
             string result = "";
@@ -201,8 +205,8 @@ namespace NewSignalR
                 txtLog1.Text = txtLog1.Text + result + "\n";
                 txtLog1.ScrollToEnd();
             }
-        } 
-        
+        }
+
         public async Task Print2()
         {
             string result = "";
@@ -217,6 +221,7 @@ namespace NewSignalR
 
         public async Task Print3()
         {
+
             string result = "";
             for (int i = 0; i < positionList3.Count(); i++)
             {
@@ -226,9 +231,9 @@ namespace NewSignalR
                 txtLog3.ScrollToEnd();
             }
         }
-        
+        */
 
-        private async void BtnStart_Click(object sender, RoutedEventArgs e)
+        private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             ConnectSignalR();
 
@@ -236,6 +241,9 @@ namespace NewSignalR
             txtLog2.Text = "Object, Timestamp, X, Y, Latitude, Longitude, Zone" + "\n";
             txtLog3.Text = "Object, Timestamp, X, Y, Latitude, Longitude, Zone" + "\n";
 
+
+
+            /*
             while (((positionList1.Count < 5) && (positionList1.Count < 5)) && (positionList1.Count < 5))
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
@@ -248,22 +256,22 @@ namespace NewSignalR
             await t1;
             await t2;
             await t3;
-
+            */
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
-            cancellationTokenSource.Cancel();
+
         }
 
         private void BtnUpdate_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void BtnDisconnect_Click(object sender, RoutedEventArgs e)
         {
-            DisconnectSignalR();
+            //DisconnectSignalR();
         }
 
         private void btnCheck_Click(object sender, RoutedEventArgs e)
@@ -277,19 +285,26 @@ namespace NewSignalR
             cmbTagID3.ItemsSource = objectIDs;
 
             cmbObjectForDistance.ItemsSource = objectIDs;
+            cmbAggregation.ItemsSource = new string[] { "None", "Sum" };
         }
 
         private void BtnDistance_Click(object sender, RoutedEventArgs e)
         {
-            string distanceAddress = "https://" + txtServer.Text + "/time-series/distance/points?aggregation=Sum&order_by=Id&order=Ascending";
+            string distanceAddress = "https://" + txtServer.Text + "/time-series/distance/points?order_by=Id&order=Ascending";
 
             string objectID = cmbObjectForDistance.Text;
             int max_age = Convert.ToInt32(txtmax_age.Text);
+            string aggregation = cmbAggregation.Text;
 
-            distances = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID, max_age);
+            distances = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID, max_age, aggregation);
 
             txtObjectForDistance.Text = "Object, Timestamp, Distance" + "\n";
-            txtObjectForDistance.Text = txtObjectForDistance.Text + distances[0].Object + ", " + distances[0].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances[0].Value;
+
+            for (int i = 0; i < distances.Count(); i++)
+            {
+                txtObjectForDistance.Text = txtObjectForDistance.Text + distances[i].Object + ", " + distances[i].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances[i].Value + "\n";
+            }
+            //txtObjectForDistance.Text = txtObjectForDistance.Text + distances[0].Object + ", " + distances[0].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances[0].Value;
 
         }
     }
@@ -319,7 +334,7 @@ namespace NewSignalR
         public string Type { get; set; }
         public string Radio { get; set; }
     }
-
+    
     public class Position
     {
         public float longitude { get; set; }

@@ -135,7 +135,7 @@ namespace NewSignalR
             //JObject json = JObject.Parse(jsonStr);
 
             JArray jarray = JArray.Parse(jsonStr);
-            var json = jarray[0];
+            var json = jarray[jarray.Count() - 1];
 
             string Timestamp = (string)json.SelectToken("Timestamp");
             string Value = (string)json.SelectToken("Value");

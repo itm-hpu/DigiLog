@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Diagnostics;
 using Microsoft.AspNetCore.SignalR.Client;
+using System.Collections.ObjectModel;
 
 namespace NewSignalR
 {
@@ -50,9 +51,21 @@ namespace NewSignalR
             return temp;
         }
 
-        public List<Distance> GetDistance(string uriAddress, string userName, string password, string objectID, int max_age)
+        public string ExtractLastInfo(ObservableCollection<Position> positionlist)
         {
-            rClient.uriAddress = uriAddress + "&object=" + objectID + "&max_age=" + max_age.ToString();
+            string temp = positionlist[positionlist.Count() - 1].Object + ", " +
+                    positionlist[positionlist.Count() - 1].Timestamp + ", " +
+                    positionlist[positionlist.Count() - 1].X + ", " +
+                    positionlist[positionlist.Count() - 1].Y + ", " +
+                    positionlist[positionlist.Count() - 1].latitude + ", " +
+                    positionlist[positionlist.Count() - 1].longitude + ", " +
+                    positionlist[positionlist.Count() - 1].Zone;
+            return temp;
+        }
+
+        public List<Distance> GetDistance(string uriAddress, string userName, string password, string objectID, int max_age, string aggregation)
+        {
+            rClient.uriAddress = uriAddress + "&object=" + objectID + "&max_age=" + max_age.ToString() + "&aggregation=" + aggregation;
             rClient.userName = userName;
             rClient.userPassword = password;
 
