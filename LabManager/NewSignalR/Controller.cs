@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Diagnostics;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace NewSignalR
 {
@@ -39,28 +40,36 @@ namespace NewSignalR
             return objectIDsArray;
         }
 
-        public string ExtractLastInfo(List<Position> positionlist)
+        public void SaveDataToTextFile(ObservableCollection<PositionClass> positionList)
         {
-            string temp = positionlist[positionlist.Count() - 1].Object + ", " +
-                    positionlist[positionlist.Count() - 1].Timestamp + ", " +
-                    positionlist[positionlist.Count() - 1].X + ", " +
-                    positionlist[positionlist.Count() - 1].Y + ", " +
-                    positionlist[positionlist.Count() - 1].Latitude + ", " +
-                    positionlist[positionlist.Count() - 1].Longitude + ", " +
-                    positionlist[positionlist.Count() - 1].Zone;
-            return temp;
-        }
+            string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
 
-        public string ExtractLastInfo(ObservableCollection<Position> positionlist)
-        {
-            string temp = positionlist[positionlist.Count() - 1].Object + ", " +
-                    positionlist[positionlist.Count() - 1].Timestamp + ", " +
-                    positionlist[positionlist.Count() - 1].X + ", " +
-                    positionlist[positionlist.Count() - 1].Y + ", " +
-                    positionlist[positionlist.Count() - 1].Latitude + ", " +
-                    positionlist[positionlist.Count() - 1].Longitude + ", " +
-                    positionlist[positionlist.Count() - 1].Zone;
-            return temp;
+            int iLength = positionList.Count();
+
+            if (iLength > 0)
+            {
+                string filedir = Directory.GetCurrentDirectory();
+                filedir = filedir + @"\000. RTLS_PositionData_" + timeStamp + "_" + positionList[0].ObjectId.ToString() + ".txt";
+                StreamWriter file = new StreamWriter(filedir);
+
+                for (int i = 0; i < iLength; i++)
+                {
+                    file.Write(positionList[i].ObjectId + "," +
+                        positionList[i].Timestamp + "," +
+                        positionList[i].X + "," +
+                        positionList[i].Y + "," +
+                        positionList[i].Zone + "," +
+                        positionList[i].Longitude + "," +
+                        positionList[i].Latitude);
+                    file.Write("\n");
+                }
+                file.Close();
+                return;
+            }
+            else
+            {
+                return;
+            }
         }
 
         public List<Distance> GetDistance(string uriAddress, string userName, string password, string objectID, int max_age, string aggregation)

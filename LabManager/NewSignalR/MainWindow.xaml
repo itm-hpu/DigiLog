@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:NewSignalR"
         Title="MainWindow" Height="563.143" Width="800">
     <Grid>
-        <Button x:Name="btnDebbug" Content="Debbug" HorizontalAlignment="Left" Margin="707,216,0,0" VerticalAlignment="Top" Width="75" Click="BtnDebbug_Click"/>
+        <Button x:Name="btnDebbug" Content="Debbug" HorizontalAlignment="Left" Margin="707,211,0,0" VerticalAlignment="Top" Width="75" Click="BtnDebbug_Click" Height="26"/>
         <Label Content="Tag ID" HorizontalAlignment="Left" Margin="506,13,0,0" VerticalAlignment="Top" Width="55"/>
         <TextBox x:Name="txtTagID" HorizontalAlignment="Left" Height="81" Margin="561,17,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="125"/>
         <ComboBox x:Name="cmbTagID1" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" Width="87"/>
         <ComboBox x:Name="cmbTagID2" HorizontalAlignment="Left" Margin="10,200,0,0" VerticalAlignment="Top" Width="87"/>
         <ComboBox x:Name="cmbTagID3" HorizontalAlignment="Left" Margin="10,294,0,0" VerticalAlignment="Top" Width="87"/>
-        <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="707,107,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.162,0.264" Click="BtnStart_Click"/>
+        <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="707,17,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.162,0.264" Click="BtnStart_Click" Height="26"/>
         <Label Content="Server" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="87"/>
         <Label Content="UserName" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="87"/>
         <Label Content="UserPassword" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="87"/>
@@ -20,8 +20,8 @@
         <TextBox x:Name="txtUserName" HorizontalAlignment="Left" Height="26" Margin="105,41,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
         <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Height="26" Margin="105,72,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
         <Button x:Name="btnCheck" Content="CheckID" HorizontalAlignment="Left" Margin="423,10,0,0" VerticalAlignment="Top" Width="62" Height="88" Click="btnCheck_Click"/>
-        <Button x:Name="BtnClear" Content="Clear" HorizontalAlignment="Left" Margin="707,159,0,0" VerticalAlignment="Top" Width="75" Click="BtnClear_Click"/>
-        <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="707,133,0,0" VerticalAlignment="Top" Width="75" Click="BtnStop_Click"/>
+        <Button x:Name="BtnClear" Content="Clear" HorizontalAlignment="Left" Margin="707,122,0,0" VerticalAlignment="Top" Width="75" Click="BtnClear_Click" Height="26"/>
+        <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="707,52,0,0" VerticalAlignment="Top" Width="75" Click="BtnStop_Click" Height="26"/>
         <Button x:Name="btnDistance" Content="Distance" HorizontalAlignment="Left" Margin="707,400,0,0" VerticalAlignment="Top" Width="75" Click="BtnDistance_Click"/>
         <ComboBox x:Name="cmbObjectForDistance" HorizontalAlignment="Left" Margin="10,400,0,0" VerticalAlignment="Top" Width="87"/>
         <TextBox x:Name="txtObjectForDistance" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="114" Margin="105,399,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="581"/>
@@ -100,5 +100,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="707,88,0,0" VerticalAlignment="Top" Width="75" Click="BtnSave_Click" Height="26"/>
     </Grid>
 </Window>

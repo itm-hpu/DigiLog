@@ -151,6 +151,9 @@ namespace NewSignalR
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
             DisconnectSignalR();
+
+            string message = "Stop acquiring data!";
+            MessageBox.Show(message);
         }
 
         private void BtnDebbug_Click(object sender, RoutedEventArgs e)
@@ -201,6 +204,16 @@ namespace NewSignalR
             }
             //txtObjectForDistance.Text = txtObjectForDistance.Text + distances[0].Object + ", " + distances[0].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances[0].Value;
 
+        }
+
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            controller.SaveDataToTextFile(positionList1);
+            controller.SaveDataToTextFile(positionList2);
+            controller.SaveDataToTextFile(positionList3);
+
+            string message = "Save a acquired data!";
+            MessageBox.Show(message);
         }
     }
 
