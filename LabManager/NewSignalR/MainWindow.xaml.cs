@@ -28,22 +28,26 @@ namespace NewSignalR
     /// </summary>
     public partial class MainWindow : Window
     {
-        
-
         public static System.Net.Http.HttpClient client;
         public HubConnection connection;
         Controller controller = new Controller();
 
         public static ObservableCollection<Position> positionList1;
         public static ObservableCollection<Position> positionList2;
-        public static ObservableCollection<Position> positionList3; 
+        public static ObservableCollection<Position> positionList3;
 
         public List<Distance> distances;
 
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = this;
+
+
+            ObservableCollection<Person> test = new ObservableCollection<Person>();
+            test.Add(new Person { Name = "One", Age = 1 });
+            test.Add(new Person { Name = "Two", Age = 2 });
+            listbox1.ItemsSource = test;
+
 
             txtServer.Text = "p186-geps-production-api.hd-rtls.com";
             txtUserName.Text = "KTH";
@@ -51,13 +55,45 @@ namespace NewSignalR
             txtmax_age.Text = "1440";
 
             positionList1 = new ObservableCollection<Position>();
+            positionList1.Add(new Position
+            {
+                Longitude = 1.2f,
+                Latitude = 0.5f,
+                X = 412,
+                Y = 232,
+                Zone = 5,
+                Object = "00000011",
+                Timestamp = Convert.ToDateTime("2020-09-16 08:43:11.102")
+            });
+            listbox1.ItemsSource = positionList1;
+
             positionList2 = new ObservableCollection<Position>();
             positionList3 = new ObservableCollection<Position>();
 
             distances = new List<Distance>();
         }
 
-        
+        public class Person
+        {
+            public string Name { get; set; }
+            public int Age { get; set; }
+        }
+        public class ViewModel
+        {
+            public ObservableCollection<Person> Items
+            {
+                get
+                {
+                    return new ObservableCollection<Person>
+            {
+                new Person { Name = "P1", Age = 1 },
+                new Person { Name = "P2", Age = 2 }
+            };
+                }
+            }
+        }
+
+
         public async void ConnectSignalR()
         {
             string server = txtServer.Text;
@@ -87,7 +123,7 @@ namespace NewSignalR
             await connection.InvokeAsync("subscribe", null);
         }
 
-        
+
         public async void DisconnectSignalR()
         {
             await connection.StopAsync();
@@ -101,8 +137,8 @@ namespace NewSignalR
                 Object = p.Object,
                 X = p.X,
                 Y = p.Y,
-                latitude = p.latitude,
-                longitude = p.longitude,
+                Latitude = p.latitude,
+                Longitude = p.longitude,
                 Timestamp = p.Timestamp,
                 Zone = p.Zone
             };
@@ -119,9 +155,9 @@ namespace NewSignalR
             {
                 positionList3.Add(inputforlist);
             }
-            
+
         }
-        
+
 
         public async Task<string> login(string server, string user, string passw)
         {
@@ -266,7 +302,7 @@ namespace NewSignalR
 
         private void BtnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void BtnDisconnect_Click(object sender, RoutedEventArgs e)
@@ -334,11 +370,11 @@ namespace NewSignalR
         public string Type { get; set; }
         public string Radio { get; set; }
     }
-    
+
     public class Position
     {
-        public float longitude { get; set; }
-        public float latitude { get; set; }
+        public float Longitude { get; set; }
+        public float Latitude { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
         public int Zone { get; set; }

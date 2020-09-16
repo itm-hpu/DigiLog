@@ -31,10 +31,20 @@
         <Label Content="max age (min)" HorizontalAlignment="Left" Margin="13,464,0,0" VerticalAlignment="Top" Width="87"/>
         <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="13,490,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
         <ComboBox x:Name="cmbAggregation" HorizontalAlignment="Left" Margin="10,437,0,0" VerticalAlignment="Top" Width="87" RenderTransformOrigin="0.048,-0.138"/>
-        <ListBox x:Name="listbox1" ItemsSource="{Binding positionList1}" HorizontalAlignment="Left" Height="89" Margin="180,107,0,0" VerticalAlignment="Top" Width="426">
+        <ListBox x:Name="listbox1" ItemsSource="{Binding positionList1}" HorizontalAlignment="Stretch" Height="255" Margin="124,119,143.286,0" VerticalAlignment="Top">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Timestamp}"/>
+                    <Grid>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Object}" />
+                            <TextBlock Text="{Binding Timestamp}" />
+                            <TextBlock Text="{Binding X}" />
+                            <TextBlock Text="{Binding Y}" />
+                            <TextBlock Text="{Binding Zone}" />
+                            <TextBlock Text="{Binding Longitude}" />
+                            <TextBlock Text="{Binding Latitude}" />
+                        </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

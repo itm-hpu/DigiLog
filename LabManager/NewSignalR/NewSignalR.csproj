@@ -135,6 +135,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="PositionClass.cs" />
+    <Compile Include="PositionViewModel.cs" />
     <Compile Include="RESTfulClient.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

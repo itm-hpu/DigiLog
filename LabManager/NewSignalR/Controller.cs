@@ -45,8 +45,8 @@ namespace NewSignalR
                     positionlist[positionlist.Count() - 1].Timestamp + ", " +
                     positionlist[positionlist.Count() - 1].X + ", " +
                     positionlist[positionlist.Count() - 1].Y + ", " +
-                    positionlist[positionlist.Count() - 1].latitude + ", " +
-                    positionlist[positionlist.Count() - 1].longitude + ", " +
+                    positionlist[positionlist.Count() - 1].Latitude + ", " +
+                    positionlist[positionlist.Count() - 1].Longitude + ", " +
                     positionlist[positionlist.Count() - 1].Zone;
             return temp;
         }
@@ -57,8 +57,8 @@ namespace NewSignalR
                     positionlist[positionlist.Count() - 1].Timestamp + ", " +
                     positionlist[positionlist.Count() - 1].X + ", " +
                     positionlist[positionlist.Count() - 1].Y + ", " +
-                    positionlist[positionlist.Count() - 1].latitude + ", " +
-                    positionlist[positionlist.Count() - 1].longitude + ", " +
+                    positionlist[positionlist.Count() - 1].Latitude + ", " +
+                    positionlist[positionlist.Count() - 1].Longitude + ", " +
                     positionlist[positionlist.Count() - 1].Zone;
             return temp;
         }
