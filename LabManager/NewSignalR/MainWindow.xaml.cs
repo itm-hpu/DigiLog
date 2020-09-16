@@ -32,9 +32,9 @@ namespace NewSignalR
         public HubConnection connection;
         Controller controller = new Controller();
 
-        public static ObservableCollection<Position> positionList1;
-        public static ObservableCollection<Position> positionList2;
-        public static ObservableCollection<Position> positionList3;
+        public static ObservableCollection<PositionClass> positionList1;
+        public static ObservableCollection<PositionClass> positionList2;
+        public static ObservableCollection<PositionClass> positionList3;
 
         public List<Distance> distances;
 
@@ -42,33 +42,17 @@ namespace NewSignalR
         {
             InitializeComponent();
 
-
-            ObservableCollection<Person> test = new ObservableCollection<Person>();
-            test.Add(new Person { Name = "One", Age = 1 });
-            test.Add(new Person { Name = "Two", Age = 2 });
-            listbox1.ItemsSource = test;
-
-
-            txtServer.Text = "p186-geps-production-api.hd-rtls.com";
-            txtUserName.Text = "KTH";
-            txtPassword.Text = "!Test4KTH";
+            txtServer.Text = "p184-geps-production-api.hd-rtls.com";
+            txtUserName.Text = "cpal";
+            txtPassword.Text = "cpal";
             txtmax_age.Text = "1440";
-
-            positionList1 = new ObservableCollection<Position>();
-            positionList1.Add(new Position
-            {
-                Longitude = 1.2f,
-                Latitude = 0.5f,
-                X = 412,
-                Y = 232,
-                Zone = 5,
-                Object = "00000011",
-                Timestamp = Convert.ToDateTime("2020-09-16 08:43:11.102")
-            });
+            
+            positionList1 = new ObservableCollection<PositionClass>();
+            positionList2 = new ObservableCollection<PositionClass>();
+            positionList3 = new ObservableCollection<PositionClass>();
             listbox1.ItemsSource = positionList1;
-
-            positionList2 = new ObservableCollection<Position>();
-            positionList3 = new ObservableCollection<Position>();
+            listbox2.ItemsSource = positionList2;
+            listbox3.ItemsSource = positionList3;
 
             distances = new List<Distance>();
         }
@@ -132,9 +116,9 @@ namespace NewSignalR
 
         public static void Poskommer(string server, pos p, string[] id4require)
         {
-            Position inputforlist = new Position
+            PositionClass inputforlist = new PositionClass
             {
-                Object = p.Object,
+                ObjectId = p.Object,
                 X = p.X,
                 Y = p.Y,
                 Latitude = p.latitude,
@@ -143,17 +127,29 @@ namespace NewSignalR
                 Zone = p.Zone
             };
 
-            if (inputforlist.Object.ToString() == id4require[0])
+            if (inputforlist.ObjectId.ToString() == id4require[0])
             {
-                positionList1.Add(inputforlist);
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate 
+                {
+                    positionList1.Add(inputforlist);
+                }));
+                //positionList1.Add(inputforlist);
             }
-            else if (inputforlist.Object.ToString() == id4require[1])
+            else if (inputforlist.ObjectId.ToString() == id4require[1])
             {
-                positionList2.Add(inputforlist);
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    positionList2.Add(inputforlist);
+                }));
+                //positionList2.Add(inputforlist);
             }
-            else if (inputforlist.Object.ToString() == id4require[2])
+            else if (inputforlist.ObjectId.ToString() == id4require[2])
             {
-                positionList3.Add(inputforlist);
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    positionList3.Add(inputforlist);
+                }));
+                //positionList3.Add(inputforlist);
             }
 
         }
@@ -276,6 +272,8 @@ namespace NewSignalR
             txtLog1.Text = "Object, Timestamp, X, Y, Latitude, Longitude, Zone" + "\n";
             txtLog2.Text = "Object, Timestamp, X, Y, Latitude, Longitude, Zone" + "\n";
             txtLog3.Text = "Object, Timestamp, X, Y, Latitude, Longitude, Zone" + "\n";
+
+
 
 
 
