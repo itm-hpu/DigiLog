@@ -166,136 +166,15 @@ namespace NewSignalR
             login_cred result = JsonConvert.DeserializeObject<login_cred>(await response.Content.ReadAsStringAsync());
             return result.AuthenticateToken;
         }
-
-        /*
-        public async Task Print1()
-        {
-            var cancellationToken = cancellationTokenSource.Token;
-            await Task.Factory.StartNew(() =>
-            {
-                string result = "";
-                for (int i = 0; i < positionList1.Count(); i++)
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        result = controller.ExtractLastInfo(positionList1);
-                        //await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
-                        txtLog1.Text = txtLog1.Text + result + "\n";
-                        txtLog1.ScrollToEnd();
-                    });
-                }
-            }, cancellationTokenSource.Token);
-        }
-
-        public async Task Print2()
-        {
-            var cancellationToken = cancellationTokenSource.Token;
-            await Task.Factory.StartNew(() =>
-            {
-                string result = "";
-                for (int i = 0; i < positionList2.Count(); i++)
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        result = controller.ExtractLastInfo(positionList2);
-                        //await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
-                        txtLog2.Text = txtLog2.Text + result + "\n";
-                        txtLog2.ScrollToEnd();
-                    });
-                }
-            }, cancellationTokenSource.Token);
-        }
-
-        public async Task Print3()
-        {
-            var cancellationToken = cancellationTokenSource.Token;
-            await Task.Factory.StartNew(() =>
-            {
-                string result = "";
-                for (int i = 0; i < positionList3.Count(); i++)
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        result = controller.ExtractLastInfo(positionList3);
-                        //await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
-                        txtLog3.Text = txtLog3.Text + result + "\n";
-                        txtLog3.ScrollToEnd();
-                    });
-                }
-            }, cancellationTokenSource.Token);
-        }
-        */
-
-        /*
-        public async Task Print1()
-        {
-            string result = "";
-            for (int i = 0; i < positionList1.Count(); i++)
-            {
-                result = controller.ExtractLastInfo(positionList1);
-                await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
-                txtLog1.Text = txtLog1.Text + result + "\n";
-                txtLog1.ScrollToEnd();
-            }
-        }
-
-        public async Task Print2()
-        {
-            string result = "";
-            for (int i = 0; i < positionList2.Count(); i++)
-            {
-                result = controller.ExtractLastInfo(positionList2);
-                await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
-                txtLog2.Text = txtLog2.Text + result + "\n";
-                txtLog2.ScrollToEnd();
-            }
-        }
-
-        public async Task Print3()
-        {
-
-            string result = "";
-            for (int i = 0; i < positionList3.Count(); i++)
-            {
-                result = controller.ExtractLastInfo(positionList3);
-                await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
-                txtLog3.Text = txtLog3.Text + result + "\n";
-                txtLog3.ScrollToEnd();
-            }
-        }
-        */
-
+        
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             ConnectSignalR();
-
-            txtLog1.Text = "Object, Timestamp, X, Y, Latitude, Longitude, Zone" + "\n";
-            txtLog2.Text = "Object, Timestamp, X, Y, Latitude, Longitude, Zone" + "\n";
-            txtLog3.Text = "Object, Timestamp, X, Y, Latitude, Longitude, Zone" + "\n";
-
-
-
-
-
-            /*
-            while (((positionList1.Count < 5) && (positionList1.Count < 5)) && (positionList1.Count < 5))
-            {
-                await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
-            }
-
-            Task t1 = Print1();
-            Task t2 = Print2();
-            Task t3 = Print3();
-
-            await t1;
-            await t2;
-            await t3;
-            */
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
-
+            DisconnectSignalR();
         }
 
         private void BtnUpdate_Click(object sender, RoutedEventArgs e)
@@ -305,7 +184,7 @@ namespace NewSignalR
 
         private void BtnDisconnect_Click(object sender, RoutedEventArgs e)
         {
-            //DisconnectSignalR();
+            
         }
 
         private void btnCheck_Click(object sender, RoutedEventArgs e)
