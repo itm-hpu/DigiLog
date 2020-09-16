@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:NewSignalR"
         Title="MainWindow" Height="563.143" Width="800">
     <Grid>
-        <Button x:Name="btnUpdate" Content="Update" HorizontalAlignment="Left" Margin="707,191,0,0" VerticalAlignment="Top" Width="75" Click="BtnUpdate_Click"/>
+        <Button x:Name="btnDebbug" Content="Debbug" HorizontalAlignment="Left" Margin="707,216,0,0" VerticalAlignment="Top" Width="75" Click="BtnDebbug_Click"/>
         <Label Content="Tag ID" HorizontalAlignment="Left" Margin="506,13,0,0" VerticalAlignment="Top" Width="55"/>
         <TextBox x:Name="txtTagID" HorizontalAlignment="Left" Height="81" Margin="561,17,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="125"/>
         <ComboBox x:Name="cmbTagID1" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" Width="87"/>
@@ -20,7 +20,7 @@
         <TextBox x:Name="txtUserName" HorizontalAlignment="Left" Height="26" Margin="105,41,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
         <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Height="26" Margin="105,72,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
         <Button x:Name="btnCheck" Content="CheckID" HorizontalAlignment="Left" Margin="423,10,0,0" VerticalAlignment="Top" Width="62" Height="88" Click="btnCheck_Click"/>
-        <Button x:Name="BtnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="707,217,0,0" VerticalAlignment="Top" Width="75" Click="BtnDisconnect_Click"/>
+        <Button x:Name="BtnClear" Content="Clear" HorizontalAlignment="Left" Margin="707,159,0,0" VerticalAlignment="Top" Width="75" Click="BtnClear_Click"/>
         <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="707,133,0,0" VerticalAlignment="Top" Width="75" Click="BtnStop_Click"/>
         <Button x:Name="btnDistance" Content="Distance" HorizontalAlignment="Left" Margin="707,400,0,0" VerticalAlignment="Top" Width="75" Click="BtnDistance_Click"/>
         <ComboBox x:Name="cmbObjectForDistance" HorizontalAlignment="Left" Margin="10,400,0,0" VerticalAlignment="Top" Width="87"/>

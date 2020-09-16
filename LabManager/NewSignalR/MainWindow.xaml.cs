@@ -57,27 +57,6 @@ namespace NewSignalR
             distances = new List<Distance>();
         }
 
-        public class Person
-        {
-            public string Name { get; set; }
-            public int Age { get; set; }
-        }
-        public class ViewModel
-        {
-            public ObservableCollection<Person> Items
-            {
-                get
-                {
-                    return new ObservableCollection<Person>
-            {
-                new Person { Name = "P1", Age = 1 },
-                new Person { Name = "P2", Age = 2 }
-            };
-                }
-            }
-        }
-
-
         public async void ConnectSignalR()
         {
             string server = txtServer.Text;
@@ -133,7 +112,6 @@ namespace NewSignalR
                 {
                     positionList1.Add(inputforlist);
                 }));
-                //positionList1.Add(inputforlist);
             }
             else if (inputforlist.ObjectId.ToString() == id4require[1])
             {
@@ -141,7 +119,6 @@ namespace NewSignalR
                 {
                     positionList2.Add(inputforlist);
                 }));
-                //positionList2.Add(inputforlist);
             }
             else if (inputforlist.ObjectId.ToString() == id4require[2])
             {
@@ -149,7 +126,6 @@ namespace NewSignalR
                 {
                     positionList3.Add(inputforlist);
                 }));
-                //positionList3.Add(inputforlist);
             }
 
         }
@@ -177,14 +153,20 @@ namespace NewSignalR
             DisconnectSignalR();
         }
 
-        private void BtnUpdate_Click(object sender, RoutedEventArgs e)
+        private void BtnDebbug_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void BtnDisconnect_Click(object sender, RoutedEventArgs e)
+        private void BtnClear_Click(object sender, RoutedEventArgs e)
         {
-            
+            txtTagID.Clear();
+            cmbTagID1.ItemsSource = null;
+            cmbTagID2.ItemsSource = null;
+            cmbTagID3.ItemsSource = null;
+            listbox1.ItemsSource = null;
+            listbox2.ItemsSource = null;
+            listbox3.ItemsSource = null;
         }
 
         private void btnCheck_Click(object sender, RoutedEventArgs e)
