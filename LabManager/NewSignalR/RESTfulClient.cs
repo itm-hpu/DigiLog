@@ -86,10 +86,10 @@ namespace NewSignalR
         }
 
 
-        public string[] GetDistance()
+        public List<string[]> GetDistance()
         {
             string strResponseValue = string.Empty;
-            string[] tempResult = new string[0];
+            List<string[]> tempResult = new List<string[]>();
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uriAddress);
 
@@ -130,22 +130,25 @@ namespace NewSignalR
             return tempResult;
         }
 
-        public string[] ReadDistanceJson(string jsonStr, string keyNameParent)
+        public List<string[]> ReadDistanceJson(string jsonStr, string keyNameParent)
         {
-            //JObject json = JObject.Parse(jsonStr);
-
             JArray jarray = JArray.Parse(jsonStr);
-            var json = jarray[jarray.Count() - 1];
 
-            string Timestamp = (string)json.SelectToken("Timestamp");
-            string Value = (string)json.SelectToken("Value");
-
+            List<string[]> result = new List<string[]>(0);
+            string Timestamp = "";
+            string Value = "";
             string[] returnValue = new string[2];
 
-            returnValue[0] = Timestamp;
-            returnValue[1] = Value;
+            for (int i = 0; i < jarray.Count; i++)
+            {
+                var json = jarray[i];
 
-            return returnValue;
+                Timestamp = (string)json.SelectToken("Timestamp");
+                Value = (string)json.SelectToken("Value");
+                
+                result.Add(new string[2] {Timestamp, Value});
+            }
+            return result;
         }
     }
 }

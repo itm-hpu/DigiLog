@@ -8,17 +8,7 @@ using System.Threading.Tasks;
 namespace NewSignalR
 {
     public class PositionClass : INotifyPropertyChanged
-    {
-        /*
-        public float Longitude { get; set; }
-        public float Latitude { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Zone { get; set; }
-        public object ObjectId { get; set; }
-        public DateTime Timestamp { get; set; }
-        */
-        
+    {        
         private object objectId;
         private DateTime timestamp;
         private int x;

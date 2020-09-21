@@ -78,22 +78,27 @@ namespace NewSignalR
             rClient.userName = userName;
             rClient.userPassword = password;
 
-            string[] responseResult = rClient.GetDistance();
+            List<string[]> responseResult = rClient.GetDistance();
 
-            List<Distance> distances = new List<Distance>()
-            {
-                new Distance()
-                {
-                    Object = objectID,
-                    Tiemstamp = DateTime.ParseExact(responseResult[0], "yyyy-MM-dd HH:mm:ss.fff", null),
-                    Value = responseResult[1]
-                }
-            };
+            List<Distance> distances = new List<Distance>(responseResult.Count);
+
+            for (int i = 0; i < responseResult.Count; i++)
+            {   
+                distances.Add
+                    (
+                    new Distance()
+                    {
+                        Object = objectID,
+                        Tiemstamp = DateTime.ParseExact(responseResult[i][0], "yyyy-MM-dd HH:mm:ss.fff", null),
+                        Value = Convert.ToDouble(responseResult[i][1])
+                    }
+                    );
+            }
 
             return distances;
         }
         
-        public double CalcDist(List<Position> positionlist)
+        public async Task<double> CalcDist(ObservableCollection<PositionClass> positionlist)
         {
             double sum = 0;
 
@@ -104,6 +109,8 @@ namespace NewSignalR
                 double dist = Math.Sqrt(distX * distX + distY * distY);
                 sum = sum + dist;
             }
+
+            await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
 
             return sum;
         }

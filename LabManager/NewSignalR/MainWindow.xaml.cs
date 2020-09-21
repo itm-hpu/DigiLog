@@ -37,14 +37,15 @@ namespace NewSignalR
         public static ObservableCollection<PositionClass> positionList3;
 
         public List<Distance> distances;
+        public ObservableCollection<DistanceClass> distancesR;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            txtServer.Text = "p184-geps-production-api.hd-rtls.com";
-            txtUserName.Text = "cpal";
-            txtPassword.Text = "cpal";
+            txtServer.Text = "p186-geps-production-api.hd-rtls.com";
+            txtUserName.Text = "KTH";
+            txtPassword.Text = "!Test4KTH";
             txtmax_age.Text = "1440";
             
             positionList1 = new ObservableCollection<PositionClass>();
@@ -55,6 +56,7 @@ namespace NewSignalR
             listbox3.ItemsSource = positionList3;
 
             distances = new List<Distance>();
+            distancesR = new ObservableCollection<DistanceClass>();
         }
 
         public async void ConnectSignalR()
@@ -170,6 +172,8 @@ namespace NewSignalR
             listbox1.ItemsSource = null;
             listbox2.ItemsSource = null;
             listbox3.ItemsSource = null;
+            cmbObjectForDistance.ItemsSource = null;
+            cmbObjectForDistanceR.ItemsSource = null;
         }
 
         private void btnCheck_Click(object sender, RoutedEventArgs e)
@@ -184,6 +188,8 @@ namespace NewSignalR
 
             cmbObjectForDistance.ItemsSource = objectIDs;
             cmbAggregation.ItemsSource = new string[] { "None", "Sum" };
+
+            cmbObjectForDistanceR.ItemsSource = objectIDs;
         }
 
         private void BtnDistance_Click(object sender, RoutedEventArgs e)
@@ -201,9 +207,8 @@ namespace NewSignalR
             for (int i = 0; i < distances.Count(); i++)
             {
                 txtObjectForDistance.Text = txtObjectForDistance.Text + distances[i].Object + ", " + distances[i].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances[i].Value + "\n";
+                txtObjectForDistance.ScrollToEnd();
             }
-            //txtObjectForDistance.Text = txtObjectForDistance.Text + distances[0].Object + ", " + distances[0].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances[0].Value;
-
         }
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
@@ -214,6 +219,29 @@ namespace NewSignalR
 
             string message = "Save a acquired data!";
             MessageBox.Show(message);
+        }
+
+        // under progressing
+        private void BtnDistanceR_Click(object sender, RoutedEventArgs e)
+        {
+            string objectID = cmbObjectForDistanceR.Text;
+        }
+
+        public static void CalculateDistances(string objectID, ObservableCollection<PositionClass> positionlist)
+        {
+            for (int i = positionlist.Count - 1; i < positionlist.Count; i++)
+            {
+                double distX = positionlist[i].X - positionlist[i - 1].X;
+                double distY = positionlist[i].Y - positionlist[i - 1].Y;
+                double dist = Math.Sqrt(distX * distX + distY * distY);
+
+                DistanceClass inputforlist = new DistanceClass
+                {
+                    ObjectId = objectID,
+                    Timestamp = positionlist[i].Timestamp,
+                    Distance = dist
+                };
+            }
         }
     }
 
@@ -269,6 +297,6 @@ namespace NewSignalR
     {
         public object Object { get; set; }
         public DateTime Tiemstamp { get; set; }
-        public string Value { get; set; }
+        public double Value { get; set; }
     }
 }

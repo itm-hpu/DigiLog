@@ -22,12 +22,12 @@
         <Button x:Name="btnCheck" Content="CheckID" HorizontalAlignment="Left" Margin="423,10,0,0" VerticalAlignment="Top" Width="62" Height="88" Click="btnCheck_Click"/>
         <Button x:Name="BtnClear" Content="Clear" HorizontalAlignment="Left" Margin="707,122,0,0" VerticalAlignment="Top" Width="75" Click="BtnClear_Click" Height="26"/>
         <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="707,52,0,0" VerticalAlignment="Top" Width="75" Click="BtnStop_Click" Height="26"/>
-        <Button x:Name="btnDistance" Content="Distance" HorizontalAlignment="Left" Margin="707,400,0,0" VerticalAlignment="Top" Width="75" Click="BtnDistance_Click"/>
-        <ComboBox x:Name="cmbObjectForDistance" HorizontalAlignment="Left" Margin="10,400,0,0" VerticalAlignment="Top" Width="87"/>
-        <TextBox x:Name="txtObjectForDistance" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="114" Margin="105,399,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="581"/>
-        <Label Content="max age (min)" HorizontalAlignment="Left" Margin="13,464,0,0" VerticalAlignment="Top" Width="87"/>
-        <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="13,490,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
-        <ComboBox x:Name="cmbAggregation" HorizontalAlignment="Left" Margin="10,437,0,0" VerticalAlignment="Top" Width="87" RenderTransformOrigin="0.048,-0.138"/>
+        <Button x:Name="btnDistance" Content="Distance" HorizontalAlignment="Left" Margin="315,396,0,0" VerticalAlignment="Top" Width="87" Click="BtnDistance_Click"/>
+        <ComboBox x:Name="cmbObjectForDistance" HorizontalAlignment="Left" Margin="10,395,0,0" VerticalAlignment="Top" Width="87"/>
+        <TextBox x:Name="txtObjectForDistance" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="105,422,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="297"/>
+        <Label Content="max age (min)" HorizontalAlignment="Left" Margin="10,463,0,0" VerticalAlignment="Top" Width="87"/>
+        <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="10,487,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
+        <ComboBox x:Name="cmbAggregation" HorizontalAlignment="Left" Margin="10,435,0,0" VerticalAlignment="Top" Width="87" RenderTransformOrigin="0.048,-0.138"/>
         <ListBox x:Name="listbox1" ItemsSource="{Binding positionList1}" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,107,108.286,0" VerticalAlignment="Top">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -101,5 +101,10 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="707,88,0,0" VerticalAlignment="Top" Width="75" Click="BtnSave_Click" Height="26"/>
+        <Label Content="Distance - RESTful API" HorizontalAlignment="Left" Margin="105,393,0,0" VerticalAlignment="Top" Width="213"/>
+        <Label Content="Distance -SignalR" HorizontalAlignment="Left" Margin="422,393,0,0" VerticalAlignment="Top" Width="213"/>
+        <ListBox x:Name="listboxDistanceR" HorizontalAlignment="Left" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="91" Margin="423,422,0,0" VerticalAlignment="Top" Width="263"/>
+        <ComboBox x:Name="cmbObjectForDistanceR" HorizontalAlignment="Left" Margin="599,395,0,0" VerticalAlignment="Top" Width="87"/>
+        <Button x:Name="btnDistanceR" Content="Distance" HorizontalAlignment="Left" Margin="697,396,0,0" VerticalAlignment="Top" Width="87" Click="BtnDistanceR_Click"/>
     </Grid>
 </Window>
