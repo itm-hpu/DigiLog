@@ -72,6 +72,34 @@ namespace NewSignalR
             }
         }
 
+        public void SaveDataToTextFile(ObservableCollection<DistanceClass> distanceList)
+        {
+            string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
+
+            int iLength = distanceList.Count();
+
+            if (iLength > 0)
+            {
+                string filedir = Directory.GetCurrentDirectory();
+                filedir = filedir + @"\000. RTLS_DistanceData_" + timeStamp + "_" + distanceList[0].ObjectId.ToString() + ".txt";
+                StreamWriter file = new StreamWriter(filedir);
+
+                for (int i = 0; i < iLength; i++)
+                {
+                    file.Write(distanceList[i].ObjectId + "," +
+                        distanceList[i].Timestamp + "," +
+                        distanceList[i].Distance);
+                    file.Write("\n");
+                }
+                file.Close();
+                return;
+            }
+            else
+            {
+                return;
+            }
+        }
+
         public List<Distance> GetDistance(string uriAddress, string userName, string password, string objectID, int max_age, string aggregation)
         {
             rClient.uriAddress = uriAddress + "&object=" + objectID + "&max_age=" + max_age.ToString() + "&aggregation=" + aggregation;
@@ -97,7 +125,10 @@ namespace NewSignalR
 
             return distances;
         }
-        
+
+
+
+        /*
         public async Task<double> CalcDist(ObservableCollection<PositionClass> positionlist)
         {
             double sum = 0;
@@ -114,6 +145,6 @@ namespace NewSignalR
 
             return sum;
         }
-        
+        */
     }
 }

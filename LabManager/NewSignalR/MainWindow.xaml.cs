@@ -37,7 +37,9 @@ namespace NewSignalR
         public static ObservableCollection<PositionClass> positionList3;
 
         public List<Distance> distances;
-        public ObservableCollection<DistanceClass> distancesR;
+        public static ObservableCollection<DistanceClass> distancesR_idx1;
+        public static ObservableCollection<DistanceClass> distancesR_idx2;
+        public static ObservableCollection<DistanceClass> distancesR_idx3;
 
         public MainWindow()
         {
@@ -51,12 +53,17 @@ namespace NewSignalR
             positionList1 = new ObservableCollection<PositionClass>();
             positionList2 = new ObservableCollection<PositionClass>();
             positionList3 = new ObservableCollection<PositionClass>();
-            listbox1.ItemsSource = positionList1;
+            listbox1.ItemsSource = positionList1; //binding data + need to bind as well in xaml
             listbox2.ItemsSource = positionList2;
             listbox3.ItemsSource = positionList3;
 
             distances = new List<Distance>();
-            distancesR = new ObservableCollection<DistanceClass>();
+            distancesR_idx1 = new ObservableCollection<DistanceClass>();
+            distancesR_idx2 = new ObservableCollection<DistanceClass>();
+            distancesR_idx3 = new ObservableCollection<DistanceClass>();
+            listboxDistanceR_idx1.ItemsSource = distancesR_idx1;
+            listboxDistanceR_idx2.ItemsSource = distancesR_idx2;
+            listboxDistanceR_idx3.ItemsSource = distancesR_idx3;
         }
 
         public async void ConnectSignalR()
@@ -113,6 +120,12 @@ namespace NewSignalR
                 Application.Current.Dispatcher.BeginInvoke(new Action(delegate 
                 {
                     positionList1.Add(inputforlist);
+                    if (positionList1.Count > 1)
+                    {
+                        double dist = CalculateDistances(id4require[0], positionList1);
+                        DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[0], Timestamp = positionList1[positionList1.Count - 1].Timestamp, Distance = dist };
+                        distancesR_idx1.Add(inputfordistlist);
+                    }
                 }));
             }
             else if (inputforlist.ObjectId.ToString() == id4require[1])
@@ -120,6 +133,12 @@ namespace NewSignalR
                 Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                 {
                     positionList2.Add(inputforlist);
+                    if (positionList2.Count > 1)
+                    {
+                        double dist = CalculateDistances(id4require[1], positionList2);
+                        DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[1], Timestamp = positionList2[positionList2.Count - 1].Timestamp, Distance = dist };
+                        distancesR_idx2.Add(inputfordistlist);
+                    }
                 }));
             }
             else if (inputforlist.ObjectId.ToString() == id4require[2])
@@ -127,6 +146,12 @@ namespace NewSignalR
                 Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                 {
                     positionList3.Add(inputforlist);
+                    if (positionList3.Count > 1)
+                    {
+                        double dist = CalculateDistances(id4require[2], positionList3);
+                        DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[2], Timestamp = positionList3[positionList3.Count - 1].Timestamp, Distance = dist };
+                        distancesR_idx3.Add(inputfordistlist);
+                    }
                 }));
             }
 
@@ -173,7 +198,6 @@ namespace NewSignalR
             listbox2.ItemsSource = null;
             listbox3.ItemsSource = null;
             cmbObjectForDistance.ItemsSource = null;
-            cmbObjectForDistanceR.ItemsSource = null;
         }
 
         private void btnCheck_Click(object sender, RoutedEventArgs e)
@@ -188,8 +212,6 @@ namespace NewSignalR
 
             cmbObjectForDistance.ItemsSource = objectIDs;
             cmbAggregation.ItemsSource = new string[] { "None", "Sum" };
-
-            cmbObjectForDistanceR.ItemsSource = objectIDs;
         }
 
         private void BtnDistance_Click(object sender, RoutedEventArgs e)
@@ -216,33 +238,26 @@ namespace NewSignalR
             controller.SaveDataToTextFile(positionList1);
             controller.SaveDataToTextFile(positionList2);
             controller.SaveDataToTextFile(positionList3);
+            controller.SaveDataToTextFile(distancesR_idx1);
+            controller.SaveDataToTextFile(distancesR_idx2);
+            controller.SaveDataToTextFile(distancesR_idx3);
 
             string message = "Save a acquired data!";
             MessageBox.Show(message);
         }
 
         // under progressing
-        private void BtnDistanceR_Click(object sender, RoutedEventArgs e)
+        public static double CalculateDistances(string objectID, ObservableCollection<PositionClass> positionlist)
         {
-            string objectID = cmbObjectForDistanceR.Text;
+            int i = positionlist.Count - 1;
+
+            double distX = positionlist[i].X - positionlist[i - 1].X;
+            double distY = positionlist[i].Y - positionlist[i - 1].Y;
+            double dist = Math.Sqrt(distX * distX + distY * distY);
+
+            return dist;
         }
 
-        public static void CalculateDistances(string objectID, ObservableCollection<PositionClass> positionlist)
-        {
-            for (int i = positionlist.Count - 1; i < positionlist.Count; i++)
-            {
-                double distX = positionlist[i].X - positionlist[i - 1].X;
-                double distY = positionlist[i].Y - positionlist[i - 1].Y;
-                double dist = Math.Sqrt(distX * distX + distY * distY);
-
-                DistanceClass inputforlist = new DistanceClass
-                {
-                    ObjectId = objectID,
-                    Timestamp = positionlist[i].Timestamp,
-                    Distance = dist
-                };
-            }
-        }
     }
 
 
