@@ -4,154 +4,175 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NewSignalR"
-        Title="MainWindow" Height="563.143" Width="953.143">
+        Title="MainWindow" Height="550" Width="910">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Button x:Name="btnDebbug" Content="Debbug" HorizontalAlignment="Left" Margin="794,41,0,0" VerticalAlignment="Top" Width="75" Click="BtnDebbug_Click" Height="26"/>
-        <Label Content="Tag ID" HorizontalAlignment="Left" Margin="511,6,0,0" VerticalAlignment="Top" Width="55" Height="26"/>
-        <TextBox x:Name="txtTagID" HorizontalAlignment="Right" Height="88" Margin="0,10,258.429,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="125"/>
-        <ComboBox x:Name="cmbTagID1" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
-        <ComboBox x:Name="cmbTagID2" HorizontalAlignment="Left" Margin="10,200,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
-        <ComboBox x:Name="cmbTagID3" HorizontalAlignment="Left" Margin="10,294,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
-        <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="708,10,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.162,0.264" Click="BtnStart_Click" Height="26"/>
-        <Label Content="Server" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
-        <Label Content="UserName" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
-        <Label Content="UserPassword" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
-        <TextBox x:Name="txtServer" HorizontalAlignment="Left" Height="26" Margin="105,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
-        <TextBox x:Name="txtUserName" HorizontalAlignment="Left" Height="26" Margin="105,41,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
-        <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Height="26" Margin="105,72,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
-        <Button x:Name="btnCheck" Content="CheckID" HorizontalAlignment="Left" Margin="423,10,0,0" VerticalAlignment="Top" Width="62" Height="88" Click="btnCheck_Click"/>
-        <Button x:Name="BtnClear" Content="Clear" HorizontalAlignment="Left" Margin="794,10,0,0" VerticalAlignment="Top" Width="75" Click="BtnClear_Click" Height="26"/>
-        <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="708,41,0,0" VerticalAlignment="Top" Width="75" Click="BtnStop_Click" Height="26"/>
-        <Button x:Name="btnDistance" Content="Distance" HorizontalAlignment="Left" Margin="473,396,0,0" VerticalAlignment="Top" Width="87" Click="BtnDistance_Click" Height="21"/>
-        <ComboBox x:Name="cmbObjectForDistance" HorizontalAlignment="Left" Margin="10,395,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
-        <TextBox x:Name="txtObjectForDistance" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="105,422,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455"/>
-        <Label Content="max age (min)" HorizontalAlignment="Left" Margin="10,463,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
-        <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="10,487,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
-        <ComboBox x:Name="cmbAggregation" HorizontalAlignment="Left" Margin="10,435,0,0" VerticalAlignment="Top" Width="87" RenderTransformOrigin="0.048,-0.138" Height="22"/>
-        <ListBox x:Name="listbox1" ItemsSource="{Binding positionList1}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,107,387.429,0" VerticalAlignment="Top">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
-                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
-                        <Label Grid.Column="2" Content="{Binding X}" MinWidth="50"/>
-                        <Label Grid.Column="3" Content="{Binding Y}" MinWidth="50"/>
-                        <Label Grid.Column="4" Content="{Binding Zone}" MinWidth="30"/>
-                        <Label Grid.Column="5" Content="{Binding Longitude}" MinWidth="80"/>
-                        <Label Grid.Column="6" Content="{Binding Latitude}" MinWidth="80"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <ListBox x:Name="listbox2" ItemsSource="{Binding positionList2}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,201,387.429,0" VerticalAlignment="Top">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
-                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
-                        <Label Grid.Column="2" Content="{Binding X}" MinWidth="50"/>
-                        <Label Grid.Column="3" Content="{Binding Y}" MinWidth="50"/>
-                        <Label Grid.Column="4" Content="{Binding Zone}" MinWidth="30"/>
-                        <Label Grid.Column="5" Content="{Binding Longitude}" MinWidth="80"/>
-                        <Label Grid.Column="6" Content="{Binding Latitude}" MinWidth="80"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <ListBox x:Name="listbox3" ItemsSource="{Binding positionList3}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,294,387.429,0" VerticalAlignment="Top">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
-                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
-                        <Label Grid.Column="2" Content="{Binding X}" MinWidth="50"/>
-                        <Label Grid.Column="3" Content="{Binding Y}" MinWidth="50"/>
-                        <Label Grid.Column="4" Content="{Binding Zone}" MinWidth="30"/>
-                        <Label Grid.Column="5" Content="{Binding Longitude}" MinWidth="80"/>
-                        <Label Grid.Column="6" Content="{Binding Latitude}" MinWidth="80"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="708,72,0,0" VerticalAlignment="Top" Width="75" Click="BtnSave_Click" Height="26"/>
-        <Label Content="Distance - RESTful API" HorizontalAlignment="Left" Margin="105,393,0,0" VerticalAlignment="Top" Width="213" Height="26"/>
-        <ListBox x:Name="listboxDistanceR_idx1" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="565,107,0,0" VerticalAlignment="Top" Width="304">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="110"/>
+            <RowDefinition Height="400"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Label Content="Server" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
+            <Label Content="UserName" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
+            <Label Content="UserPassword" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
+            <TextBox x:Name="txtServer" HorizontalAlignment="Left" Height="26" Margin="105,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
+            <TextBox x:Name="txtUserName" HorizontalAlignment="Left" Height="26" Margin="105,41,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
+            <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Height="26" Margin="105,72,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
+            <Button x:Name="btnCheck" Content="CheckID" HorizontalAlignment="Left" Margin="423,10,0,0" VerticalAlignment="Top" Width="75" Height="88" Click="btnCheck_Click"/>
+            <Label Content="Tag ID" HorizontalAlignment="Left" Margin="525,6,0,0" VerticalAlignment="Top" Width="55" Height="26"/>
+            <TextBox x:Name="txtTagID" HorizontalAlignment="Right" Height="88" Margin="0,10,199,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="125"/>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <TabControl>
+                <TabItem Header="SignalR">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
-                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
-                        <Label Grid.Column="2" Content="{Binding Distance}" MinWidth="30"/>
+                        <Label Content="ObjectID" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
+                        <Label Content="Position" HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
+                        <Label Content="Distance" HorizontalAlignment="Left" Margin="600,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
+                        <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="400,331,0,0" VerticalAlignment="Top" Width="80" RenderTransformOrigin="-0.162,0.264" Click="BtnStart_Click" Height="26"/>
+                        <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="500,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnStop_Click" Height="26"/>
+                        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="600,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnSave_Click" Height="26"/>
+                        <Button x:Name="BtnClear" Content="Clear" HorizontalAlignment="Left" Margin="700,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnClear_Click" Height="26"/>
+                        <Button x:Name="btnDebbug" Content="Debbug" HorizontalAlignment="Left" Margin="800,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnDebbug_Click" Height="26"/>
+                        <ComboBox x:Name="cmbTagID1" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
+                        <ComboBox x:Name="cmbTagID2" HorizontalAlignment="Left" Margin="10,137,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
+                        <ComboBox x:Name="cmbTagID3" HorizontalAlignment="Left" Margin="10,231,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
+                        <ListBox x:Name="listbox1" ItemsSource="{Binding positionList1}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,44,308.714,0" VerticalAlignment="Top">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding X}" MinWidth="50"/>
+                                        <Label Grid.Column="3" Content="{Binding Y}" MinWidth="50"/>
+                                        <Label Grid.Column="4" Content="{Binding Zone}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Longitude}" MinWidth="80"/>
+                                        <Label Grid.Column="6" Content="{Binding Latitude}" MinWidth="80"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <ListBox x:Name="listbox2" ItemsSource="{Binding positionList2}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,138,308.714,0" VerticalAlignment="Top">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding X}" MinWidth="50"/>
+                                        <Label Grid.Column="3" Content="{Binding Y}" MinWidth="50"/>
+                                        <Label Grid.Column="4" Content="{Binding Zone}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Longitude}" MinWidth="80"/>
+                                        <Label Grid.Column="6" Content="{Binding Latitude}" MinWidth="80"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <ListBox x:Name="listbox3" ItemsSource="{Binding positionList3}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,231,308.714,0" VerticalAlignment="Top">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding X}" MinWidth="50"/>
+                                        <Label Grid.Column="3" Content="{Binding Y}" MinWidth="50"/>
+                                        <Label Grid.Column="4" Content="{Binding Zone}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Longitude}" MinWidth="80"/>
+                                        <Label Grid.Column="6" Content="{Binding Latitude}" MinWidth="80"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <ListBox x:Name="listboxDistanceR_idx1" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,44,0,0" VerticalAlignment="Top" Width="280">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding Distance}" MinWidth="30"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <ListBox x:Name="listboxDistanceR_idx2" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,138,0,0" VerticalAlignment="Top" Width="280">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding Distance}" MinWidth="30"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <ListBox x:Name="listboxDistanceR_idx3" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,231,0,0" VerticalAlignment="Top" Width="280">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding Distance}" MinWidth="30"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <ListBox x:Name="listboxDistanceR_idx2" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="565,201,0,0" VerticalAlignment="Top" Width="304">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
+                </TabItem>
+
+                <TabItem Header="RESTful">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
-                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
-                        <Label Grid.Column="2" Content="{Binding Distance}" MinWidth="30"/>
+                        <Label Content="Distance - RESTful API" HorizontalAlignment="Left" Margin="110,23,0,0" VerticalAlignment="Top" Width="213" Height="26"/>
+                        <Button x:Name="btnDistance" Content="Distance" HorizontalAlignment="Left" Margin="478,26,0,0" VerticalAlignment="Top" Width="87" Click="BtnDistance_Click" Height="21"/>
+                        <ComboBox x:Name="cmbObjectForDistance" HorizontalAlignment="Left" Margin="15,25,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
+                        <TextBox x:Name="txtObjectForDistance" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,51,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455"/>
+                        <Label Content="max age (min)" HorizontalAlignment="Left" Margin="15,93,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
+                        <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="17,117,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
+                        <ComboBox x:Name="cmbAggregation" HorizontalAlignment="Left" Margin="15,65,0,0" VerticalAlignment="Top" Width="87" RenderTransformOrigin="0.048,-0.138" Height="22"/>
                     </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <ListBox x:Name="listboxDistanceR_idx3" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="565,294,0,0" VerticalAlignment="Top" Width="304">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
-                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
-                        <Label Grid.Column="2" Content="{Binding Distance}" MinWidth="30"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                </TabItem>
+            </TabControl>
+        </Grid>
     </Grid>
 </Window>

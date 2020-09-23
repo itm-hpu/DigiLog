@@ -49,7 +49,7 @@ namespace NewSignalR
             txtUserName.Text = "cpal";
             txtPassword.Text = "cpal";
             txtmax_age.Text = "1440";
-            
+
             positionList1 = new ObservableCollection<PositionClass>();
             positionList2 = new ObservableCollection<PositionClass>();
             positionList3 = new ObservableCollection<PositionClass>();
