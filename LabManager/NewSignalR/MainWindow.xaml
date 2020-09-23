@@ -31,7 +31,7 @@
         <Label Content="max age (min)" HorizontalAlignment="Left" Margin="10,463,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
         <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="10,487,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
         <ComboBox x:Name="cmbAggregation" HorizontalAlignment="Left" Margin="10,435,0,0" VerticalAlignment="Top" Width="87" RenderTransformOrigin="0.048,-0.138" Height="22"/>
-        <ListBox x:Name="listbox1" ItemsSource="{Binding positionList1}" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,107,387.429,0" VerticalAlignment="Top">
+        <ListBox x:Name="listbox1" ItemsSource="{Binding positionList1}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,107,387.429,0" VerticalAlignment="Top">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid >
@@ -55,7 +55,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox x:Name="listbox2" ItemsSource="{Binding positionList2}" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,201,387.429,0" VerticalAlignment="Top">
+        <ListBox x:Name="listbox2" ItemsSource="{Binding positionList2}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,201,387.429,0" VerticalAlignment="Top">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid >
@@ -79,7 +79,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox x:Name="listbox3" ItemsSource="{Binding positionList3}" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,294,387.429,0" VerticalAlignment="Top">
+        <ListBox x:Name="listbox3" ItemsSource="{Binding positionList3}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,294,387.429,0" VerticalAlignment="Top">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid >
@@ -105,7 +105,7 @@
         </ListBox>
         <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="708,72,0,0" VerticalAlignment="Top" Width="75" Click="BtnSave_Click" Height="26"/>
         <Label Content="Distance - RESTful API" HorizontalAlignment="Left" Margin="105,393,0,0" VerticalAlignment="Top" Width="213" Height="26"/>
-        <ListBox x:Name="listboxDistanceR_idx1" HorizontalAlignment="Left" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="565,107,0,0" VerticalAlignment="Top" Width="304">
+        <ListBox x:Name="listboxDistanceR_idx1" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="565,107,0,0" VerticalAlignment="Top" Width="304">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -121,7 +121,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox x:Name="listboxDistanceR_idx2" HorizontalAlignment="Left" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="565,201,0,0" VerticalAlignment="Top" Width="304">
+        <ListBox x:Name="listboxDistanceR_idx2" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="565,201,0,0" VerticalAlignment="Top" Width="304">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -137,7 +137,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox x:Name="listboxDistanceR_idx3" HorizontalAlignment="Left" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="565,294,0,0" VerticalAlignment="Top" Width="304">
+        <ListBox x:Name="listboxDistanceR_idx3" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="565,294,0,0" VerticalAlignment="Top" Width="304">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>

@@ -136,6 +136,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DistanceClass.cs" />
+    <Compile Include="ListBoxBehavior.cs" />
     <Compile Include="PositionClass.cs" />
     <Compile Include="PositionViewModel.cs" />
     <Compile Include="RESTfulClient.cs" />

@@ -45,9 +45,9 @@ namespace NewSignalR
         {
             InitializeComponent();
 
-            txtServer.Text = "p186-geps-production-api.hd-rtls.com";
-            txtUserName.Text = "KTH";
-            txtPassword.Text = "!Test4KTH";
+            txtServer.Text = "p184-geps-production-api.hd-rtls.com";
+            txtUserName.Text = "cpal";
+            txtPassword.Text = "cpal";
             txtmax_age.Text = "1440";
             
             positionList1 = new ObservableCollection<PositionClass>();
@@ -259,7 +259,7 @@ namespace NewSignalR
         }
 
     }
-
+    
 
     public class login_cred
     {
