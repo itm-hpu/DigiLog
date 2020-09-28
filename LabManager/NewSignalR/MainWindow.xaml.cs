@@ -36,7 +36,9 @@ namespace NewSignalR
         public static ObservableCollection<PositionClass> positionList2;
         public static ObservableCollection<PositionClass> positionList3;
 
-        public List<Distance> distances;
+        public List<Distance> distances1;
+        public List<Distance> distances2;
+        public List<Distance> distances3;
         public static ObservableCollection<DistanceClass> distancesR_idx1;
         public static ObservableCollection<DistanceClass> distancesR_idx2;
         public static ObservableCollection<DistanceClass> distancesR_idx3;
@@ -57,7 +59,9 @@ namespace NewSignalR
             listbox2.ItemsSource = positionList2;
             listbox3.ItemsSource = positionList3;
 
-            distances = new List<Distance>();
+            distances1 = new List<Distance>();
+            distances2 = new List<Distance>();
+            distances3 = new List<Distance>();
             distancesR_idx1 = new ObservableCollection<DistanceClass>();
             distancesR_idx2 = new ObservableCollection<DistanceClass>();
             distancesR_idx3 = new ObservableCollection<DistanceClass>();
@@ -197,7 +201,9 @@ namespace NewSignalR
             listbox1.ItemsSource = null;
             listbox2.ItemsSource = null;
             listbox3.ItemsSource = null;
-            cmbObjectForDistance.ItemsSource = null;
+            cmbObjectForDistance1.ItemsSource = null;
+            cmbObjectForDistance2.ItemsSource = null;
+            cmbObjectForDistance3.ItemsSource = null;
         }
 
         private void btnCheck_Click(object sender, RoutedEventArgs e)
@@ -210,7 +216,9 @@ namespace NewSignalR
             cmbTagID2.ItemsSource = objectIDs;
             cmbTagID3.ItemsSource = objectIDs;
 
-            cmbObjectForDistance.ItemsSource = objectIDs;
+            cmbObjectForDistance1.ItemsSource = objectIDs;
+            cmbObjectForDistance2.ItemsSource = objectIDs;
+            cmbObjectForDistance3.ItemsSource = objectIDs;
             cmbAggregation.ItemsSource = new string[] { "None", "Sum" };
         }
 
@@ -218,18 +226,34 @@ namespace NewSignalR
         {
             string distanceAddress = "https://" + txtServer.Text + "/time-series/distance/points?order_by=Id&order=Ascending";
 
-            string objectID = cmbObjectForDistance.Text;
             int max_age = Convert.ToInt32(txtmax_age.Text);
             string aggregation = cmbAggregation.Text;
 
-            distances = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID, max_age, aggregation);
+            string objectID1 = cmbObjectForDistance1.Text;
+            string objectID2 = cmbObjectForDistance2.Text;
+            string objectID3 = cmbObjectForDistance3.Text;
+            distances1 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID1, max_age, aggregation);
+            distances2 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID2, max_age, aggregation);
+            distances3 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID3, max_age, aggregation);
 
-            txtObjectForDistance.Text = "Object, Timestamp, Distance" + "\n";
+            txtObjectForDistance1.Text = "Object, Timestamp, Distance" + "\n";
+            txtObjectForDistance2.Text = "Object, Timestamp, Distance" + "\n";
+            txtObjectForDistance3.Text = "Object, Timestamp, Distance" + "\n";
 
-            for (int i = 0; i < distances.Count(); i++)
+            for (int i = 0; i < distances1.Count(); i++)
             {
-                txtObjectForDistance.Text = txtObjectForDistance.Text + distances[i].Object + ", " + distances[i].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances[i].Value + "\n";
-                txtObjectForDistance.ScrollToEnd();
+                txtObjectForDistance1.Text = txtObjectForDistance1.Text + distances1[i].Object + ", " + distances1[i].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances1[i].Value + "\n";
+                txtObjectForDistance1.ScrollToEnd();
+            }
+            for (int i = 0; i < distances2.Count(); i++)
+            {
+                txtObjectForDistance2.Text = txtObjectForDistance2.Text + distances2[i].Object + ", " + distances2[i].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances2[i].Value + "\n";
+                txtObjectForDistance2.ScrollToEnd();
+            }
+            for (int i = 0; i < distances3.Count(); i++)
+            {
+                txtObjectForDistance3.Text = txtObjectForDistance3.Text + distances3[i].Object + ", " + distances3[i].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances3[i].Value + "\n";
+                txtObjectForDistance3.ScrollToEnd();
             }
         }
 
