@@ -111,8 +111,8 @@ namespace NewSignalR
             PositionClass inputforlist = new PositionClass
             {
                 ObjectId = p.Object,
-                X = p.X,
-                Y = p.Y,
+                X = 0,//p.X,
+                Y = 0,//p.Y,
                 Latitude = p.latitude,
                 Longitude = p.longitude,
                 Timestamp = p.Timestamp,
@@ -270,7 +270,6 @@ namespace NewSignalR
             MessageBox.Show(message);
         }
 
-        // under progressing
         public static double CalculateDistances(string objectID, ObservableCollection<PositionClass> positionlist)
         {
             int i = positionlist.Count - 1;
@@ -282,6 +281,49 @@ namespace NewSignalR
             return dist;
         }
 
+        // under progressing
+        public static void DrawHeatMap(string objectID, ObservableCollection<PositionClass> positionlist, Canvas canvas)
+        {
+            int dotSize = 5;
+            Ellipse currentDot = new Ellipse();
+
+            Color c = new Color();
+            double tempProgress = (double)1 / (double)positionlist.Count;
+            c = Rainbow(Convert.ToSingle(tempProgress));
+
+            currentDot.Stroke = new SolidColorBrush(c);
+            currentDot.StrokeThickness = 3;
+            Canvas.SetZIndex(currentDot, 3);
+            currentDot.Height = dotSize;
+            currentDot.Width = dotSize;
+
+            currentDot.Fill = new SolidColorBrush(c);
+            currentDot.Margin = new Thickness(positionlist[positionlist.Count - 1].X, positionlist[positionlist.Count - 1].Y * 30.0, 0, 0); // Sets the position.
+            canvas.Children.Add(currentDot);
+        }
+
+        public static Color Rainbow(float progress)
+        {
+            float div = (Math.Abs(progress % 1) * 6);
+            int ascending = (int)((div % 1) * 255);
+            int descending = 255 - ascending;
+
+            switch ((int)div)
+            {
+                case 0:
+                    return Color.FromArgb(255, 255, Convert.ToByte(ascending), 0);
+                case 1:
+                    return Color.FromArgb(255, Convert.ToByte(descending), 255, 0);
+                case 2:
+                    return Color.FromArgb(255, 0, 255, Convert.ToByte(ascending));
+                case 3:
+                    return Color.FromArgb(255, 0, Convert.ToByte(descending), 255);
+                case 4:
+                    return Color.FromArgb(255, Convert.ToByte(ascending), 0, 255);
+                default: // case 5:
+                    return Color.FromArgb(255, 255, 0, Convert.ToByte(descending));
+            }
+        }
     }
     
 

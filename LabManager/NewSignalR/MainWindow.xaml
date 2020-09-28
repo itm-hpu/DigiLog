@@ -163,23 +163,26 @@
 
                 <TabItem Header="RESTful">
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="55*"/>
-                            <RowDefinition Height="318*"/>
-                        </Grid.RowDefinitions>
                         <Button x:Name="btnDistance" Content="Distance" HorizontalAlignment="Left" Margin="449,9,0,0" VerticalAlignment="Top" Width="117" Click="BtnDistance_Click" Height="25"/>
                         <ComboBox x:Name="cmbObjectForDistance1" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" Width="87" Height="22" Grid.RowSpan="2"/>
                         <TextBox x:Name="txtObjectForDistance1" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,51,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455" Grid.RowSpan="2"/>
-                        <ComboBox x:Name="cmbObjectForDistance2" HorizontalAlignment="Left" Margin="10,98.143,0,0" VerticalAlignment="Top" Width="87" Height="22" Grid.Row="1"/>
-                        <TextBox x:Name="txtObjectForDistance2" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,98.143,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455" Grid.Row="1"/>
-                        <ComboBox x:Name="cmbObjectForDistance3" HorizontalAlignment="Left" Margin="10,203.143,0,0" VerticalAlignment="Top" Width="87" Height="22" Grid.Row="1"/>
-                        <TextBox x:Name="txtObjectForDistance3" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,202.143,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455" Grid.Row="1"/>
+                        <ComboBox x:Name="cmbObjectForDistance2" HorizontalAlignment="Left" Margin="10,153,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
+                        <TextBox x:Name="txtObjectForDistance2" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,154,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455"/>
+                        <ComboBox x:Name="cmbObjectForDistance3" HorizontalAlignment="Left" Margin="10,257,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
+                        <TextBox x:Name="txtObjectForDistance3" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,257,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455"/>
                         <Label Content="max age (min)" HorizontalAlignment="Left" Margin="210,7,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
                         <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="302,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
                         <ComboBox x:Name="cmbAggregation" HorizontalAlignment="Left" Margin="111,10,0,0" VerticalAlignment="Top" Width="87" RenderTransformOrigin="0.048,-0.138" Height="22"/>
                         <Label Content="Aggregation" HorizontalAlignment="Left" Margin="19,7,0,0" VerticalAlignment="Top" Width="87" Height="27"/>
                     </Grid>
                 </TabItem>
+
+                <TabItem Header="Visualization">
+                    <Grid>
+
+                    </Grid>
+                </TabItem>
+
             </TabControl>
         </Grid>
     </Grid>
