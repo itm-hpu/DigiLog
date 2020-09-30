@@ -46,10 +46,11 @@ namespace NewSignalR
         public MainWindow()
         {
             InitializeComponent();
+            //this.DataContext = new PositionClass();
 
-            txtServer.Text = "p184-geps-production-api.hd-rtls.com";
-            txtUserName.Text = "cpal";
-            txtPassword.Text = "cpal";
+            txtServer.Text = "p186-geps-production-api.hd-rtls.com";
+            txtUserName.Text = "KTH";
+            txtPassword.Text = "!Test4KTH";
             txtmax_age.Text = "1440";
 
             positionList1 = new ObservableCollection<PositionClass>();
@@ -68,6 +69,17 @@ namespace NewSignalR
             listboxDistanceR_idx1.ItemsSource = distancesR_idx1;
             listboxDistanceR_idx2.ItemsSource = distancesR_idx2;
             listboxDistanceR_idx3.ItemsSource = distancesR_idx3;
+
+
+            Canvas myCanvas = new Canvas();
+            Ellipse dot = new Ellipse();
+            Color color = new Color();
+            color = Colors.Black;
+            dot.Height = 5;
+            dot.Width = 5;
+            dot.Fill = new SolidColorBrush(color);
+            dot.Margin = new Thickness(0, 0, 0, 0);
+            myCanvas.Children.Add(dot);
         }
 
         public async void ConnectSignalR()
@@ -204,6 +216,9 @@ namespace NewSignalR
             cmbObjectForDistance1.ItemsSource = null;
             cmbObjectForDistance2.ItemsSource = null;
             cmbObjectForDistance3.ItemsSource = null;
+            listboxDistanceR_idx1.ItemsSource = null;
+            listboxDistanceR_idx2.ItemsSource = null;
+            listboxDistanceR_idx3.ItemsSource = null;
         }
 
         private void btnCheck_Click(object sender, RoutedEventArgs e)
@@ -282,7 +297,7 @@ namespace NewSignalR
         }
 
         // under progressing
-        public static void DrawHeatMap(string objectID, ObservableCollection<PositionClass> positionlist, Canvas canvas)
+        public void DrawPoint(string objectID, ObservableCollection<PositionClass> positionlist, Canvas canvas)
         {
             int dotSize = 5;
             Ellipse currentDot = new Ellipse();
@@ -298,7 +313,8 @@ namespace NewSignalR
             currentDot.Width = dotSize;
 
             currentDot.Fill = new SolidColorBrush(c);
-            currentDot.Margin = new Thickness(positionlist[positionlist.Count - 1].X, positionlist[positionlist.Count - 1].Y * 30.0, 0, 0); // Sets the position.
+            //currentDot.Margin = new Thickness(positionlist[positionlist.Count - 1].X, positionlist[positionlist.Count - 1].Y * 30.0, 0, 0); // Sets the position.
+            currentDot.Margin = new Thickness(0, 0, 0, 0); // Sets the position.
             canvas.Children.Add(currentDot);
         }
 

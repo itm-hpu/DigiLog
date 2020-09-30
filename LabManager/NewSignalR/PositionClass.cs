@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NewSignalR
 {
-    public class PositionClass : INotifyPropertyChanged
+    public class PositionClass : Notifier
     {        
         private object objectId;
         private DateTime timestamp;
@@ -99,15 +99,6 @@ namespace NewSignalR
             {
                 latitude = value;
                 OnPropertyChanged("Latitude");
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

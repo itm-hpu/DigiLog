@@ -138,7 +138,7 @@
     <Compile Include="DistanceClass.cs" />
     <Compile Include="ListBoxBehavior.cs" />
     <Compile Include="PositionClass.cs" />
-    <Compile Include="PositionViewModel.cs" />
+    <Compile Include="Notifier.cs" />
     <Compile Include="RESTfulClient.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
