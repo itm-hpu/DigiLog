@@ -123,8 +123,8 @@ namespace NewSignalR
             PositionClass inputforlist = new PositionClass
             {
                 ObjectId = p.Object,
-                X = 0,//p.X,
-                Y = 0,//p.Y,
+                X = p.X,
+                Y = p.Y,
                 Latitude = p.latitude,
                 Longitude = p.longitude,
                 Timestamp = p.Timestamp,
@@ -185,7 +185,22 @@ namespace NewSignalR
             login_cred result = JsonConvert.DeserializeObject<login_cred>(await response.Content.ReadAsStringAsync());
             return result.AuthenticateToken;
         }
-        
+
+        public static double CalculateDistances(string objectID, ObservableCollection<PositionClass> positionlist)
+        {
+            int i = positionlist.Count - 1;
+
+            double distX = positionlist[i].X - positionlist[i - 1].X;
+            double distY = positionlist[i].Y - positionlist[i - 1].Y;
+            double dist = Math.Sqrt(distX * distX + distY * distY);
+
+            return dist;
+        }
+
+        //-----------------------------
+        // # TabSignalR
+        //-----------------------------
+
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             ConnectSignalR();
@@ -204,21 +219,23 @@ namespace NewSignalR
 
         }
 
-        private void BtnClear_Click(object sender, RoutedEventArgs e)
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            txtTagID.Clear();
-            cmbTagID1.ItemsSource = null;
-            cmbTagID2.ItemsSource = null;
-            cmbTagID3.ItemsSource = null;
-            listbox1.ItemsSource = null;
-            listbox2.ItemsSource = null;
-            listbox3.ItemsSource = null;
-            cmbObjectForDistance1.ItemsSource = null;
-            cmbObjectForDistance2.ItemsSource = null;
-            cmbObjectForDistance3.ItemsSource = null;
-            listboxDistanceR_idx1.ItemsSource = null;
-            listboxDistanceR_idx2.ItemsSource = null;
-            listboxDistanceR_idx3.ItemsSource = null;
+            Process.Start(Application.ResourceAssembly.Location);
+            Application.Current.Shutdown();
+        }
+
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            controller.SaveDataToTextFile(positionList1);
+            controller.SaveDataToTextFile(positionList2);
+            controller.SaveDataToTextFile(positionList3);
+            controller.SaveDataToTextFile(distancesR_idx1);
+            controller.SaveDataToTextFile(distancesR_idx2);
+            controller.SaveDataToTextFile(distancesR_idx3);
+
+            string message = "Save a acquired data!";
+            MessageBox.Show(message);
         }
 
         private void btnCheck_Click(object sender, RoutedEventArgs e)
@@ -236,6 +253,10 @@ namespace NewSignalR
             cmbObjectForDistance3.ItemsSource = objectIDs;
             cmbAggregation.ItemsSource = new string[] { "None", "Sum" };
         }
+
+        //-----------------------------
+        // # RESTful 
+        //-----------------------------
 
         private void BtnDistance_Click(object sender, RoutedEventArgs e)
         {
@@ -257,44 +278,29 @@ namespace NewSignalR
 
             for (int i = 0; i < distances1.Count(); i++)
             {
-                txtObjectForDistance1.Text = txtObjectForDistance1.Text + distances1[i].Object + ", " + distances1[i].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances1[i].Value + "\n";
+                txtObjectForDistance1.Text = txtObjectForDistance1.Text + distances1[i].ObjectId + ", " + distances1[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances1[i].Value + "\n";
                 txtObjectForDistance1.ScrollToEnd();
             }
             for (int i = 0; i < distances2.Count(); i++)
             {
-                txtObjectForDistance2.Text = txtObjectForDistance2.Text + distances2[i].Object + ", " + distances2[i].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances2[i].Value + "\n";
+                txtObjectForDistance2.Text = txtObjectForDistance2.Text + distances2[i].ObjectId + ", " + distances2[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances2[i].Value + "\n";
                 txtObjectForDistance2.ScrollToEnd();
             }
             for (int i = 0; i < distances3.Count(); i++)
             {
-                txtObjectForDistance3.Text = txtObjectForDistance3.Text + distances3[i].Object + ", " + distances3[i].Tiemstamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances3[i].Value + "\n";
+                txtObjectForDistance3.Text = txtObjectForDistance3.Text + distances3[i].ObjectId + ", " + distances3[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances3[i].Value + "\n";
                 txtObjectForDistance3.ScrollToEnd();
             }
         }
 
-        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        private void BtnSaveDistance_Click(object sender, RoutedEventArgs e)
         {
-            controller.SaveDataToTextFile(positionList1);
-            controller.SaveDataToTextFile(positionList2);
-            controller.SaveDataToTextFile(positionList3);
-            controller.SaveDataToTextFile(distancesR_idx1);
-            controller.SaveDataToTextFile(distancesR_idx2);
-            controller.SaveDataToTextFile(distancesR_idx3);
-
-            string message = "Save a acquired data!";
-            MessageBox.Show(message);
+            controller.SaveDataToTextFile(distances1);
+            controller.SaveDataToTextFile(distances2);
+            controller.SaveDataToTextFile(distances3);
         }
 
-        public static double CalculateDistances(string objectID, ObservableCollection<PositionClass> positionlist)
-        {
-            int i = positionlist.Count - 1;
 
-            double distX = positionlist[i].X - positionlist[i - 1].X;
-            double distY = positionlist[i].Y - positionlist[i - 1].Y;
-            double dist = Math.Sqrt(distX * distX + distY * distY);
-
-            return dist;
-        }
 
         // under progressing
         public void DrawPoint(string objectID, ObservableCollection<PositionClass> positionlist, Canvas canvas)
@@ -341,7 +347,7 @@ namespace NewSignalR
             }
         }
     }
-    
+
 
     public class login_cred
     {
@@ -392,8 +398,8 @@ namespace NewSignalR
 
     public class Distance
     {
-        public object Object { get; set; }
-        public DateTime Tiemstamp { get; set; }
+        public string ObjectId { get; set; }
+        public DateTime Timestamp { get; set; }
         public double Value { get; set; }
     }
 }

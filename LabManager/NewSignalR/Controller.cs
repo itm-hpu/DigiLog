@@ -81,7 +81,7 @@ namespace NewSignalR
             if (iLength > 0)
             {
                 string filedir = Directory.GetCurrentDirectory();
-                filedir = filedir + @"\000. RTLS_DistanceData_" + timeStamp + "_" + distanceList[0].ObjectId.ToString() + ".txt";
+                filedir = filedir + @"\000. RTLS_DistanceDataFromSignalR_" + timeStamp + "_" + distanceList[0].ObjectId.ToString() + ".txt";
                 StreamWriter file = new StreamWriter(filedir);
 
                 for (int i = 0; i < iLength; i++)
@@ -89,6 +89,34 @@ namespace NewSignalR
                     file.Write(distanceList[i].ObjectId + "," +
                         distanceList[i].Timestamp + "," +
                         distanceList[i].Distance);
+                    file.Write("\n");
+                }
+                file.Close();
+                return;
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        public void SaveDataToTextFile(List<Distance> distanceList)
+        {
+            string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
+
+            int iLength = distanceList.Count();
+
+            if (iLength > 0)
+            {
+                string filedir = Directory.GetCurrentDirectory();
+                filedir = filedir + @"\000. RTLS_DistanceDataFromRESTful_" + timeStamp + "_" + distanceList[0].ObjectId.ToString() + ".txt";
+                StreamWriter file = new StreamWriter(filedir);
+
+                for (int i = 0; i < iLength; i++)
+                {
+                    file.Write(distanceList[i].ObjectId + "," +
+                        distanceList[i].Timestamp + "," +
+                        distanceList[i].Value);
                     file.Write("\n");
                 }
                 file.Close();
@@ -114,13 +142,11 @@ namespace NewSignalR
             {   
                 distances.Add
                     (
-                    new Distance()
-                    {
-                        Object = objectID,
-                        Tiemstamp = DateTime.ParseExact(responseResult[i][0], "yyyy-MM-dd HH:mm:ss.fff", null),
+                    new Distance() {
+                        ObjectId = objectID,
+                        Timestamp = DateTime.ParseExact(responseResult[i][0], "yyyy-MM-dd HH:mm:ss.fff", null),
                         Value = Convert.ToDouble(responseResult[i][1])
-                    }
-                    );
+                    });
             }
 
             return distances;

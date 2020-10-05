@@ -4,41 +4,42 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NewSignalR"
+        SizeToContent="WidthAndHeight"
         Title="RTLS Application for CPALS" Height="550" Width="910">
-    <Grid Margin="0,0,4,0.143">
+    <Grid Margin="0,0,1,1">
         <Grid.RowDefinitions>
             <RowDefinition Height="110"/>
             <RowDefinition Height="400"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Margin="0,0,0,401" Grid.RowSpan="2">
-            <Label Content="Server" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
-            <Label Content="UserName" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
-            <Label Content="UserPassword" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
-            <TextBox x:Name="txtServer" HorizontalAlignment="Left" Height="26" Margin="105,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
-            <TextBox x:Name="txtUserName" HorizontalAlignment="Left" Height="26" Margin="105,41,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
-            <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Height="26" Margin="105,72,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
-            <Button x:Name="btnCheck" Content="CheckID" HorizontalAlignment="Left" Margin="423,10,0,0" VerticalAlignment="Top" Width="75" Height="88" Click="btnCheck_Click"/>
-            <Label Content="Tag ID" HorizontalAlignment="Left" Margin="525,6,0,0" VerticalAlignment="Top" Width="55" Height="26"/>
-            <TextBox x:Name="txtTagID" HorizontalAlignment="Right" Height="88" Margin="0,10,199,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="125"/>
+        <Grid Grid.Row="0" Margin="0,0,0,2.857">
+            <Label Content="Server" HorizontalAlignment="Left" Margin="10,10,803,0" VerticalAlignment="Top" Width="87" Height="26"/>
+            <Label Content="UserName" HorizontalAlignment="Left" Margin="10,41,803,0" VerticalAlignment="Top" Width="87" Height="26"/>
+            <Label Content="UserPassword" HorizontalAlignment="Left" Margin="10,72,803,0" VerticalAlignment="Top" Width="87" Height="26"/>
+            <TextBox x:Name="txtServer" HorizontalAlignment="Left" Height="26" Margin="102,10,485,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
+            <TextBox x:Name="txtUserName" HorizontalAlignment="Left" Height="26" Margin="102,41,485,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
+            <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Height="26" Margin="102,72,485,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="313"/>
+            <Button x:Name="btnCheck" Content="CheckID" HorizontalAlignment="Left" Margin="434,10,0,0" VerticalAlignment="Top" Width="70" Height="88" Click="btnCheck_Click"/>
+            <Label Content="Tag ID" HorizontalAlignment="Left" Margin="534,6,0,0" VerticalAlignment="Top" Width="55" Height="26"/>
+            <TextBox x:Name="txtTagID" HorizontalAlignment="Left" Height="88" Margin="589,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="114"/>
+            <Button x:Name="btnDebbug" Content="Debbug" HorizontalAlignment="Left" Margin="800,10,0,0" VerticalAlignment="Top" Width="80" Click="BtnDebbug_Click" Height="26"/>
         </Grid>
 
-        <Grid Grid.Row="1">
-            <TabControl Margin="0,0,0,0.143">
+        <Grid Grid.Row="1" Margin="0,5,0,0">
+            <TabControl>
                 <TabItem Header="SignalR">
                     <Grid>
                         <Label Content="ObjectID" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
                         <Label Content="Position" HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
                         <Label Content="Distance" HorizontalAlignment="Left" Margin="600,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
-                        <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="406,331,0,0" VerticalAlignment="Top" Width="80" RenderTransformOrigin="-0.162,0.264" Click="BtnStart_Click" Height="26"/>
-                        <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="506,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnStop_Click" Height="26"/>
-                        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="600,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnSave_Click" Height="26"/>
-                        <Button x:Name="BtnClear" Content="Clear" HorizontalAlignment="Left" Margin="700,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnClear_Click" Height="26"/>
-                        <Button x:Name="btnDebbug" Content="Debbug" HorizontalAlignment="Left" Margin="800,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnDebbug_Click" Height="26"/>
+                        <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="499,331,0,0" VerticalAlignment="Top" Width="80" RenderTransformOrigin="-0.162,0.264" Click="BtnStart_Click" Height="26"/>
+                        <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="600,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnStop_Click" Height="26"/>
+                        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="701,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnSave_Click" Height="26"/>
+                        <Button x:Name="BtnRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="800,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnRefresh_Click" Height="26"/>
                         <ComboBox x:Name="cmbTagID1" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
                         <ComboBox x:Name="cmbTagID2" HorizontalAlignment="Left" Margin="10,137,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
                         <ComboBox x:Name="cmbTagID3" HorizontalAlignment="Left" Margin="10,231,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
-                        <ListBox x:Name="listbox1" ItemsSource="{Binding positionList1}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,44,308.714,0" VerticalAlignment="Top">
+                        <ListBox x:Name="listbox1" ItemsSource="{Binding positionList1}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,44,0,0" VerticalAlignment="Top" Width="481">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid >
@@ -62,7 +63,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <ListBox x:Name="listbox2" ItemsSource="{Binding positionList2}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,138,308.714,0" VerticalAlignment="Top">
+                        <ListBox x:Name="listbox2" ItemsSource="{Binding positionList2}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,138,0,0" VerticalAlignment="Top" Width="481">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid >
@@ -86,7 +87,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <ListBox x:Name="listbox3" ItemsSource="{Binding positionList3}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Stretch" Height="89" Margin="105,231,308.714,0" VerticalAlignment="Top">
+                        <ListBox x:Name="listbox3" ItemsSource="{Binding positionList3}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,231,0,0" VerticalAlignment="Top" Width="481">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid >
@@ -163,17 +164,19 @@
 
                 <TabItem Header="RESTful">
                     <Grid>
-                        <Button x:Name="btnDistance" Content="Distance" HorizontalAlignment="Left" Margin="449,9,0,0" VerticalAlignment="Top" Width="117" Click="BtnDistance_Click" Height="25"/>
+                        <Button x:Name="btnDistance" Content="Distance" HorizontalAlignment="Left" Margin="403,7,0,0" VerticalAlignment="Top" Width="74" Click="BtnDistance_Click" Height="25"/>
                         <ComboBox x:Name="cmbObjectForDistance1" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" Width="87" Height="22" Grid.RowSpan="2"/>
                         <TextBox x:Name="txtObjectForDistance1" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,51,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455" Grid.RowSpan="2"/>
                         <ComboBox x:Name="cmbObjectForDistance2" HorizontalAlignment="Left" Margin="10,153,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
                         <TextBox x:Name="txtObjectForDistance2" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,154,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455"/>
                         <ComboBox x:Name="cmbObjectForDistance3" HorizontalAlignment="Left" Margin="10,257,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
                         <TextBox x:Name="txtObjectForDistance3" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,257,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455"/>
-                        <Label Content="max age (min)" HorizontalAlignment="Left" Margin="210,7,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
-                        <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="302,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
-                        <ComboBox x:Name="cmbAggregation" HorizontalAlignment="Left" Margin="111,10,0,0" VerticalAlignment="Top" Width="87" RenderTransformOrigin="0.048,-0.138" Height="22"/>
-                        <Label Content="Aggregation" HorizontalAlignment="Left" Margin="19,7,0,0" VerticalAlignment="Top" Width="87" Height="27"/>
+                        <Label Content="max age (min)" HorizontalAlignment="Left" Margin="197,5,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
+                        <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="289,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
+                        <ComboBox x:Name="cmbAggregation" HorizontalAlignment="Left" Margin="111,9,0,0" VerticalAlignment="Top" Width="69" RenderTransformOrigin="0.048,-0.138" Height="22"/>
+                        <Label Content="Aggregation" HorizontalAlignment="Left" Margin="24,7,0,0" VerticalAlignment="Top" Width="87" Height="27"/>
+                        <Button x:Name="btnSaveDistance" Content="Save" HorizontalAlignment="Left" Margin="492,7,0,0" VerticalAlignment="Top" Width="74" Click="BtnSaveDistance_Click" Height="25"/>
+                        <Button x:Name="BtnRefreshRESTful" Content="Refresh" HorizontalAlignment="Left" Margin="581,7,0,0" VerticalAlignment="Top" Width="74" Click="BtnRefresh_Click" Height="25"/>
                     </Grid>
                 </TabItem>
 
