@@ -135,8 +135,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Distance.cs" />
     <Compile Include="DistanceClass.cs" />
     <Compile Include="ListBoxBehavior.cs" />
+    <Compile Include="MovementClass.cs" />
     <Compile Include="PositionClass.cs" />
     <Compile Include="Notifier.cs" />
     <Compile Include="RESTfulClient.cs" />

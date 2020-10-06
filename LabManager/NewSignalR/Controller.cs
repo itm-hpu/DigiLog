@@ -10,6 +10,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Globalization;
 
 namespace NewSignalR
 {
@@ -139,17 +140,28 @@ namespace NewSignalR
             List<Distance> distances = new List<Distance>(responseResult.Count);
 
             for (int i = 0; i < responseResult.Count; i++)
-            {   
+            {
                 distances.Add
                     (
                     new Distance() {
                         ObjectId = objectID,
-                        Timestamp = DateTime.ParseExact(responseResult[i][0], "yyyy-MM-dd HH:mm:ss.fff", null),
-                        Value = Convert.ToDouble(responseResult[i][1])
-                    });
+                        Timestamp = DateTime.ParseExact(responseResult[i][0], "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture),
+                        Value = double.Parse(responseResult[i][1], CultureInfo.InvariantCulture)
+            });
             }
 
             return distances;
+        }
+
+        public static double CalculateDistances(string objectID, ObservableCollection<PositionClass> positionlist)
+        {
+            int i = positionlist.Count - 1;
+
+            double distX = positionlist[i].X - positionlist[i - 1].X;
+            double distY = positionlist[i].Y - positionlist[i - 1].Y;
+            double dist = Math.Sqrt(distX * distX + distY * distY);
+
+            return dist;
         }
 
 

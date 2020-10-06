@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NewSignalR
 {
-    public class DistanceClass : INotifyPropertyChanged
+    public class DistanceClass : Notifier
     {
 
         private object objectId;

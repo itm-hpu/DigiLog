@@ -43,6 +43,8 @@ namespace NewSignalR
         public static ObservableCollection<DistanceClass> distancesR_idx2;
         public static ObservableCollection<DistanceClass> distancesR_idx3;
 
+        public static ObservableCollection<PointToShowInCanvas> Points1;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -70,16 +72,7 @@ namespace NewSignalR
             listboxDistanceR_idx2.ItemsSource = distancesR_idx2;
             listboxDistanceR_idx3.ItemsSource = distancesR_idx3;
 
-
-            Canvas myCanvas = new Canvas();
-            Ellipse dot = new Ellipse();
-            Color color = new Color();
-            color = Colors.Black;
-            dot.Height = 5;
-            dot.Width = 5;
-            dot.Fill = new SolidColorBrush(color);
-            dot.Margin = new Thickness(0, 0, 0, 0);
-            myCanvas.Children.Add(dot);
+            Points1 = new ObservableCollection<PointToShowInCanvas>();
         }
 
         public async void ConnectSignalR()
@@ -136,9 +129,11 @@ namespace NewSignalR
                 Application.Current.Dispatcher.BeginInvoke(new Action(delegate 
                 {
                     positionList1.Add(inputforlist);
+                    Points1.Add(new PointToShowInCanvas { Left = inputforlist.X / 100, Top = inputforlist.Y / 100 });
+
                     if (positionList1.Count > 1)
                     {
-                        double dist = CalculateDistances(id4require[0], positionList1);
+                        double dist = Controller.CalculateDistances(id4require[0], positionList1);
                         DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[0], Timestamp = positionList1[positionList1.Count - 1].Timestamp, Distance = dist };
                         distancesR_idx1.Add(inputfordistlist);
                     }
@@ -151,7 +146,7 @@ namespace NewSignalR
                     positionList2.Add(inputforlist);
                     if (positionList2.Count > 1)
                     {
-                        double dist = CalculateDistances(id4require[1], positionList2);
+                        double dist = Controller.CalculateDistances(id4require[1], positionList2);
                         DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[1], Timestamp = positionList2[positionList2.Count - 1].Timestamp, Distance = dist };
                         distancesR_idx2.Add(inputfordistlist);
                     }
@@ -164,7 +159,7 @@ namespace NewSignalR
                     positionList3.Add(inputforlist);
                     if (positionList3.Count > 1)
                     {
-                        double dist = CalculateDistances(id4require[2], positionList3);
+                        double dist = Controller.CalculateDistances(id4require[2], positionList3);
                         DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[2], Timestamp = positionList3[positionList3.Count - 1].Timestamp, Distance = dist };
                         distancesR_idx3.Add(inputfordistlist);
                     }
@@ -184,17 +179,6 @@ namespace NewSignalR
             HttpResponseMessage response = await client.PostAsync("https://" + server + "/login/", content);
             login_cred result = JsonConvert.DeserializeObject<login_cred>(await response.Content.ReadAsStringAsync());
             return result.AuthenticateToken;
-        }
-
-        public static double CalculateDistances(string objectID, ObservableCollection<PositionClass> positionlist)
-        {
-            int i = positionlist.Count - 1;
-
-            double distX = positionlist[i].X - positionlist[i - 1].X;
-            double distY = positionlist[i].Y - positionlist[i - 1].Y;
-            double dist = Math.Sqrt(distX * distX + distY * distY);
-
-            return dist;
         }
 
         //-----------------------------
@@ -374,32 +358,9 @@ namespace NewSignalR
         public string Radio { get; set; }
     }
 
-    public class Position
+    public class PointToShowInCanvas
     {
-        public float Longitude { get; set; }
-        public float Latitude { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Zone { get; set; }
-        public object Object { get; set; }
-        public DateTime Timestamp { get; set; }
-    }
-
-    public class Movement
-    {
-        public object Object { get; set; }
-        public string Type { get; set; }
-        public double Distance { get; set; }
-        public string Zone { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public DateTime Timespan { get; set; }
-    }
-
-    public class Distance
-    {
-        public string ObjectId { get; set; }
-        public DateTime Timestamp { get; set; }
-        public double Value { get; set; }
+        public double Top { get; set; }
+        public double Left { get; set; }
     }
 }
