@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System.Threading;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace NewSignalR
 {
@@ -31,30 +32,30 @@ namespace NewSignalR
         public static System.Net.Http.HttpClient client;
         public HubConnection connection;
         Controller controller = new Controller();
-
+        
         public static ObservableCollection<PositionClass> positionList1;
         public static ObservableCollection<PositionClass> positionList2;
         public static ObservableCollection<PositionClass> positionList3;
 
-        public List<Distance> distances1;
-        public List<Distance> distances2;
-        public List<Distance> distances3;
         public static ObservableCollection<DistanceClass> distancesR_idx1;
         public static ObservableCollection<DistanceClass> distancesR_idx2;
         public static ObservableCollection<DistanceClass> distancesR_idx3;
 
-        public static ObservableCollection<PointToShowInCanvas> Points1;
+        public List<Distance> distances1;
+        public List<Distance> distances2;
+        public List<Distance> distances3;
+
+        public static ViewModel vm;
 
         public MainWindow()
         {
             InitializeComponent();
-            //this.DataContext = new PositionClass();
 
-            txtServer.Text = "p186-geps-production-api.hd-rtls.com";
-            txtUserName.Text = "KTH";
-            txtPassword.Text = "!Test4KTH";
+            txtServer.Text = "p184-geps-production-api.hd-rtls.com";
+            txtUserName.Text = "cpal";
+            txtPassword.Text = "cpal";
             txtmax_age.Text = "1440";
-
+                        
             positionList1 = new ObservableCollection<PositionClass>();
             positionList2 = new ObservableCollection<PositionClass>();
             positionList3 = new ObservableCollection<PositionClass>();
@@ -62,21 +63,24 @@ namespace NewSignalR
             listbox2.ItemsSource = positionList2;
             listbox3.ItemsSource = positionList3;
 
-            distances1 = new List<Distance>();
-            distances2 = new List<Distance>();
-            distances3 = new List<Distance>();
             distancesR_idx1 = new ObservableCollection<DistanceClass>();
             distancesR_idx2 = new ObservableCollection<DistanceClass>();
             distancesR_idx3 = new ObservableCollection<DistanceClass>();
             listboxDistanceR_idx1.ItemsSource = distancesR_idx1;
             listboxDistanceR_idx2.ItemsSource = distancesR_idx2;
             listboxDistanceR_idx3.ItemsSource = distancesR_idx3;
-
-            Points1 = new ObservableCollection<PointToShowInCanvas>();
+            
+            distances1 = new List<Distance>();
+            distances2 = new List<Distance>();
+            distances3 = new List<Distance>();
+            
+            vm = new ViewModel();
+            DataContext = vm;
         }
 
         public async void ConnectSignalR()
         {
+            
             string server = txtServer.Text;
             string userName = txtUserName.Text;
             string password = txtPassword.Text;
@@ -98,6 +102,7 @@ namespace NewSignalR
             connection.On<pos>("onEvent", Data =>
             {
                 Poskommer("kkK", Data, id4require);
+                
             });
 
             await connection.StartAsync();
@@ -124,18 +129,31 @@ namespace NewSignalR
                 Zone = p.Zone
             };
 
+            int dotsize = 3;
+            int valueAdjustConstant = 100;
+            SolidColorBrush FillColor1 = new SolidColorBrush(Colors.Red);
+
             if (inputforlist.ObjectId.ToString() == id4require[0])
             {
                 Application.Current.Dispatcher.BeginInvoke(new Action(delegate 
                 {
                     positionList1.Add(inputforlist);
-                    Points1.Add(new PointToShowInCanvas { Left = inputforlist.X / 100, Top = inputforlist.Y / 100 });
-
                     if (positionList1.Count > 1)
                     {
                         double dist = Controller.CalculateDistances(id4require[0], positionList1);
                         DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[0], Timestamp = positionList1[positionList1.Count - 1].Timestamp, Distance = dist };
                         distancesR_idx1.Add(inputfordistlist);
+                    }
+                    if (positionList1.Count > 0)
+                    {
+                        vm.EllipseNodes.Add(new EllipseNode1
+                        {
+                            Left = positionList1[positionList1.Count - 1].X / valueAdjustConstant,
+                            Top = positionList1[positionList1.Count - 1].Y / valueAdjustConstant,
+                            FillColor = FillColor1,
+                            Height = dotsize,
+                            Width = dotsize
+                        });
                     }
                 }));
             }
@@ -284,30 +302,9 @@ namespace NewSignalR
             controller.SaveDataToTextFile(distances3);
         }
 
-
+        
 
         // under progressing
-        public void DrawPoint(string objectID, ObservableCollection<PositionClass> positionlist, Canvas canvas)
-        {
-            int dotSize = 5;
-            Ellipse currentDot = new Ellipse();
-
-            Color c = new Color();
-            double tempProgress = (double)1 / (double)positionlist.Count;
-            c = Rainbow(Convert.ToSingle(tempProgress));
-
-            currentDot.Stroke = new SolidColorBrush(c);
-            currentDot.StrokeThickness = 3;
-            Canvas.SetZIndex(currentDot, 3);
-            currentDot.Height = dotSize;
-            currentDot.Width = dotSize;
-
-            currentDot.Fill = new SolidColorBrush(c);
-            //currentDot.Margin = new Thickness(positionlist[positionlist.Count - 1].X, positionlist[positionlist.Count - 1].Y * 30.0, 0, 0); // Sets the position.
-            currentDot.Margin = new Thickness(0, 0, 0, 0); // Sets the position.
-            canvas.Children.Add(currentDot);
-        }
-
         public static Color Rainbow(float progress)
         {
             float div = (Math.Abs(progress % 1) * 6);
@@ -358,9 +355,18 @@ namespace NewSignalR
         public string Radio { get; set; }
     }
 
-    public class PointToShowInCanvas
+    public class EllipseNode1 : PositionClass
     {
-        public double Top { get; set; }
         public double Left { get; set; }
+        public double Top { get; set; }
+        public SolidColorBrush FillColor { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
+    }
+
+ 
+    public class ViewModel
+    {
+        public ObservableCollection<PositionClass> EllipseNodes { get; } = new ObservableCollection<PositionClass>();
     }
 }

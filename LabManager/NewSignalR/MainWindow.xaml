@@ -182,27 +182,24 @@
 
                 <TabItem Header="Visualization">
                     <Grid>
-                        <ItemsControl ItemsSource="{Binding Points1}">
+                        <ListBox ItemsSource="{Binding Path = EllipseNodes}">
+                            <ItemsControl.Resources>
+                                <DataTemplate DataType="{x:Type local:EllipseNode1}">
+                                    <Ellipse Fill="Red" Height="{Binding Height}" Width="{Binding Width}"/>
+                                </DataTemplate>
+                            </ItemsControl.Resources>
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <Canvas  x:Name="myCanvas" HorizontalAlignment="Left" Height="353" Margin="10,10,0,0" VerticalAlignment="Top" Width="874" Background="#FFEAEAEA" IsItemsHost="True"/>
+                                    <Canvas x:Name="myCanvas" HorizontalAlignment="Left" VerticalAlignment="Top" Height="353" Margin="10,10,0,0" Width="874" Background="#FFE9E9E9" />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
-
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Ellipse Fill="Red" Width="5" Height="5" StrokeThickness="3"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-
                             <ItemsControl.ItemContainerStyle>
-                                <Style TargetType="ContentPresenter">
-                                    <Setter Property="Canvas.Left" Value="{Binding Left}"/>
-                                    <Setter Property="Canvas.Top" Value="{Binding Top}"/>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Canvas.Left" Value="{Binding Path = Left}" />
+                                    <Setter Property="Canvas.Top" Value="{Binding Path = Top}" />
                                 </Style>
                             </ItemsControl.ItemContainerStyle>
-
-                        </ItemsControl>
+                        </ListBox>
                     </Grid>
                 </TabItem>
 

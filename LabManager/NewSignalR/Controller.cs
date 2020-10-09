@@ -11,6 +11,10 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Globalization;
+using System.Windows.Shapes;
+using System.Windows.Media;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace NewSignalR
 {
