@@ -182,17 +182,26 @@
 
                 <TabItem Header="Visualization">
                     <Grid>
+
                         <ListBox ItemsSource="{Binding Path = EllipseNodes}">
                             <ItemsControl.Resources>
                                 <DataTemplate DataType="{x:Type local:EllipseNode1}">
-                                    <Ellipse Fill="Red" Height="{Binding Height}" Width="{Binding Width}"/>
+                                    <Ellipse Fill="{Binding FillColor}" Height="{Binding Height}" Width="{Binding Width}"/>
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type local:EllipseNode2}">
+                                    <Ellipse Fill="{Binding FillColor}" Height="{Binding Height}" Width="{Binding Width}"/>
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type local:EllipseNode3}">
+                                    <Ellipse Fill="{Binding FillColor}" Height="{Binding Height}" Width="{Binding Width}"/>
                                 </DataTemplate>
                             </ItemsControl.Resources>
+                            
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <Canvas x:Name="myCanvas" HorizontalAlignment="Left" VerticalAlignment="Top" Height="353" Margin="10,10,0,0" Width="874" Background="#FFE9E9E9" />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
+                            
                             <ItemsControl.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="Canvas.Left" Value="{Binding Path = Left}" />
@@ -200,6 +209,7 @@
                                 </Style>
                             </ItemsControl.ItemContainerStyle>
                         </ListBox>
+                        
                     </Grid>
                 </TabItem>
 

@@ -130,12 +130,11 @@ namespace NewSignalR
             };
 
             int dotsize = 3;
-            int valueAdjustConstant = 100;
-            SolidColorBrush FillColor1 = new SolidColorBrush(Colors.Red);
-
+            int valueAdjustConstant = 100; // need to modify FillColor in Dispatcher statements
+            
             if (inputforlist.ObjectId.ToString() == id4require[0])
             {
-                Application.Current.Dispatcher.BeginInvoke(new Action(delegate 
+                Application.Current.Dispatcher.Invoke(new Action(delegate 
                 {
                     positionList1.Add(inputforlist);
                     if (positionList1.Count > 1)
@@ -146,6 +145,7 @@ namespace NewSignalR
                     }
                     if (positionList1.Count > 0)
                     {
+                        SolidColorBrush FillColor1 = new SolidColorBrush(Colors.Red); //FillColor1
                         vm.EllipseNodes.Add(new EllipseNode1
                         {
                             Left = positionList1[positionList1.Count - 1].X / valueAdjustConstant,
@@ -159,7 +159,7 @@ namespace NewSignalR
             }
             else if (inputforlist.ObjectId.ToString() == id4require[1])
             {
-                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                Application.Current.Dispatcher.Invoke(new Action(delegate
                 {
                     positionList2.Add(inputforlist);
                     if (positionList2.Count > 1)
@@ -168,11 +168,23 @@ namespace NewSignalR
                         DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[1], Timestamp = positionList2[positionList2.Count - 1].Timestamp, Distance = dist };
                         distancesR_idx2.Add(inputfordistlist);
                     }
+                    if (positionList2.Count > 0)
+                    {
+                        SolidColorBrush FillColor2 = new SolidColorBrush(Colors.Blue); //FillColor2
+                        vm.EllipseNodes.Add(new EllipseNode2
+                        {
+                            Left = positionList2[positionList2.Count - 1].X / valueAdjustConstant,
+                            Top = positionList2[positionList2.Count - 1].Y / valueAdjustConstant,
+                            FillColor = FillColor2,
+                            Height = dotsize,
+                            Width = dotsize
+                        });
+                    }
                 }));
             }
             else if (inputforlist.ObjectId.ToString() == id4require[2])
             {
-                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                Application.Current.Dispatcher.Invoke(new Action(delegate
                 {
                     positionList3.Add(inputforlist);
                     if (positionList3.Count > 1)
@@ -181,9 +193,20 @@ namespace NewSignalR
                         DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[2], Timestamp = positionList3[positionList3.Count - 1].Timestamp, Distance = dist };
                         distancesR_idx3.Add(inputfordistlist);
                     }
+                    if (positionList3.Count > 0)
+                    {
+                        SolidColorBrush FillColor3 = new SolidColorBrush(Colors.Green); //FillColor3
+                        vm.EllipseNodes.Add(new EllipseNode3
+                        {
+                            Left = positionList3[positionList3.Count - 1].X / valueAdjustConstant,
+                            Top = positionList3[positionList3.Count - 1].Y / valueAdjustConstant,
+                            FillColor = FillColor3,
+                            Height = dotsize,
+                            Width = dotsize
+                        });
+                    }
                 }));
             }
-
         }
 
 
@@ -364,9 +387,29 @@ namespace NewSignalR
         public int Width { get; set; }
     }
 
- 
+    public class EllipseNode2 : PositionClass
+    {
+        public double Left { get; set; }
+        public double Top { get; set; }
+        public SolidColorBrush FillColor { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
+    }
+
+    public class EllipseNode3 : PositionClass
+    {
+        public double Left { get; set; }
+        public double Top { get; set; }
+        public SolidColorBrush FillColor { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
+    }
+
+
     public class ViewModel
     {
         public ObservableCollection<PositionClass> EllipseNodes { get; } = new ObservableCollection<PositionClass>();
+        //public ObservableCollection<PositionClass> Ellipse2Nodes { get; } = new ObservableCollection<PositionClass>();
+        //public ObservableCollection<PositionClass> Ellipse3Nodes { get; } = new ObservableCollection<PositionClass>();
     }
 }
