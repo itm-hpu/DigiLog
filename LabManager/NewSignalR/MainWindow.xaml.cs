@@ -45,6 +45,8 @@ namespace NewSignalR
         public List<Distance> distances2;
         public List<Distance> distances3;
 
+        public static ObservableCollection<MovementClass> Movements;
+
         public static ViewModel vm;
 
         public MainWindow()
@@ -73,7 +75,10 @@ namespace NewSignalR
             distances1 = new List<Distance>();
             distances2 = new List<Distance>();
             distances3 = new List<Distance>();
-            
+
+            Movements = new ObservableCollection<MovementClass>();
+            MovementListBox1.ItemsSource = Movements;
+
             vm = new ViewModel();
             DataContext = vm;
         }
@@ -154,6 +159,19 @@ namespace NewSignalR
                             Height = dotsize,
                             Width = dotsize
                         });
+                    }
+                    if (positionList1.Count > 1)
+                    {
+                        if (positionList1[positionList1.Count - 1].Zone != positionList1[positionList1.Count - 2].Zone)
+                        {
+                            Movements.Add(new MovementClass
+                            {
+                                ObjectId = positionList1[positionList1.Count - 1].ObjectId,
+                                Type = Controller.CheckMovementType(positionList1),
+                                Zone = positionList1[positionList1.Count - 1].Zone,
+                                StartTime = positionList1[positionList1.Count - 1].Timestamp
+                            });
+                        }
                     }
                 }));
             }
@@ -403,13 +421,11 @@ namespace NewSignalR
         public SolidColorBrush FillColor { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
-    }
+}
 
 
     public class ViewModel
     {
         public ObservableCollection<PositionClass> EllipseNodes { get; } = new ObservableCollection<PositionClass>();
-        //public ObservableCollection<PositionClass> Ellipse2Nodes { get; } = new ObservableCollection<PositionClass>();
-        //public ObservableCollection<PositionClass> Ellipse3Nodes { get; } = new ObservableCollection<PositionClass>();
     }
 }

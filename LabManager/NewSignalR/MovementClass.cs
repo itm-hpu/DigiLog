@@ -10,11 +10,11 @@ namespace NewSignalR
     {
         private object objectId;
         private string type;
-        private double distance;
-        private string zone;
+        //private double distance;
+        private int zone;
         private DateTime startTime;
-        private DateTime endTime;
-        private DateTime timespan;
+        //private DateTime endTime;
+        //private DateTime timespan;
 
         public object ObjectId
         {
@@ -40,6 +40,7 @@ namespace NewSignalR
                 OnPropertyChanged("Type");
             }
         }
+        /*
         public double Distance
         {
             get
@@ -52,7 +53,8 @@ namespace NewSignalR
                 OnPropertyChanged("Distance");
             }
         }
-        public string Zone
+        */
+        public int Zone
         {
             get
             {
@@ -76,6 +78,7 @@ namespace NewSignalR
                 OnPropertyChanged("StartTime");
             }
         }
+        /*
         public DateTime EndTime
         {
             get
@@ -100,5 +103,6 @@ namespace NewSignalR
                 OnPropertyChanged("Timespan");
             }
         }
+        */
     }
 }

@@ -168,7 +168,17 @@ namespace NewSignalR
             return dist;
         }
 
-
+        public static string CheckMovementType(ObservableCollection<PositionClass> positionlist)
+        {
+            if (positionlist[positionlist.Count - 1].Zone != 0)
+            {
+                return "Stop";
+            }
+            else
+            {
+                return "Move";
+            }
+        }
 
         /*
         public async Task<double> CalcDist(ObservableCollection<PositionClass> positionlist)
