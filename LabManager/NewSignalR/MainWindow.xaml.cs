@@ -163,13 +163,26 @@ namespace NewSignalR
                     }
                     if (positionList1.Count == 1)
                     {
-                        Movements.Add(new MovementClass
+                        if (Controller.CheckMovementType(positionList1) == "Move")
                         {
-                            ObjectId = positionList1[0].ObjectId,
-                            //Type = Controller.CheckMovementType(positionList1), 
-                            Zone = positionList1[0].Zone,
-                            StartTime = positionList1[0].Timestamp
-                        });
+                            Movements.Add(new MovementClass
+                            {
+                                ObjectId = positionList1[0].ObjectId,
+                                //Type = Controller.CheckMovementType(positionList1), 
+                                Zone = positionList1[0].Zone,
+                                StartTime = positionList1[0].Timestamp
+                            });
+                        }
+                        else
+                        {
+                            Movements.Add(new MovementClass
+                            {
+                                ObjectId = positionList1[0].ObjectId,
+                                //Type = Controller.CheckMovementType(positionList1), 
+                                Zone = positionList1[0].Zone,
+                                StartTime = positionList1[0].Timestamp
+                            });
+                        }
                     }
                     if (positionList1.Count > 1)
                     {
