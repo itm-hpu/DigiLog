@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace NewSignalR
 {
     public class PositionClass : Notifier
-    {        
+    {
+        private int index;
         private object objectId;
         private DateTime timestamp;
         private int x;
@@ -17,6 +18,19 @@ namespace NewSignalR
         private float longitude;
         private float latitude;
 
+
+        public int Index
+        {
+            get
+            {
+                return index;
+            }
+            set
+            {
+                index = value;
+                OnPropertyChanged("Index");
+            }
+        }
         public object ObjectId
         {
             get

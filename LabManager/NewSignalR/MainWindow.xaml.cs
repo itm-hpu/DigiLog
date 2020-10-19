@@ -141,6 +141,7 @@ namespace NewSignalR
             {
                 Application.Current.Dispatcher.Invoke(new Action(delegate 
                 {
+                    inputforlist.Index = positionList1.Count();
                     positionList1.Add(inputforlist);
                     if (positionList1.Count > 1)
                     {
@@ -160,6 +161,16 @@ namespace NewSignalR
                             Width = dotsize
                         });
                     }
+                    if (positionList1.Count == 1)
+                    {
+                        Movements.Add(new MovementClass
+                        {
+                            ObjectId = positionList1[0].ObjectId,
+                            //Type = Controller.CheckMovementType(positionList1), 
+                            Zone = positionList1[0].Zone,
+                            StartTime = positionList1[0].Timestamp
+                        });
+                    }
                     if (positionList1.Count > 1)
                     {
                         if (positionList1[positionList1.Count - 1].Zone != positionList1[positionList1.Count - 2].Zone)
@@ -167,7 +178,7 @@ namespace NewSignalR
                             Movements.Add(new MovementClass
                             {
                                 ObjectId = positionList1[positionList1.Count - 1].ObjectId,
-                                Type = Controller.CheckMovementType(positionList1),
+                                //Type = Controller.CheckMovementType(positionList1),
                                 Zone = positionList1[positionList1.Count - 1].Zone,
                                 StartTime = positionList1[positionList1.Count - 1].Timestamp
                             });
@@ -179,6 +190,7 @@ namespace NewSignalR
             {
                 Application.Current.Dispatcher.Invoke(new Action(delegate
                 {
+                    inputforlist.Index = positionList2.Count();
                     positionList2.Add(inputforlist);
                     if (positionList2.Count > 1)
                     {
@@ -204,6 +216,7 @@ namespace NewSignalR
             {
                 Application.Current.Dispatcher.Invoke(new Action(delegate
                 {
+                    inputforlist.Index = positionList3.Count();
                     positionList3.Add(inputforlist);
                     if (positionList3.Count > 1)
                     {

@@ -170,7 +170,7 @@ namespace NewSignalR
 
         public static string CheckMovementType(ObservableCollection<PositionClass> positionlist)
         {
-            if (positionlist[positionlist.Count - 1].Zone != 0)
+            if (positionlist[positionlist.Count - 1].Zone != 0) // If the zone != 0, does it stop?
             {
                 return "Stop";
             }
