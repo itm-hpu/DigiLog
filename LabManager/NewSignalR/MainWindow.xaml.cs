@@ -45,7 +45,7 @@ namespace NewSignalR
         public List<Distance> distances2;
         public List<Distance> distances3;
 
-        public static ObservableCollection<MovementClass> Movements;
+        public static ObservableCollection<MovementClass> movementList;
 
         public static ViewModel vm;
 
@@ -53,9 +53,9 @@ namespace NewSignalR
         {
             InitializeComponent();
 
-            txtServer.Text = "p184-geps-production-api.hd-rtls.com";
-            txtUserName.Text = "cpal";
-            txtPassword.Text = "cpal";
+            txtServer.Text = "p186-geps-production-api.hd-rtls.com";
+            txtUserName.Text = "KTH";
+            txtPassword.Text = "!Test4KTH";
             txtmax_age.Text = "1440";
                         
             positionList1 = new ObservableCollection<PositionClass>();
@@ -76,8 +76,8 @@ namespace NewSignalR
             distances2 = new List<Distance>();
             distances3 = new List<Distance>();
 
-            Movements = new ObservableCollection<MovementClass>();
-            MovementListBox1.ItemsSource = Movements;
+            movementList = new ObservableCollection<MovementClass>();
+            MovementListBox1.ItemsSource = movementList;
 
             vm = new ViewModel();
             DataContext = vm;
@@ -165,20 +165,20 @@ namespace NewSignalR
                     {
                         if (Controller.CheckMovementType(positionList1) == "Move")
                         {
-                            Movements.Add(new MovementClass
+                            movementList.Add(new MovementClass
                             {
                                 ObjectId = positionList1[0].ObjectId,
-                                //Type = Controller.CheckMovementType(positionList1), 
+                                Type = Controller.CheckMovementType(positionList1), 
                                 Zone = positionList1[0].Zone,
                                 StartTime = positionList1[0].Timestamp
                             });
                         }
                         else
                         {
-                            Movements.Add(new MovementClass
+                            movementList.Add(new MovementClass
                             {
                                 ObjectId = positionList1[0].ObjectId,
-                                //Type = Controller.CheckMovementType(positionList1), 
+                                Type = Controller.CheckMovementType(positionList1), 
                                 Zone = positionList1[0].Zone,
                                 StartTime = positionList1[0].Timestamp
                             });
@@ -188,10 +188,10 @@ namespace NewSignalR
                     {
                         if (positionList1[positionList1.Count - 1].Zone != positionList1[positionList1.Count - 2].Zone)
                         {
-                            Movements.Add(new MovementClass
+                            movementList.Add(new MovementClass
                             {
                                 ObjectId = positionList1[positionList1.Count - 1].ObjectId,
-                                //Type = Controller.CheckMovementType(positionList1),
+                                Type = Controller.CheckMovementType(positionList1),
                                 Zone = positionList1[positionList1.Count - 1].Zone,
                                 StartTime = positionList1[positionList1.Count - 1].Timestamp
                             });
@@ -367,6 +367,9 @@ namespace NewSignalR
             controller.SaveDataToTextFile(distances1);
             controller.SaveDataToTextFile(distances2);
             controller.SaveDataToTextFile(distances3);
+
+            string message = "Save a acquired data!";
+            MessageBox.Show(message);
         }
 
         
@@ -393,6 +396,14 @@ namespace NewSignalR
                 default: // case 5:
                     return Color.FromArgb(255, 255, 0, Convert.ToByte(descending));
             }
+        }
+
+        private void BtnSaveMovement_Click(object sender, RoutedEventArgs e)
+        {
+            controller.SaveDataToTextFile(movementList);
+
+            string message = "Save a acquired data!";
+            MessageBox.Show(message);
         }
     }
 

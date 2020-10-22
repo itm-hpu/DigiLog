@@ -188,7 +188,8 @@
 
                 <TabItem Header="Movement">
                     <Grid>
-                        <ListBox x:Name="MovementListBox1" ItemsSource="{Binding Movements}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,44,0,0" VerticalAlignment="Top" Width="481">
+                        <Button x:Name="btnSaveMovement" Content="Save" HorizontalAlignment="Left" Margin="701,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnSaveMovement_Click" Height="26"/>
+                        <ListBox x:Name="MovementListBox1" ItemsSource="{Binding movementList}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,44,0,0" VerticalAlignment="Top" Width="481">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid >
@@ -227,7 +228,7 @@
                             
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <Canvas x:Name="myCanvas" HorizontalAlignment="Left" VerticalAlignment="Top" Height="353" Margin="10,10,0,0" Width="874" Background="#FFE9E9E9" />
+                                    <Canvas x:Name="myCanvas" HorizontalAlignment="Left" VerticalAlignment="Top" Height="340" Margin="10,10,10,10" Width="870" Background="#FFE9E9E9" />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             

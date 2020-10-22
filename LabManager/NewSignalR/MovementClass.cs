@@ -9,7 +9,7 @@ namespace NewSignalR
     public class MovementClass : Notifier
     {
         private object objectId;
-        //private string type;
+        private string type;
         //private double distance;
         private int zone;
         private DateTime startTime;
@@ -28,7 +28,7 @@ namespace NewSignalR
                 OnPropertyChanged("ObjectId");
             }
         }
-        /*
+        
         public string Type
         {
             get
@@ -41,7 +41,7 @@ namespace NewSignalR
                 OnPropertyChanged("Type");
             }
         }
-        */
+        
         /*
         public double Distance
         {
