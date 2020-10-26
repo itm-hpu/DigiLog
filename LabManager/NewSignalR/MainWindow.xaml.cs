@@ -98,20 +98,22 @@ namespace NewSignalR
             string Token = await login(server, userName, password);
 
             connection = new HubConnectionBuilder()
-               .WithUrl("https://" + server + "/signalr/beaconPosition", options =>
+               //.WithUrl("https://" + server + "/signalr/beaconPosition", options =>
+               .WithUrl("https://" + server + "/signalr/position", options =>
                {
                    options.Headers.Add("X-Authenticate-Token", Token);
                })
                .Build();
 
             connection.On<pos>("onEvent", Data =>
+            //connection.On<pos>("onPosition", Data =>
             {
                 Poskommer("kkK", Data, id4require);
                 
             });
 
             await connection.StartAsync();
-            await connection.InvokeAsync("subscribe", null);
+            await connection.InvokeAsync("subscribe");
         }
 
 
@@ -128,14 +130,25 @@ namespace NewSignalR
                 ObjectId = p.Object,
                 X = p.X,
                 Y = p.Y,
-                Latitude = p.latitude,
-                Longitude = p.longitude,
-                Timestamp = p.Timestamp,
+                Latitude = p.Latitude,
+                Longitude = p.Longitude,
+                Timestamp = Convert.ToDateTime(p.Timestamp),
                 Zone = p.Zone
             };
 
             int dotsize = 3;
             int valueAdjustConstant = 100; // need to modify FillColor in Dispatcher statements
+
+            /*
+            if ( 340 * i < p.X && p.X < 340 * (i + 1) )
+            {
+                int XvalueAdjustConstant = i;
+            }
+            if ( 870 * j < p.Y && p.Y < 870 * (j + 1))
+            {
+                int YvalueAdjustConstant = j;
+            }
+            */
             
             if (inputforlist.ObjectId.ToString() == id4require[0])
             {
@@ -417,20 +430,70 @@ namespace NewSignalR
 
     public class pos
     {
-        public float longitude { get; set; }
-        public float latitude { get; set; }
+        public string Beacon { get; set; }
+        public string Box { get; set; }
+        public string Object { get; set; }
+        public string Device { get; set; }
+        public float Longitude { get; set; }
+        public float Latitude { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
         public int Z { get; set; }
         public int Map { get; set; }
+        public int Building { get; set; }
         public int Zone { get; set; }
-        public string Beacon { get; set; }
-        public object Object { get; set; }
-        public DateTime Timestamp { get; set; }
-        public object Data { get; set; }
-        public object Frames { get; set; }
+        public int Site { get; set; }
+        public string Timestamp { get; set; }
+        public string ServerTimestamp { get; set; }
+        public int Flags { get; set; }
+        public List<object> Frames { get; set; }
         public string Type { get; set; }
         public string Radio { get; set; }
+        public string Container { get; set; }
+        public Data Data { get; set; }
+        public int State { get; set; }
+        public Object Events { get; set; }
+        public Velocity Velocity { get; set; }
+        public float Distance { get; set; }
+        public int Quality { get; set; }
+    }
+    public class Data
+    {
+
+        public Acceleration Acceleration { get; set; }
+        public Temperature Temperature { get; set; }
+        public Battery Battery { get; set; }
+        public Compass Compass { get; set; }
+    }
+    public class Velocity
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
+        public float Value { get; set; }
+    }
+    public class Acceleration
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
+        public string Timestamp { get; set; }
+    }
+    public class Temperature
+    {
+        public float Celsius { get; set; }
+        public string Timestamp { get; set; }
+    }
+    public class Battery
+    {
+        public float level { get; set; }
+        public float Voltage { get; set; }
+        public string Timestamp { get; set; }
+    }
+    public class Compass
+    {
+        public float Degrees { get; set; }
+        public string Timestamp { get; set; }
     }
 
     public class EllipseNode1 : PositionClass
