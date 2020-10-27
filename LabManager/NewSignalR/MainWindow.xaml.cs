@@ -105,10 +105,14 @@ namespace NewSignalR
                })
                .Build();
 
-            connection.On<pos>("onEvent", Data =>
-            //connection.On<pos>("onPosition", Data =>
+            //connection.On<pos>("onEvent", Data =>
+            connection.On<pos>("onPosition", Data =>
             {
-                Poskommer("kkK", Data, id4require);
+                // how to set Adjustment Constant?
+                // Does it need to set adjustment value for each position?
+                int XvalueAdjustConstant = SetXAdjustConstant(Data); 
+                int YvalueAdjustConstant = SetYAdjustConstant(Data);
+                Poskommer(Data, id4require, XvalueAdjustConstant, YvalueAdjustConstant);
                 
             });
 
@@ -122,8 +126,32 @@ namespace NewSignalR
             await connection.StopAsync();
         }
 
+        // for X
+        public int SetXAdjustConstant(pos p)
+        {
+            int xTimes = 0;
+            do
+            {
+                xTimes++;
+            } while (!((340 * (xTimes - 1)) < p.X && p.X < (340 * xTimes))); // Canvas Height
+            int XvalueAdjustConstant = xTimes;
 
-        public static void Poskommer(string server, pos p, string[] id4require)
+            return XvalueAdjustConstant;
+        }
+        // for Y
+        public int SetYAdjustConstant(pos p)
+        {
+            int yTimes = 0;
+            do
+            {
+                yTimes++;
+            } while (!((870 * (yTimes - 1)) < p.Y && p.Y < (870 * yTimes))); // Canvas Width
+            int YvalueAdjustConstant = yTimes;
+
+            return YvalueAdjustConstant;
+        }
+
+        public static void Poskommer(pos p, string[] id4require, int XAdjustCons, int YAdjustCons)
         {
             PositionClass inputforlist = new PositionClass
             {
@@ -137,18 +165,6 @@ namespace NewSignalR
             };
 
             int dotsize = 3;
-            int valueAdjustConstant = 100; // need to modify FillColor in Dispatcher statements
-
-            /*
-            if ( 340 * i < p.X && p.X < 340 * (i + 1) )
-            {
-                int XvalueAdjustConstant = i;
-            }
-            if ( 870 * j < p.Y && p.Y < 870 * (j + 1))
-            {
-                int YvalueAdjustConstant = j;
-            }
-            */
             
             if (inputforlist.ObjectId.ToString() == id4require[0])
             {
@@ -167,8 +183,8 @@ namespace NewSignalR
                         SolidColorBrush FillColor1 = new SolidColorBrush(Colors.Red); //FillColor1
                         vm.EllipseNodes.Add(new EllipseNode1
                         {
-                            Left = positionList1[positionList1.Count - 1].X / valueAdjustConstant,
-                            Top = positionList1[positionList1.Count - 1].Y / valueAdjustConstant,
+                            Left = positionList1[positionList1.Count - 1].X / XAdjustCons,
+                            Top = positionList1[positionList1.Count - 1].Y / YAdjustCons,
                             FillColor = FillColor1,
                             Height = dotsize,
                             Width = dotsize
@@ -229,8 +245,8 @@ namespace NewSignalR
                         SolidColorBrush FillColor2 = new SolidColorBrush(Colors.Blue); //FillColor2
                         vm.EllipseNodes.Add(new EllipseNode2
                         {
-                            Left = positionList2[positionList2.Count - 1].X / valueAdjustConstant,
-                            Top = positionList2[positionList2.Count - 1].Y / valueAdjustConstant,
+                            Left = positionList2[positionList2.Count - 1].X / XAdjustCons,
+                            Top = positionList2[positionList2.Count - 1].Y / YAdjustCons,
                             FillColor = FillColor2,
                             Height = dotsize,
                             Width = dotsize
@@ -255,8 +271,8 @@ namespace NewSignalR
                         SolidColorBrush FillColor3 = new SolidColorBrush(Colors.Green); //FillColor3
                         vm.EllipseNodes.Add(new EllipseNode3
                         {
-                            Left = positionList3[positionList3.Count - 1].X / valueAdjustConstant,
-                            Top = positionList3[positionList3.Count - 1].Y / valueAdjustConstant,
+                            Left = positionList3[positionList3.Count - 1].X / XAdjustCons,
+                            Top = positionList3[positionList3.Count - 1].Y / YAdjustCons,
                             FillColor = FillColor3,
                             Height = dotsize,
                             Width = dotsize
