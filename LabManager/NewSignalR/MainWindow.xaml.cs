@@ -108,7 +108,8 @@ namespace NewSignalR
             //connection.On<pos>("onEvent", Data =>
             connection.On<pos>("onPosition", Data =>
             {
-                // how to set Adjustment Constant?
+                // Question
+                // how to set Adjustment Constant? coordinates have positive and negative both of them
                 // Does it need to set adjustment value for each position?
                 int XvalueAdjustConstant = SetXAdjustConstant(Data); 
                 int YvalueAdjustConstant = SetYAdjustConstant(Data);
@@ -190,6 +191,9 @@ namespace NewSignalR
                             Width = dotsize
                         });
                     }
+
+                    // Question
+                    // If the p.Zone == 0, is it moving state?
                     if (positionList1.Count == 1)
                     {
                         if (Controller.CheckMovementType(positionList1) == "Move")
