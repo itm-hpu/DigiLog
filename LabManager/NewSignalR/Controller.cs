@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows;
+using System.Reflection;
 
 namespace NewSignalR
 {
@@ -48,8 +49,19 @@ namespace NewSignalR
         public void SaveDataToTextFile(ObservableCollection<PositionClass> positionList)
         {
             string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
+            
+            PropertyInfo[] propertyInfos;
+            propertyInfos = typeof(PositionClass).GetProperties();
+            string[] propertyNames = new string[typeof(PositionClass).GetProperties().Count()];
+            int propertyIndex = 0;
+            foreach (PropertyInfo p in propertyInfos)
+            {
+                propertyNames[propertyIndex] = p.Name;
+                propertyIndex++;
+            }
 
             int iLength = positionList.Count();
+            int jLength = typeof(PositionClass).GetProperties().Count() - 1;
 
             if (iLength > 0)
             {
@@ -59,6 +71,10 @@ namespace NewSignalR
 
                 for (int i = 0; i < iLength; i++)
                 {
+                    for (int j = 0; j < jLength; j++)
+                    {
+
+                    }
                     file.Write(positionList[i].ObjectId + "," +
                         positionList[i].Timestamp + "," +
                         positionList[i].X + "," +

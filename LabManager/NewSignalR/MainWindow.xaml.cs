@@ -180,7 +180,7 @@ namespace NewSignalR
                         double velocity = Controller.CalculateVelocity(id4require[0], positionList1); // second
                         string type = Controller.CheckMovementType(id4require[0], positionList1); // cm/s
                         DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[0], Timestamp = positionList1[positionList1.Count - 1].Timestamp, Distance = dist, Velocity = velocity , Type = type};
-                        inputfordistlist.Index = positionList1[positionList1.Count].Index;
+                        inputfordistlist.Index = positionList1[positionList1.Count - 1].Index;
                         distancesR_idx1.Add(inputfordistlist);
                     }
                     // visualization in real-time
