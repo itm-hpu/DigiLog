@@ -17,7 +17,7 @@ namespace NewSignalR
         private int zone;
         private float longitude;
         private float latitude;
-
+        private Velocity velocity;
 
         public int Index
         {
@@ -113,6 +113,18 @@ namespace NewSignalR
             {
                 latitude = value;
                 OnPropertyChanged("Latitude");
+            }
+        }
+        public Velocity Velocity
+        {
+            get
+            {
+                return velocity;
+            }
+            set
+            {
+                velocity= value;
+                OnPropertyChanged("Velocity");
             }
         }
     }

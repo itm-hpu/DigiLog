@@ -10,7 +10,7 @@ namespace NewSignalR
     {
         private object objectId;
         private string type;
-        //private double distance;
+        private double distance;
         private int zone;
         private DateTime startTime;
         //private DateTime endTime;
@@ -42,7 +42,7 @@ namespace NewSignalR
             }
         }
         
-        /*
+        
         public double Distance
         {
             get
@@ -55,7 +55,7 @@ namespace NewSignalR
                 OnPropertyChanged("Distance");
             }
         }
-        */
+        
         
         public int Zone
         {

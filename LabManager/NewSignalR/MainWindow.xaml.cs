@@ -53,9 +53,9 @@ namespace NewSignalR
         {
             InitializeComponent();
 
-            txtServer.Text = "p186-geps-production-api.hd-rtls.com";
-            txtUserName.Text = "KTH";
-            txtPassword.Text = "!Test4KTH";
+            txtServer.Text = "p184-geps-production-api.hd-rtls.com";
+            txtUserName.Text = "cpal";
+            txtPassword.Text = "cpal";
             txtmax_age.Text = "1440";
                         
             positionList1 = new ObservableCollection<PositionClass>();
@@ -173,12 +173,17 @@ namespace NewSignalR
                 {
                     inputforlist.Index = positionList1.Count();
                     positionList1.Add(inputforlist);
+                    // distance in real-time
                     if (positionList1.Count > 1)
                     {
-                        double dist = Controller.CalculateDistances(id4require[0], positionList1);
-                        DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[0], Timestamp = positionList1[positionList1.Count - 1].Timestamp, Distance = dist };
+                        double dist = Controller.CalculateDistances(id4require[0], positionList1); // cm
+                        double velocity = Controller.CalculateVelocity(id4require[0], positionList1); // second
+                        string type = Controller.CheckMovementType(id4require[0], positionList1); // cm/s
+                        DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[0], Timestamp = positionList1[positionList1.Count - 1].Timestamp, Distance = dist, Velocity = velocity , Type = type};
+                        inputfordistlist.Index = positionList1[positionList1.Count].Index;
                         distancesR_idx1.Add(inputfordistlist);
                     }
+                    // visualization in real-time
                     if (positionList1.Count > 0)
                     {
                         SolidColorBrush FillColor1 = new SolidColorBrush(Colors.Red); //FillColor1
@@ -192,42 +197,21 @@ namespace NewSignalR
                         });
                     }
 
-                    // Question
-                    // If the p.Zone == 0, is it moving state?
-                    if (positionList1.Count == 1)
-                    {
-                        if (Controller.CheckMovementType(positionList1) == "Move")
-                        {
-                            movementList.Add(new MovementClass
-                            {
-                                ObjectId = positionList1[0].ObjectId,
-                                Type = Controller.CheckMovementType(positionList1), 
-                                Zone = positionList1[0].Zone,
-                                StartTime = positionList1[0].Timestamp
-                            });
-                        }
-                        else
-                        {
-                            movementList.Add(new MovementClass
-                            {
-                                ObjectId = positionList1[0].ObjectId,
-                                Type = Controller.CheckMovementType(positionList1), 
-                                Zone = positionList1[0].Zone,
-                                StartTime = positionList1[0].Timestamp
-                            });
-                        }
-                    }
+                    // movement in real-time: need to modify velocity criteria, define data when "distancesR_idx1.Count == 1"
                     if (positionList1.Count > 1)
                     {
-                        if (positionList1[positionList1.Count - 1].Zone != positionList1[positionList1.Count - 2].Zone)
+                        if (distancesR_idx1.Count > 1)
                         {
-                            movementList.Add(new MovementClass
+                            if (distancesR_idx1[distancesR_idx1.Count - 2].Type != distancesR_idx1[distancesR_idx1.Count - 1].Type)
                             {
-                                ObjectId = positionList1[positionList1.Count - 1].ObjectId,
-                                Type = Controller.CheckMovementType(positionList1),
-                                Zone = positionList1[positionList1.Count - 1].Zone,
-                                StartTime = positionList1[positionList1.Count - 1].Timestamp
-                            });
+                                movementList.Add(new MovementClass
+                                {
+                                    ObjectId = distancesR_idx1[distancesR_idx1.Count - 1].ObjectId,
+                                    Type = distancesR_idx1[distancesR_idx1.Count - 1].Type,
+                                    Zone = positionList1[distancesR_idx1.Count].Zone,
+                                    StartTime = distancesR_idx1[distancesR_idx1.Count - 1].Timestamp
+                                });
+                            }
                         }
                     }
                 }));

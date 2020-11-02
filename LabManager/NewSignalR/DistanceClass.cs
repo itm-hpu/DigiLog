@@ -9,11 +9,25 @@ namespace NewSignalR
 {
     public class DistanceClass : Notifier
     {
-
+        private int index;
         private object objectId;
         private DateTime timestamp;
         private double distance;
+        private double velocity;
+        private string type;
 
+        public int Index
+        {
+            get
+            {
+                return index;
+            }
+            set
+            {
+                index = value;
+                OnPropertyChanged("Index");
+            }
+        }
         public object ObjectId
         {
             get
@@ -50,13 +64,28 @@ namespace NewSignalR
                 OnPropertyChanged("Distance");
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string propertyName)
+        public double Velocity
         {
-            if (PropertyChanged != null)
+            get
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                return velocity;
+            }
+            set
+            {
+                velocity = value;
+                OnPropertyChanged("Velocity");
+            }
+        }
+        public string Type
+        {
+            get
+            {
+                return type;
+            }
+            set
+            {
+                type = value;
+                OnPropertyChanged("Type");
             }
         }
     }

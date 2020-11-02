@@ -93,7 +93,9 @@ namespace NewSignalR
                 {
                     file.Write(distanceList[i].ObjectId + "," +
                         distanceList[i].Timestamp + "," +
-                        distanceList[i].Distance);
+                        distanceList[i].Distance + "," +
+                        distanceList[i].Velocity + "," +
+                        distanceList[i].Type);
                     file.Write("\n");
                 }
                 file.Close();
@@ -197,9 +199,30 @@ namespace NewSignalR
             return dist;
         }
 
-        public static string CheckMovementType(ObservableCollection<PositionClass> positionlist)
+        public static double CalculateVelocity(string objectID, ObservableCollection<PositionClass> positionlist)
         {
-            if (positionlist[positionlist.Count - 1].Zone != 0) // If the zone != 0, does it stop?
+            int i = positionlist.Count - 1;
+
+            DateTime startTimeSpan = positionlist[i - 1].Timestamp;
+            DateTime endTimeSpan = positionlist[i].Timestamp;
+
+            double startTimeSecond = startTimeSpan.Hour * 10000 + startTimeSpan.Minute * 100 + startTimeSpan.Second;
+            double endTimeSecond = endTimeSpan.Hour * 10000 + endTimeSpan.Minute * 100 + endTimeSpan.Second;
+
+            double timeSpan = endTimeSecond - startTimeSecond;
+
+            double dist = CalculateDistances(objectID, positionlist);
+
+            double velocity = dist / timeSpan;
+
+            return velocity;
+        }
+
+        public static string CheckMovementType(string objectID, ObservableCollection<PositionClass> positionlist)
+        {
+            double velocity = CalculateVelocity(objectID, positionlist);
+
+            if (velocity < 50) // Velocity criteria (cm/s)
             {
                 return "Stop";
             }
@@ -208,24 +231,5 @@ namespace NewSignalR
                 return "Move";
             }
         }
-
-        /*
-        public async Task<double> CalcDist(ObservableCollection<PositionClass> positionlist)
-        {
-            double sum = 0;
-
-            for (int i = 1; i < positionlist.Count(); i++)
-            {
-                double distX = positionlist[i].X - positionlist[i - 1].X;
-                double distY = positionlist[i].Y - positionlist[i - 1].Y;
-                double dist = Math.Sqrt(distX * distX + distY * distY);
-                sum = sum + dist;
-            }
-
-            await Task.Delay(TimeSpan.FromMilliseconds(1 * 1000));
-
-            return sum;
-        }
-        */
     }
 }
