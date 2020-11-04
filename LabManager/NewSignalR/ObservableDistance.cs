@@ -7,17 +7,14 @@ using System.Threading.Tasks;
 
 namespace NewSignalR
 {
-    public class PositionClass : Notifier
+    public class ObservableDistance : Notifier
     {
         private int index;
         private object objectId;
         private DateTime timestamp;
-        private int x;
-        private int y;
-        private int zone;
-        private float longitude;
-        private float latitude;
-        private Velocity velocity;
+        private double distance;
+        private double velocity;
+        private string type;
 
         public int Index
         {
@@ -55,67 +52,19 @@ namespace NewSignalR
                 OnPropertyChanged("Timestamp");
             }
         }
-        public int X
+        public double Distance
         {
             get
             {
-                return x;
+                return distance;
             }
             set
             {
-                x = value;
-                OnPropertyChanged("X");
+                distance = value;
+                OnPropertyChanged("Distance");
             }
         }
-        public int Y
-        {
-            get
-            {
-                return y;
-            }
-            set
-            {
-                y = value;
-                OnPropertyChanged("Y");
-            }
-        }
-        public int Zone
-        {
-            get
-            {
-                return zone;
-            }
-            set
-            {
-                zone = value;
-                OnPropertyChanged("Zone");
-            }
-        }
-        public float Longitude
-        {
-            get
-            {
-                return longitude;
-            }
-            set
-            {
-                longitude = value;
-                OnPropertyChanged("Longitude");
-            }
-        }
-        public float Latitude
-        {
-            get
-            {
-                return latitude;
-            }
-            set
-            {
-                latitude = value;
-                OnPropertyChanged("Latitude");
-            }
-        }
-        public Velocity Velocity
+        public double Velocity
         {
             get
             {
@@ -123,8 +72,20 @@ namespace NewSignalR
             }
             set
             {
-                velocity= value;
+                velocity = value;
                 OnPropertyChanged("Velocity");
+            }
+        }
+        public string Type
+        {
+            get
+            {
+                return type;
+            }
+            set
+            {
+                type = value;
+                OnPropertyChanged("Type");
             }
         }
     }

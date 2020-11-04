@@ -46,13 +46,13 @@ namespace NewSignalR
             return objectIDsArray;
         }
 
-        public void SaveDataToTextFile(ObservableCollection<PositionClass> positionList)
+        public void SaveDataToTextFile(ObservableCollection<ObservablePosition> positionList)
         {
             string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
             
             PropertyInfo[] propertyInfos;
-            propertyInfos = typeof(PositionClass).GetProperties();
-            string[] propertyNames = new string[typeof(PositionClass).GetProperties().Count()];
+            propertyInfos = typeof(ObservablePosition).GetProperties();
+            string[] propertyNames = new string[typeof(ObservablePosition).GetProperties().Count()];
             int propertyIndex = 0;
             foreach (PropertyInfo p in propertyInfos)
             {
@@ -61,7 +61,7 @@ namespace NewSignalR
             }
 
             int iLength = positionList.Count();
-            int jLength = typeof(PositionClass).GetProperties().Count() - 1;
+            int jLength = typeof(ObservablePosition).GetProperties().Count() - 1;
 
             if (iLength > 0)
             {
@@ -93,7 +93,7 @@ namespace NewSignalR
             }
         }
 
-        public void SaveDataToTextFile(ObservableCollection<DistanceClass> distanceList)
+        public void SaveDataToTextFile(ObservableCollection<ObservableDistance> distanceList)
         {
             string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
 
@@ -151,7 +151,7 @@ namespace NewSignalR
             }
         }
 
-        public void SaveDataToTextFile(ObservableCollection<MovementClass> movementList)
+        public void SaveDataToTextFile(ObservableCollection<ObservableMovement> movementList)
         {
             string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
 
@@ -204,7 +204,7 @@ namespace NewSignalR
             return distances;
         }
 
-        public static double CalculateDistances(string objectID, ObservableCollection<PositionClass> positionlist)
+        public static double CalculateDistances(string objectID, ObservableCollection<ObservablePosition> positionlist)
         {
             int i = positionlist.Count - 1;
 
@@ -215,7 +215,7 @@ namespace NewSignalR
             return dist;
         }
 
-        public static double CalculateVelocity(string objectID, ObservableCollection<PositionClass> positionlist)
+        public static double CalculateVelocity(string objectID, ObservableCollection<ObservablePosition> positionlist)
         {
             int i = positionlist.Count - 1;
 
@@ -234,7 +234,7 @@ namespace NewSignalR
             return velocity;
         }
 
-        public static string CheckMovementType(string objectID, ObservableCollection<PositionClass> positionlist)
+        public static string CheckMovementType(string objectID, ObservableCollection<ObservablePosition> positionlist)
         {
             double velocity = CalculateVelocity(objectID, positionlist);
 

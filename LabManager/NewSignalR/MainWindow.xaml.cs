@@ -33,19 +33,19 @@ namespace NewSignalR
         public HubConnection connection;
         Controller controller = new Controller();
         
-        public static ObservableCollection<PositionClass> positionList1;
-        public static ObservableCollection<PositionClass> positionList2;
-        public static ObservableCollection<PositionClass> positionList3;
+        public static ObservableCollection<ObservablePosition> positionList1;
+        public static ObservableCollection<ObservablePosition> positionList2;
+        public static ObservableCollection<ObservablePosition> positionList3;
 
-        public static ObservableCollection<DistanceClass> distancesR_idx1;
-        public static ObservableCollection<DistanceClass> distancesR_idx2;
-        public static ObservableCollection<DistanceClass> distancesR_idx3;
+        public static ObservableCollection<ObservableDistance> distancesR_idx1;
+        public static ObservableCollection<ObservableDistance> distancesR_idx2;
+        public static ObservableCollection<ObservableDistance> distancesR_idx3;
 
         public List<Distance> distances1;
         public List<Distance> distances2;
         public List<Distance> distances3;
 
-        public static ObservableCollection<MovementClass> movementList;
+        public static ObservableCollection<ObservableMovement> movementList;
 
         public static ViewModel vm;
 
@@ -58,16 +58,16 @@ namespace NewSignalR
             txtPassword.Text = "cpal";
             txtmax_age.Text = "1440";
                         
-            positionList1 = new ObservableCollection<PositionClass>();
-            positionList2 = new ObservableCollection<PositionClass>();
-            positionList3 = new ObservableCollection<PositionClass>();
+            positionList1 = new ObservableCollection<ObservablePosition>();
+            positionList2 = new ObservableCollection<ObservablePosition>();
+            positionList3 = new ObservableCollection<ObservablePosition>();
             listbox1.ItemsSource = positionList1; //binding data + need to bind as well in xaml
             listbox2.ItemsSource = positionList2;
             listbox3.ItemsSource = positionList3;
 
-            distancesR_idx1 = new ObservableCollection<DistanceClass>();
-            distancesR_idx2 = new ObservableCollection<DistanceClass>();
-            distancesR_idx3 = new ObservableCollection<DistanceClass>();
+            distancesR_idx1 = new ObservableCollection<ObservableDistance>();
+            distancesR_idx2 = new ObservableCollection<ObservableDistance>();
+            distancesR_idx3 = new ObservableCollection<ObservableDistance>();
             listboxDistanceR_idx1.ItemsSource = distancesR_idx1;
             listboxDistanceR_idx2.ItemsSource = distancesR_idx2;
             listboxDistanceR_idx3.ItemsSource = distancesR_idx3;
@@ -76,7 +76,7 @@ namespace NewSignalR
             distances2 = new List<Distance>();
             distances3 = new List<Distance>();
 
-            movementList = new ObservableCollection<MovementClass>();
+            movementList = new ObservableCollection<ObservableMovement>();
             MovementListBox1.ItemsSource = movementList;
 
             vm = new ViewModel();
@@ -154,7 +154,7 @@ namespace NewSignalR
 
         public static void Poskommer(pos p, string[] id4require, int XAdjustCons, int YAdjustCons)
         {
-            PositionClass inputforlist = new PositionClass
+            ObservablePosition inputforlist = new ObservablePosition
             {
                 ObjectId = p.Object,
                 X = p.X,
@@ -179,7 +179,7 @@ namespace NewSignalR
                         double dist = Controller.CalculateDistances(id4require[0], positionList1); // cm
                         double velocity = Controller.CalculateVelocity(id4require[0], positionList1); // second
                         string type = Controller.CheckMovementType(id4require[0], positionList1); // cm/s
-                        DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[0], Timestamp = positionList1[positionList1.Count - 1].Timestamp, Distance = dist, Velocity = velocity , Type = type};
+                        ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[0], Timestamp = positionList1[positionList1.Count - 1].Timestamp, Distance = dist, Velocity = velocity , Type = type};
                         inputfordistlist.Index = positionList1[positionList1.Count - 1].Index;
                         distancesR_idx1.Add(inputfordistlist);
                     }
@@ -204,7 +204,7 @@ namespace NewSignalR
                         {
                             if (distancesR_idx1[distancesR_idx1.Count - 2].Type != distancesR_idx1[distancesR_idx1.Count - 1].Type)
                             {
-                                movementList.Add(new MovementClass
+                                movementList.Add(new ObservableMovement
                                 {
                                     ObjectId = distancesR_idx1[distancesR_idx1.Count - 1].ObjectId,
                                     Type = distancesR_idx1[distancesR_idx1.Count - 1].Type,
@@ -225,7 +225,7 @@ namespace NewSignalR
                     if (positionList2.Count > 1)
                     {
                         double dist = Controller.CalculateDistances(id4require[1], positionList2);
-                        DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[1], Timestamp = positionList2[positionList2.Count - 1].Timestamp, Distance = dist };
+                        ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[1], Timestamp = positionList2[positionList2.Count - 1].Timestamp, Distance = dist };
                         distancesR_idx2.Add(inputfordistlist);
                     }
                     if (positionList2.Count > 0)
@@ -251,7 +251,7 @@ namespace NewSignalR
                     if (positionList3.Count > 1)
                     {
                         double dist = Controller.CalculateDistances(id4require[2], positionList3);
-                        DistanceClass inputfordistlist = new DistanceClass { ObjectId = id4require[2], Timestamp = positionList3[positionList3.Count - 1].Timestamp, Distance = dist };
+                        ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[2], Timestamp = positionList3[positionList3.Count - 1].Timestamp, Distance = dist };
                         distancesR_idx3.Add(inputfordistlist);
                     }
                     if (positionList3.Count > 0)
@@ -500,7 +500,7 @@ namespace NewSignalR
         public string Timestamp { get; set; }
     }
 
-    public class EllipseNode1 : PositionClass
+    public class EllipseNode1 : ObservablePosition
     {
         public double Left { get; set; }
         public double Top { get; set; }
@@ -509,7 +509,7 @@ namespace NewSignalR
         public int Width { get; set; }
     }
 
-    public class EllipseNode2 : PositionClass
+    public class EllipseNode2 : ObservablePosition
     {
         public double Left { get; set; }
         public double Top { get; set; }
@@ -518,7 +518,7 @@ namespace NewSignalR
         public int Width { get; set; }
     }
 
-    public class EllipseNode3 : PositionClass
+    public class EllipseNode3 : ObservablePosition
     {
         public double Left { get; set; }
         public double Top { get; set; }
@@ -530,6 +530,6 @@ namespace NewSignalR
 
     public class ViewModel
     {
-        public ObservableCollection<PositionClass> EllipseNodes { get; } = new ObservableCollection<PositionClass>();
+        public ObservableCollection<ObservablePosition> EllipseNodes { get; } = new ObservableCollection<ObservablePosition>();
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NewSignalR
 {
-    public class MovementClass : Notifier
+    public class ObservableMovement : Notifier
     {
         private object objectId;
         private string type;
