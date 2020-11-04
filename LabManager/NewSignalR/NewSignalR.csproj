@@ -185,10 +185,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Distance.cs" />
-    <Compile Include="DistanceClass.cs" />
+    <Compile Include="ObservableDistance.cs" />
     <Compile Include="ListBoxBehavior.cs" />
-    <Compile Include="MovementClass.cs" />
-    <Compile Include="PositionClass.cs" />
+    <Compile Include="ObservableMovement.cs" />
+    <Compile Include="ObservablePosition.cs" />
     <Compile Include="Notifier.cs" />
     <Compile Include="RESTfulClient.cs" />
     <Page Include="MainWindow.xaml">

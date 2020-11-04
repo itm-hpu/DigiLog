@@ -46,6 +46,22 @@ namespace NewSignalR
             return objectIDsArray;
         }
 
+        private object GetValueByProperty(object obj, string propertyName)
+        {
+            // get the type:
+            var objType = obj.GetType();
+
+            // iterate the properties
+            var prop = (from property in objType.GetProperties()
+                            // filter on the name
+                        where property.Name == propertyName
+                        // select the propertyInfo
+                        select property).FirstOrDefault();
+
+            // use the propertyinfo to get the instance->property value
+            return prop?.GetValue(obj);
+        }
+
         public void SaveDataToTextFile(ObservableCollection<ObservablePosition> positionList)
         {
             string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
@@ -61,7 +77,7 @@ namespace NewSignalR
             }
 
             int iLength = positionList.Count();
-            int jLength = typeof(ObservablePosition).GetProperties().Count() - 1;
+            int jLength = typeof(ObservablePosition).GetProperties().Count();
 
             if (iLength > 0)
             {
@@ -73,8 +89,11 @@ namespace NewSignalR
                 {
                     for (int j = 0; j < jLength; j++)
                     {
-
+                        file.Write(GetValueByProperty(positionList[i], propertyNames[j]) + ",");
                     }
+                    file.Write("\n");
+
+                    /*%
                     file.Write(positionList[i].ObjectId + "," +
                         positionList[i].Timestamp + "," +
                         positionList[i].X + "," +
@@ -83,6 +102,7 @@ namespace NewSignalR
                         positionList[i].Longitude + "," +
                         positionList[i].Latitude);
                     file.Write("\n");
+                    */
                 }
                 file.Close();
                 return;
