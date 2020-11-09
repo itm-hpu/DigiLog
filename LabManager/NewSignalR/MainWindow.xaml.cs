@@ -166,6 +166,7 @@ namespace NewSignalR
             };
 
             int dotsize = 3;
+            double velocityValue = 1.0; // criteria value to judge movement of tag, m/s
             
             if (inputforlist.ObjectId.ToString() == id4require[0])
             {
@@ -176,9 +177,9 @@ namespace NewSignalR
                     // distance in real-time
                     if (positionList1.Count > 1)
                     {
-                        double dist = Controller.CalculateDistances(id4require[0], positionList1); // cm
-                        double velocity = Controller.CalculateVelocity(id4require[0], positionList1); // second
-                        string type = Controller.CheckMovementType(id4require[0], positionList1); // cm/s
+                        double dist = Controller.CalculateDistances(id4require[0], positionList1); 
+                        double velocity = Controller.CalculateVelocity(id4require[0], positionList1);
+                        string type = Controller.CheckMovementType(id4require[0], positionList1, velocityValue); 
                         ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[0], Timestamp = positionList1[positionList1.Count - 1].Timestamp, Distance = dist, Velocity = velocity , Type = type};
                         inputfordistlist.Index = positionList1[positionList1.Count - 1].Index;
                         distancesR_idx1.Add(inputfordistlist);

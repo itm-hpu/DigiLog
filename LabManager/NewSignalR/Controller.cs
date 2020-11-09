@@ -87,22 +87,14 @@ namespace NewSignalR
 
                 for (int i = 0; i < iLength; i++)
                 {
+                    string tempResult = string.Empty;
                     for (int j = 0; j < jLength; j++)
                     {
-                        file.Write(GetValueByProperty(positionList[i], propertyNames[j]) + ",");
+                        tempResult = tempResult + GetValueByProperty(positionList[i], propertyNames[j]).ToString() + ",";
                     }
+                    tempResult = tempResult.Remove(tempResult.Length - 1, 1);
+                    file.Write(tempResult);
                     file.Write("\n");
-
-                    /*%
-                    file.Write(positionList[i].ObjectId + "," +
-                        positionList[i].Timestamp + "," +
-                        positionList[i].X + "," +
-                        positionList[i].Y + "," +
-                        positionList[i].Zone + "," +
-                        positionList[i].Longitude + "," +
-                        positionList[i].Latitude);
-                    file.Write("\n");
-                    */
                 }
                 file.Close();
                 return;
@@ -117,7 +109,18 @@ namespace NewSignalR
         {
             string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
 
+            PropertyInfo[] propertyInfos;
+            propertyInfos = typeof(ObservableDistance).GetProperties();
+            string[] propertyNames = new string[typeof(ObservableDistance).GetProperties().Count()];
+            int propertyIndex = 0;
+            foreach (PropertyInfo p in propertyInfos)
+            {
+                propertyNames[propertyIndex] = p.Name;
+                propertyIndex++;
+            }
+
             int iLength = distanceList.Count();
+            int jLength = typeof(ObservableDistance).GetProperties().Count();
 
             if (iLength > 0)
             {
@@ -127,11 +130,13 @@ namespace NewSignalR
 
                 for (int i = 0; i < iLength; i++)
                 {
-                    file.Write(distanceList[i].ObjectId + "," +
-                        distanceList[i].Timestamp + "," +
-                        distanceList[i].Distance + "," +
-                        distanceList[i].Velocity + "," +
-                        distanceList[i].Type);
+                    string tempResult = string.Empty;
+                    for (int j = 0; j < jLength; j++)
+                    {
+                        tempResult = tempResult + GetValueByProperty(distanceList[i], propertyNames[j]).ToString() + ",";
+                    }
+                    tempResult = tempResult.Remove(tempResult.Length - 1, 1);
+                    file.Write(tempResult);
                     file.Write("\n");
                 }
                 file.Close();
@@ -147,7 +152,18 @@ namespace NewSignalR
         {
             string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
 
+            PropertyInfo[] propertyInfos;
+            propertyInfos = typeof(Distance).GetProperties();
+            string[] propertyNames = new string[typeof(Distance).GetProperties().Count()];
+            int propertyIndex = 0;
+            foreach (PropertyInfo p in propertyInfos)
+            {
+                propertyNames[propertyIndex] = p.Name;
+                propertyIndex++;
+            }
+
             int iLength = distanceList.Count();
+            int jLength = typeof(Distance).GetProperties().Count();
 
             if (iLength > 0)
             {
@@ -157,9 +173,13 @@ namespace NewSignalR
 
                 for (int i = 0; i < iLength; i++)
                 {
-                    file.Write(distanceList[i].ObjectId + "," +
-                        distanceList[i].Timestamp + "," +
-                        distanceList[i].Value);
+                    string tempResult = string.Empty;
+                    for (int j = 0; j < jLength; j++)
+                    {
+                        tempResult = tempResult + GetValueByProperty(distanceList[i], propertyNames[j]).ToString() + ",";
+                    }
+                    tempResult = tempResult.Remove(tempResult.Length - 1, 1);
+                    file.Write(tempResult);
                     file.Write("\n");
                 }
                 file.Close();
@@ -175,7 +195,18 @@ namespace NewSignalR
         {
             string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
 
+            PropertyInfo[] propertyInfos;
+            propertyInfos = typeof(ObservableMovement).GetProperties();
+            string[] propertyNames = new string[typeof(ObservableMovement).GetProperties().Count()];
+            int propertyIndex = 0;
+            foreach (PropertyInfo p in propertyInfos)
+            {
+                propertyNames[propertyIndex] = p.Name;
+                propertyIndex++;
+            }
+
             int iLength = movementList.Count();
+            int jLength = typeof(ObservableMovement).GetProperties().Count();
 
             if (iLength > 0)
             {
@@ -185,10 +216,13 @@ namespace NewSignalR
 
                 for (int i = 0; i < iLength; i++)
                 {
-                    file.Write(movementList[i].ObjectId + "," +
-                        movementList[i].Type + "," +
-                        movementList[i].Zone + "," +
-                        movementList[i].StartTime);
+                    string tempResult = string.Empty;
+                    for (int j = 0; j < jLength; j++)
+                    {
+                        tempResult = tempResult + GetValueByProperty(movementList[i], propertyNames[j]).ToString() + ",";
+                    }
+                    tempResult = tempResult.Remove(tempResult.Length - 1, 1);
+                    file.Write(tempResult);
                     file.Write("\n");
                 }
                 file.Close();
@@ -224,18 +258,18 @@ namespace NewSignalR
             return distances;
         }
 
-        public static double CalculateDistances(string objectID, ObservableCollection<ObservablePosition> positionlist)
+        public static double CalculateDistances(string objectID, ObservableCollection<ObservablePosition> positionlist) // m
         {
             int i = positionlist.Count - 1;
 
             double distX = positionlist[i].X - positionlist[i - 1].X;
             double distY = positionlist[i].Y - positionlist[i - 1].Y;
-            double dist = Math.Sqrt(distX * distX + distY * distY);
+            double dist = Math.Sqrt(distX * distX + distY * distY) / 100.0;
 
             return dist;
         }
 
-        public static double CalculateVelocity(string objectID, ObservableCollection<ObservablePosition> positionlist)
+        public static double CalculateVelocity(string objectID, ObservableCollection<ObservablePosition> positionlist) // second
         {
             int i = positionlist.Count - 1;
 
@@ -254,11 +288,11 @@ namespace NewSignalR
             return velocity;
         }
 
-        public static string CheckMovementType(string objectID, ObservableCollection<ObservablePosition> positionlist)
+        public static string CheckMovementType(string objectID, ObservableCollection<ObservablePosition> positionlist, double velocityValue) // m/s
         {
             double velocity = CalculateVelocity(objectID, positionlist);
 
-            if (velocity < 50) // Velocity criteria (cm/s)
+            if (velocity < velocityValue) // Velocity criteria (m/s)
             {
                 return "Stop";
             }

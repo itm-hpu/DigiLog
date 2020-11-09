@@ -17,7 +17,7 @@ namespace NewSignalR
         private int zone;
         private float longitude;
         private float latitude;
-        private Velocity velocity;
+        //private Velocity velocity;
 
         public int Index
         {
@@ -115,6 +115,7 @@ namespace NewSignalR
                 OnPropertyChanged("Latitude");
             }
         }
+        /* there is Velocity data in Per's pos data, but is a 'null' value yet
         public Velocity Velocity
         {
             get
@@ -127,5 +128,6 @@ namespace NewSignalR
                 OnPropertyChanged("Velocity");
             }
         }
+        */
     }
 }
