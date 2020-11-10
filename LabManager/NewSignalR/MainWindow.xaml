@@ -60,9 +60,10 @@
                                         <Label Grid.Column="3" Content="{Binding X}" MinWidth="50"/>
                                         <Label Grid.Column="4" Content="{Binding Y}" MinWidth="50"/>
                                         <Label Grid.Column="5" Content="{Binding Zone}" MinWidth="30"/>
-                                        <Label Grid.Column="6" Content="{Binding Velocity}" MinWidth="30"/>
-                                        <Label Grid.Column="7" Content="{Binding Longitude}" MinWidth="80"/>
-                                        <Label Grid.Column="8" Content="{Binding Latitude}" MinWidth="80"/>
+                                        <Label Grid.Column="6" Content="{Binding Longitude}" MinWidth="80"/>
+                                        <Label Grid.Column="7" Content="{Binding Latitude}" MinWidth="80"/>
+                                        <Label Grid.Column="8" Content="{Binding Velocity}" MinWidth="30"/>
+
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -80,6 +81,7 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
                                         <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
@@ -89,6 +91,7 @@
                                         <Label Grid.Column="5" Content="{Binding Zone}" MinWidth="30"/>
                                         <Label Grid.Column="6" Content="{Binding Longitude}" MinWidth="80"/>
                                         <Label Grid.Column="7" Content="{Binding Latitude}" MinWidth="80"/>
+                                        <Label Grid.Column="8" Content="{Binding Velocity}" MinWidth="30"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -106,6 +109,7 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
                                         <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
@@ -115,6 +119,7 @@
                                         <Label Grid.Column="5" Content="{Binding Zone}" MinWidth="30"/>
                                         <Label Grid.Column="6" Content="{Binding Longitude}" MinWidth="80"/>
                                         <Label Grid.Column="7" Content="{Binding Latitude}" MinWidth="80"/>
+                                        <Label Grid.Column="8" Content="{Binding Velocity}" MinWidth="30"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -149,10 +154,16 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
-                                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
-                                        <Label Grid.Column="2" Content="{Binding Distance}" MinWidth="30"/>
+                                        <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="3" Content="{Binding Distance}" MinWidth="30"/>
+                                        <Label Grid.Column="4" Content="{Binding Velocity}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Type}" MinWidth="30"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -165,10 +176,16 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
-                                        <Label Grid.Column="1" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
-                                        <Label Grid.Column="2" Content="{Binding Distance}" MinWidth="30"/>
+                                        <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="3" Content="{Binding Distance}" MinWidth="30"/>
+                                        <Label Grid.Column="4" Content="{Binding Velocity}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Type}" MinWidth="30"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -206,11 +223,15 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" Content="{Binding ObjectId}" MinWidth="30"/>
-                                        <Label Grid.Column="1" Content="{Binding Type}" MinWidth="50"/>
-                                        <Label Grid.Column="2" Content="{Binding Zone}" MinWidth="30"/>
-                                        <Label Grid.Column="3" Content="{Binding StartTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding StartTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="3" Content="{Binding Type}" MinWidth="50"/>
+                                        <Label Grid.Column="4" Content="{Binding Zone}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Distance}" MinWidth="30"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>

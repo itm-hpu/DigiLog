@@ -8,13 +8,27 @@ namespace NewSignalR
 {
     public class ObservableMovement : Notifier
     {
+        private int index;
         private object objectId;
-        private string type;
-        private double distance;
-        private int zone;
         private DateTime startTime;
+        private string type;
+        private int zone;
+        private double distance;
         //private DateTime endTime;
         //private DateTime timespan;
+
+        public int Index
+        {
+            get
+            {
+                return index;
+            }
+            set
+            {
+                index = value;
+                OnPropertyChanged("Index");
+            }
+        }
 
         public object ObjectId
         {

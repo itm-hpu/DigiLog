@@ -111,9 +111,9 @@ namespace NewSignalR
                 // Question
                 // how to set Adjustment Constant? coordinates have positive and negative both of them
                 // Does it need to set adjustment value for each position?
-                int XvalueAdjustConstant = SetXAdjustConstant(Data); 
-                int YvalueAdjustConstant = SetYAdjustConstant(Data);
-                Poskommer(Data, id4require, XvalueAdjustConstant, YvalueAdjustConstant);
+                //int XvalueAdjustConstant = SetXAdjustConstant(Data); 
+                //int YvalueAdjustConstant = SetYAdjustConstant(Data);
+                Poskommer(Data, id4require);
                 
             });
 
@@ -126,7 +126,7 @@ namespace NewSignalR
         {
             await connection.StopAsync();
         }
-
+        /*
         // for X
         public int SetXAdjustConstant(pos p)
         {
@@ -151,8 +151,8 @@ namespace NewSignalR
 
             return YvalueAdjustConstant;
         }
-
-        public static void Poskommer(pos p, string[] id4require, int XAdjustCons, int YAdjustCons)
+        */
+        public static void Poskommer(pos p, string[] id4require)
         {
             ObservablePosition inputforlist = new ObservablePosition
             {
@@ -167,7 +167,10 @@ namespace NewSignalR
 
             int dotsize = 3;
             double velocityValue = 1.0; // criteria value to judge movement of tag, m/s
-            
+
+            double XAdjustCons = 10.0;
+            double YAdjustCons = 10.0;
+
             if (inputforlist.ObjectId.ToString() == id4require[0])
             {
                 Application.Current.Dispatcher.Invoke(new Action(delegate 
@@ -201,17 +204,44 @@ namespace NewSignalR
                     // movement in real-time: need to modify velocity criteria, define data when "distancesR_idx1.Count == 1"
                     if (positionList1.Count > 1)
                     {
+                        if (distancesR_idx1.Count == 1)
+                        {
+                            movementList.Add(new ObservableMovement
+                            {
+                                Index = distancesR_idx1[distancesR_idx1.Count - 1].Index,
+                                ObjectId = distancesR_idx1[distancesR_idx1.Count - 1].ObjectId,
+                                Type = distancesR_idx1[distancesR_idx1.Count - 1].Type,
+                                Zone = positionList1[distancesR_idx1.Count].Zone,
+                                StartTime = distancesR_idx1[distancesR_idx1.Count - 1].Timestamp
+                            });
+                        }
                         if (distancesR_idx1.Count > 1)
                         {
                             if (distancesR_idx1[distancesR_idx1.Count - 2].Type != distancesR_idx1[distancesR_idx1.Count - 1].Type)
                             {
                                 movementList.Add(new ObservableMovement
                                 {
+                                    Index = distancesR_idx1[distancesR_idx1.Count - 1].Index,
                                     ObjectId = distancesR_idx1[distancesR_idx1.Count - 1].ObjectId,
                                     Type = distancesR_idx1[distancesR_idx1.Count - 1].Type,
                                     Zone = positionList1[distancesR_idx1.Count].Zone,
                                     StartTime = distancesR_idx1[distancesR_idx1.Count - 1].Timestamp
                                 });
+
+                                double tempDistResult = 0.0;
+
+                                if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Move")
+                                {
+                                    movementList[movementList.Count - 2].Distance = tempDistResult;
+                                }
+                                else
+                                {
+                                    for (int i = movementList[movementList.Count - 2].Index; i < movementList[movementList.Count - 1].Index; i++)
+                                    {
+                                        tempDistResult = tempDistResult + distancesR_idx1[i].Distance;
+                                    }
+                                    movementList[movementList.Count - 2].Distance = tempDistResult;
+                                }
                             }
                         }
                     }
