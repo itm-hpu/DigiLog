@@ -42,7 +42,20 @@ namespace NewSignalR
                 OnPropertyChanged("ObjectId");
             }
         }
-        
+
+        public DateTime StartTime
+        {
+            get
+            {
+                return startTime;
+            }
+            set
+            {
+                startTime = value;
+                OnPropertyChanged("StartTime");
+            }
+        }
+
         public string Type
         {
             get
@@ -56,21 +69,6 @@ namespace NewSignalR
             }
         }
         
-        
-        public double Distance
-        {
-            get
-            {
-                return distance;
-            }
-            set
-            {
-                distance = value;
-                OnPropertyChanged("Distance");
-            }
-        }
-        
-        
         public int Zone
         {
             get
@@ -83,18 +81,20 @@ namespace NewSignalR
                 OnPropertyChanged("Zone");
             }
         }
-        public DateTime StartTime
+
+        public double Distance
         {
             get
             {
-                return startTime;
+                return distance;
             }
             set
             {
-                startTime = value;
-                OnPropertyChanged("StartTime");
+                distance = value;
+                OnPropertyChanged("Distance");
             }
         }
+
         /*
         public DateTime EndTime
         {

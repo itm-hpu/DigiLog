@@ -184,7 +184,7 @@ namespace NewSignalR
                         double velocity = Controller.CalculateVelocity(id4require[0], positionList1);
                         string type = Controller.CheckMovementType(id4require[0], positionList1, velocityValue); 
                         ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[0], Timestamp = positionList1[positionList1.Count - 1].Timestamp, Distance = dist, Velocity = velocity , Type = type};
-                        inputfordistlist.Index = positionList1[positionList1.Count - 1].Index;
+                        inputfordistlist.Index = positionList1[positionList1.Count - 2].Index;
                         distancesR_idx1.Add(inputfordistlist);
                     }
                     // visualization in real-time
@@ -202,45 +202,81 @@ namespace NewSignalR
                     }
 
                     // movement in real-time: need to modify velocity criteria, define data when "distancesR_idx1.Count == 1"
+                    double tempDistResult = 0.0;
+
                     if (positionList1.Count > 1)
                     {
-                        if (distancesR_idx1.Count == 1)
+                        if (distancesR_idx1.Count == 1 && distancesR_idx1[distancesR_idx1.Count - 1].Type == "Stop")
                         {
                             movementList.Add(new ObservableMovement
                             {
-                                Index = distancesR_idx1[distancesR_idx1.Count - 1].Index,
-                                ObjectId = distancesR_idx1[distancesR_idx1.Count - 1].ObjectId,
+                                Index = positionList1[distancesR_idx1.Count - 1].Index,
+                                ObjectId = positionList1[distancesR_idx1.Count - 1].ObjectId,
+                                Zone = positionList1[distancesR_idx1.Count - 1].Zone,
+                                StartTime = positionList1[distancesR_idx1.Count - 1].Timestamp,
                                 Type = distancesR_idx1[distancesR_idx1.Count - 1].Type,
-                                Zone = positionList1[distancesR_idx1.Count].Zone,
-                                StartTime = distancesR_idx1[distancesR_idx1.Count - 1].Timestamp
+                                Distance = 0.0
                             });
                         }
+                        else if (distancesR_idx1.Count == 1 && distancesR_idx1[distancesR_idx1.Count - 1].Type == "Move")
+                        {
+                            movementList.Add(new ObservableMovement
+                            {
+                                Index = positionList1[distancesR_idx1.Count - 1].Index,
+                                ObjectId = positionList1[distancesR_idx1.Count - 1].ObjectId,
+                                Zone = positionList1[distancesR_idx1.Count - 1].Zone,
+                                StartTime = positionList1[distancesR_idx1.Count - 1].Timestamp,
+                                Type = distancesR_idx1[distancesR_idx1.Count - 1].Type,
+                                //Distance = 0.0
+                            });
+                        }
+
                         if (distancesR_idx1.Count > 1)
                         {
                             if (distancesR_idx1[distancesR_idx1.Count - 2].Type != distancesR_idx1[distancesR_idx1.Count - 1].Type)
                             {
                                 movementList.Add(new ObservableMovement
                                 {
-                                    Index = distancesR_idx1[distancesR_idx1.Count - 1].Index,
-                                    ObjectId = distancesR_idx1[distancesR_idx1.Count - 1].ObjectId,
+                                    Index = positionList1[distancesR_idx1.Count - 1].Index,
+                                    ObjectId = positionList1[distancesR_idx1.Count - 1].ObjectId,
+                                    Zone = positionList1[distancesR_idx1.Count - 1].Zone,
+                                    StartTime = positionList1[distancesR_idx1.Count - 1].Timestamp,
                                     Type = distancesR_idx1[distancesR_idx1.Count - 1].Type,
-                                    Zone = positionList1[distancesR_idx1.Count].Zone,
-                                    StartTime = distancesR_idx1[distancesR_idx1.Count - 1].Timestamp
                                 });
-
-                                double tempDistResult = 0.0;
 
                                 if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Move")
                                 {
-                                    movementList[movementList.Count - 2].Distance = tempDistResult;
+                                    movementList[movementList.Count - 2].Distance = 0.0;
                                 }
-                                else
+                                else if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Stop")
                                 {
-                                    for (int i = movementList[movementList.Count - 2].Index; i < movementList[movementList.Count - 1].Index; i++)
+                                    //tempDistResult = movementList[movementList.Count - 1].Distance + distancesR_idx1[distancesR_idx1[distancesR_idx1.Count - 2].Index].Distance;
+                                    
+                                    for (int i = distancesR_idx1[distancesR_idx1.Count - 2].Index; i < distancesR_idx1[distancesR_idx1.Count - 1].Index; i++)
                                     {
-                                        tempDistResult = tempDistResult + distancesR_idx1[i].Distance;
+                                        tempDistResult = movementList[movementList.Count - 1].Distance + distancesR_idx1[i].Distance;
                                     }
-                                    movementList[movementList.Count - 2].Distance = tempDistResult;
+                                    
+                                    movementList[movementList.Count - 1].Distance = tempDistResult;
+                                }
+                            }
+                            else if (distancesR_idx1[distancesR_idx1.Count - 2].Type == distancesR_idx1[distancesR_idx1.Count - 1].Type)
+                            {
+                                if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Move")
+                                {
+                                    //tempDistResult = movementList[movementList.Count - 1].Distance + distancesR_idx1[distancesR_idx1[distancesR_idx1.Count - 2].Index].Distance;
+                                    
+                                    for (int i = distancesR_idx1[distancesR_idx1.Count - 2].Index; i < distancesR_idx1[distancesR_idx1.Count - 1].Index; i++)
+                                    {
+                                        tempDistResult = movementList[movementList.Count - 1].Distance + distancesR_idx1[i].Distance;
+                                    }
+                                    
+                                    tempDistResult = tempDistResult + distancesR_idx1[distancesR_idx1.Count - 1].Distance;
+                                    movementList[movementList.Count - 1].Distance = tempDistResult;
+                                }
+                                else if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Stop")
+                                {
+                                    movementList[movementList.Count - 1].Distance = 0.0;
                                 }
                             }
                         }
