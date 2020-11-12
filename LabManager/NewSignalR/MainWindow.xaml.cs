@@ -227,10 +227,10 @@ namespace NewSignalR
                                 Zone = positionList1[distancesR_idx1.Count - 1].Zone,
                                 StartTime = positionList1[distancesR_idx1.Count - 1].Timestamp,
                                 Type = distancesR_idx1[distancesR_idx1.Count - 1].Type,
-                                //Distance = 0.0
+                                Distance = distancesR_idx1[distancesR_idx1.Count - 1].Distance
                             });
                         }
-
+                        
                         if (distancesR_idx1.Count > 1)
                         {
                             if (distancesR_idx1[distancesR_idx1.Count - 2].Type != distancesR_idx1[distancesR_idx1.Count - 1].Type)
@@ -242,21 +242,17 @@ namespace NewSignalR
                                     Zone = positionList1[distancesR_idx1.Count - 1].Zone,
                                     StartTime = positionList1[distancesR_idx1.Count - 1].Timestamp,
                                     Type = distancesR_idx1[distancesR_idx1.Count - 1].Type,
+                                    Distance = 0.0
                                 });
 
                                 if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Move")
                                 {
-                                    movementList[movementList.Count - 2].Distance = 0.0;
+                                    tempDistResult = movementList[movementList.Count - 1].Distance;
+                                    tempDistResult = tempDistResult + distancesR_idx1[distancesR_idx1.Count - 1].Distance;
+                                    movementList[movementList.Count - 1].Distance = tempDistResult;
                                 }
                                 else if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Stop")
                                 {
-                                    //tempDistResult = movementList[movementList.Count - 1].Distance + distancesR_idx1[distancesR_idx1[distancesR_idx1.Count - 2].Index].Distance;
-                                    
-                                    for (int i = distancesR_idx1[distancesR_idx1.Count - 2].Index; i < distancesR_idx1[distancesR_idx1.Count - 1].Index; i++)
-                                    {
-                                        tempDistResult = movementList[movementList.Count - 1].Distance + distancesR_idx1[i].Distance;
-                                    }
-                                    
                                     movementList[movementList.Count - 1].Distance = tempDistResult;
                                 }
                             }
@@ -264,19 +260,13 @@ namespace NewSignalR
                             {
                                 if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Move")
                                 {
-                                    //tempDistResult = movementList[movementList.Count - 1].Distance + distancesR_idx1[distancesR_idx1[distancesR_idx1.Count - 2].Index].Distance;
-                                    
-                                    for (int i = distancesR_idx1[distancesR_idx1.Count - 2].Index; i < distancesR_idx1[distancesR_idx1.Count - 1].Index; i++)
-                                    {
-                                        tempDistResult = movementList[movementList.Count - 1].Distance + distancesR_idx1[i].Distance;
-                                    }
-                                    
+                                    tempDistResult = movementList[movementList.Count - 1].Distance;
                                     tempDistResult = tempDistResult + distancesR_idx1[distancesR_idx1.Count - 1].Distance;
                                     movementList[movementList.Count - 1].Distance = tempDistResult;
                                 }
                                 else if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Stop")
                                 {
-                                    movementList[movementList.Count - 1].Distance = 0.0;
+                                    movementList[movementList.Count - 1].Distance = tempDistResult;
                                 }
                             }
                         }
