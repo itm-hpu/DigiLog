@@ -301,5 +301,23 @@ namespace NewSignalR
                 return "Move";
             }
         }
+        
+        public static double CalculateTheLastMovement(ObservableCollection<ObservableDistance> distanceList, ObservableCollection<ObservableMovement> movementList)
+        {
+            double tempDistResult = 0.0;
+
+            if (movementList[movementList.Count - 1].Type == "Move")
+            {
+                for (int i = movementList[movementList.Count - 2].Index; i <= movementList[movementList.Count - 1].Index; i++)
+                {
+                    tempDistResult = tempDistResult + distanceList[i - 1].Distance;
+                }
+                return tempDistResult;
+            }
+            else 
+            {
+                return tempDistResult;
+            }
+        }        
     }
 }

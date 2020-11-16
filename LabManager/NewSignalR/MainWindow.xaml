@@ -214,7 +214,51 @@
                 <TabItem Header="Movement">
                     <Grid>
                         <Button x:Name="btnSaveMovement" Content="Save" HorizontalAlignment="Left" Margin="701,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnSaveMovement_Click" Height="26"/>
-                        <ListBox x:Name="MovementListBox1" ItemsSource="{Binding movementList}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,44,0,0" VerticalAlignment="Top" Width="481">
+                        <ListBox x:Name="MovementListBox1" ItemsSource="{Binding movementList1}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,35,0,0" VerticalAlignment="Top" Width="481">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding StartTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="3" Content="{Binding Type}" MinWidth="50"/>
+                                        <Label Grid.Column="4" Content="{Binding Zone}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Distance}" MinWidth="30"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <ListBox x:Name="MovementListBox2" ItemsSource="{Binding movementList2}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,142,0,0" VerticalAlignment="Top" Width="481">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding StartTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="3" Content="{Binding Type}" MinWidth="50"/>
+                                        <Label Grid.Column="4" Content="{Binding Zone}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Distance}" MinWidth="30"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <ListBox x:Name="MovementListBox3" ItemsSource="{Binding movementList3}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,251,0,0" VerticalAlignment="Top" Width="481">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid >

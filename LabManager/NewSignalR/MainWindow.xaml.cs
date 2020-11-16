@@ -45,7 +45,9 @@ namespace NewSignalR
         public List<Distance> distances2;
         public List<Distance> distances3;
 
-        public static ObservableCollection<ObservableMovement> movementList;
+        public static ObservableCollection<ObservableMovement> movementList1;
+        public static ObservableCollection<ObservableMovement> movementList2;
+        public static ObservableCollection<ObservableMovement> movementList3;
 
         public static ViewModel vm;
 
@@ -76,8 +78,12 @@ namespace NewSignalR
             distances2 = new List<Distance>();
             distances3 = new List<Distance>();
 
-            movementList = new ObservableCollection<ObservableMovement>();
-            MovementListBox1.ItemsSource = movementList;
+            movementList1 = new ObservableCollection<ObservableMovement>();
+            movementList2 = new ObservableCollection<ObservableMovement>();
+            movementList3 = new ObservableCollection<ObservableMovement>();
+            MovementListBox1.ItemsSource = movementList1;
+            MovementListBox2.ItemsSource = movementList2;
+            MovementListBox3.ItemsSource = movementList3;
 
             vm = new ViewModel();
             DataContext = vm;
@@ -124,6 +130,7 @@ namespace NewSignalR
 
         public async void DisconnectSignalR()
         {
+            Controller.CalculateTheLastMovement(distancesR_idx1, movementList1);
             await connection.StopAsync();
         }
         /*
@@ -166,10 +173,9 @@ namespace NewSignalR
             };
 
             int dotsize = 3;
-            double velocityValue = 1.0; // criteria value to judge movement of tag, m/s
-
             double XAdjustCons = 10.0;
-            double YAdjustCons = 10.0;
+            double YAdjustCons = 150.0;
+            double velocityValue = 1.0; // criteria value to judge movement of tag, m/s
 
             if (inputforlist.ObjectId.ToString() == id4require[0])
             {
@@ -193,8 +199,8 @@ namespace NewSignalR
                         SolidColorBrush FillColor1 = new SolidColorBrush(Colors.Red); //FillColor1
                         vm.EllipseNodes.Add(new EllipseNode1
                         {
-                            Left = positionList1[positionList1.Count - 1].X / XAdjustCons,
-                            Top = positionList1[positionList1.Count - 1].Y / YAdjustCons,
+                            Left = (positionList1[positionList1.Count - 1].X + 435) / XAdjustCons, // normal (+) x axis
+                            Top = (positionList1[positionList1.Count - 1].Y + 170) / YAdjustCons, // normal (-) y axis
                             FillColor = FillColor1,
                             Height = dotsize,
                             Width = dotsize
@@ -208,7 +214,7 @@ namespace NewSignalR
                     {
                         if (distancesR_idx1.Count == 1 && distancesR_idx1[distancesR_idx1.Count - 1].Type == "Stop")
                         {
-                            movementList.Add(new ObservableMovement
+                            movementList1.Add(new ObservableMovement
                             {
                                 Index = positionList1[distancesR_idx1.Count - 1].Index,
                                 ObjectId = positionList1[distancesR_idx1.Count - 1].ObjectId,
@@ -220,7 +226,7 @@ namespace NewSignalR
                         }
                         else if (distancesR_idx1.Count == 1 && distancesR_idx1[distancesR_idx1.Count - 1].Type == "Move")
                         {
-                            movementList.Add(new ObservableMovement
+                            movementList1.Add(new ObservableMovement
                             {
                                 Index = positionList1[distancesR_idx1.Count - 1].Index,
                                 ObjectId = positionList1[distancesR_idx1.Count - 1].ObjectId,
@@ -235,7 +241,7 @@ namespace NewSignalR
                         {
                             if (distancesR_idx1[distancesR_idx1.Count - 2].Type != distancesR_idx1[distancesR_idx1.Count - 1].Type)
                             {
-                                movementList.Add(new ObservableMovement
+                                movementList1.Add(new ObservableMovement
                                 {
                                     Index = positionList1[distancesR_idx1.Count - 1].Index,
                                     ObjectId = positionList1[distancesR_idx1.Count - 1].ObjectId,
@@ -247,26 +253,26 @@ namespace NewSignalR
 
                                 if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Move")
                                 {
-                                    tempDistResult = movementList[movementList.Count - 1].Distance;
+                                    tempDistResult = movementList1[movementList1.Count - 1].Distance;
                                     tempDistResult = tempDistResult + distancesR_idx1[distancesR_idx1.Count - 1].Distance;
-                                    movementList[movementList.Count - 1].Distance = tempDistResult;
+                                    movementList1[movementList1.Count - 1].Distance = tempDistResult;
                                 }
                                 else if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Stop")
                                 {
-                                    movementList[movementList.Count - 1].Distance = tempDistResult;
+                                    movementList1[movementList1.Count - 1].Distance = tempDistResult;
                                 }
                             }
                             else if (distancesR_idx1[distancesR_idx1.Count - 2].Type == distancesR_idx1[distancesR_idx1.Count - 1].Type)
                             {
                                 if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Move")
                                 {
-                                    tempDistResult = movementList[movementList.Count - 1].Distance;
+                                    tempDistResult = movementList1[movementList1.Count - 1].Distance;
                                     tempDistResult = tempDistResult + distancesR_idx1[distancesR_idx1.Count - 1].Distance;
-                                    movementList[movementList.Count - 1].Distance = tempDistResult;
+                                    movementList1[movementList1.Count - 1].Distance = tempDistResult;
                                 }
                                 else if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Stop")
                                 {
-                                    movementList[movementList.Count - 1].Distance = tempDistResult;
+                                    movementList1[movementList1.Count - 1].Distance = tempDistResult;
                                 }
                             }
                         }
@@ -279,23 +285,99 @@ namespace NewSignalR
                 {
                     inputforlist.Index = positionList2.Count();
                     positionList2.Add(inputforlist);
+                    // distance in real-time
                     if (positionList2.Count > 1)
                     {
                         double dist = Controller.CalculateDistances(id4require[1], positionList2);
-                        ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[1], Timestamp = positionList2[positionList2.Count - 1].Timestamp, Distance = dist };
+                        double velocity = Controller.CalculateVelocity(id4require[1], positionList2);
+                        string type = Controller.CheckMovementType(id4require[1], positionList2, velocityValue);
+                        ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[1], Timestamp = positionList2[positionList2.Count - 1].Timestamp, Distance = dist, Velocity = velocity, Type = type };
+                        inputfordistlist.Index = positionList2[positionList2.Count - 2].Index;
                         distancesR_idx2.Add(inputfordistlist);
                     }
+                    // visualization in real-time
                     if (positionList2.Count > 0)
                     {
                         SolidColorBrush FillColor2 = new SolidColorBrush(Colors.Blue); //FillColor2
                         vm.EllipseNodes.Add(new EllipseNode2
                         {
-                            Left = positionList2[positionList2.Count - 1].X / XAdjustCons,
-                            Top = positionList2[positionList2.Count - 1].Y / YAdjustCons,
+                            Left = (positionList2[positionList2.Count - 1].X + 435) / XAdjustCons, // normal (+) x axis
+                            Top = (positionList2[positionList2.Count - 1].Y + 170) / YAdjustCons, // normal (-) y axis
                             FillColor = FillColor2,
                             Height = dotsize,
                             Width = dotsize
                         });
+                    }
+
+                    // movement in real-time: need to modify velocity criteria, define data when "distancesR_idx2.Count == 1"
+                    double tempDistResult = 0.0;
+
+                    if (positionList2.Count > 1)
+                    {
+                        if (distancesR_idx2.Count == 1 && distancesR_idx2[distancesR_idx2.Count - 1].Type == "Stop")
+                        {
+                            movementList2.Add(new ObservableMovement
+                            {
+                                Index = positionList2[distancesR_idx2.Count - 1].Index,
+                                ObjectId = positionList2[distancesR_idx2.Count - 1].ObjectId,
+                                Zone = positionList2[distancesR_idx2.Count - 1].Zone,
+                                StartTime = positionList2[distancesR_idx2.Count - 1].Timestamp,
+                                Type = distancesR_idx2[distancesR_idx2.Count - 1].Type,
+                                Distance = 0.0
+                            });
+                        }
+                        else if (distancesR_idx2.Count == 1 && distancesR_idx2[distancesR_idx2.Count - 1].Type == "Move")
+                        {
+                            movementList2.Add(new ObservableMovement
+                            {
+                                Index = positionList2[distancesR_idx2.Count - 1].Index,
+                                ObjectId = positionList2[distancesR_idx2.Count - 1].ObjectId,
+                                Zone = positionList2[distancesR_idx2.Count - 1].Zone,
+                                StartTime = positionList2[distancesR_idx2.Count - 1].Timestamp,
+                                Type = distancesR_idx2[distancesR_idx2.Count - 1].Type,
+                                Distance = distancesR_idx2[distancesR_idx2.Count - 1].Distance
+                            });
+                        }
+
+                        if (distancesR_idx2.Count > 1)
+                        {
+                            if (distancesR_idx2[distancesR_idx2.Count - 2].Type != distancesR_idx2[distancesR_idx2.Count - 1].Type)
+                            {
+                                movementList2.Add(new ObservableMovement
+                                {
+                                    Index = positionList2[distancesR_idx2.Count - 1].Index,
+                                    ObjectId = positionList2[distancesR_idx2.Count - 1].ObjectId,
+                                    Zone = positionList2[distancesR_idx2.Count - 1].Zone,
+                                    StartTime = positionList2[distancesR_idx2.Count - 1].Timestamp,
+                                    Type = distancesR_idx2[distancesR_idx2.Count - 1].Type,
+                                    Distance = 0.0
+                                });
+
+                                if (distancesR_idx2[distancesR_idx2.Count - 1].Type == "Move")
+                                {
+                                    tempDistResult = movementList2[movementList2.Count - 1].Distance;
+                                    tempDistResult = tempDistResult + distancesR_idx2[distancesR_idx2.Count - 1].Distance;
+                                    movementList2[movementList2.Count - 1].Distance = tempDistResult;
+                                }
+                                else if (distancesR_idx2[distancesR_idx2.Count - 1].Type == "Stop")
+                                {
+                                    movementList2[movementList2.Count - 1].Distance = tempDistResult;
+                                }
+                            }
+                            else if (distancesR_idx2[distancesR_idx2.Count - 2].Type == distancesR_idx2[distancesR_idx2.Count - 1].Type)
+                            {
+                                if (distancesR_idx2[distancesR_idx2.Count - 1].Type == "Move")
+                                {
+                                    tempDistResult = movementList2[movementList2.Count - 1].Distance;
+                                    tempDistResult = tempDistResult + distancesR_idx2[distancesR_idx2.Count - 1].Distance;
+                                    movementList2[movementList2.Count - 1].Distance = tempDistResult;
+                                }
+                                else if (distancesR_idx2[distancesR_idx2.Count - 1].Type == "Stop")
+                                {
+                                    movementList2[movementList2.Count - 1].Distance = tempDistResult;
+                                }
+                            }
+                        }
                     }
                 }));
             }
@@ -305,23 +387,99 @@ namespace NewSignalR
                 {
                     inputforlist.Index = positionList3.Count();
                     positionList3.Add(inputforlist);
+                    // distance in real-time
                     if (positionList3.Count > 1)
                     {
                         double dist = Controller.CalculateDistances(id4require[2], positionList3);
-                        ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[2], Timestamp = positionList3[positionList3.Count - 1].Timestamp, Distance = dist };
+                        double velocity = Controller.CalculateVelocity(id4require[2], positionList3);
+                        string type = Controller.CheckMovementType(id4require[2], positionList3, velocityValue);
+                        ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[2], Timestamp = positionList3[positionList3.Count - 1].Timestamp, Distance = dist, Velocity = velocity, Type = type };
+                        inputfordistlist.Index = positionList3[positionList3.Count - 2].Index;
                         distancesR_idx3.Add(inputfordistlist);
                     }
+                    // visualization in real-time
                     if (positionList3.Count > 0)
                     {
-                        SolidColorBrush FillColor3 = new SolidColorBrush(Colors.Green); //FillColor3
+                        SolidColorBrush FillColor3 = new SolidColorBrush(Colors.Green); //FillColor2
                         vm.EllipseNodes.Add(new EllipseNode3
                         {
-                            Left = positionList3[positionList3.Count - 1].X / XAdjustCons,
-                            Top = positionList3[positionList3.Count - 1].Y / YAdjustCons,
+                            Left = (positionList3[positionList3.Count - 1].X + 435) / XAdjustCons, // normal (+) x axis
+                            Top = (positionList3[positionList3.Count - 1].Y + 170) / YAdjustCons, // normal (-) y axis
                             FillColor = FillColor3,
                             Height = dotsize,
                             Width = dotsize
                         });
+                    }
+
+                    // movement in real-time: need to modify velocity criteria, define data when "distancesR_idx2.Count == 1"
+                    double tempDistResult = 0.0;
+
+                    if (positionList3.Count > 1)
+                    {
+                        if (distancesR_idx3.Count == 1 && distancesR_idx3[distancesR_idx3.Count - 1].Type == "Stop")
+                        {
+                            movementList3.Add(new ObservableMovement
+                            {
+                                Index = positionList3[distancesR_idx3.Count - 1].Index,
+                                ObjectId = positionList3[distancesR_idx3.Count - 1].ObjectId,
+                                Zone = positionList3[distancesR_idx3.Count - 1].Zone,
+                                StartTime = positionList3[distancesR_idx3.Count - 1].Timestamp,
+                                Type = distancesR_idx3[distancesR_idx3.Count - 1].Type,
+                                Distance = 0.0
+                            });
+                        }
+                        else if (distancesR_idx3.Count == 1 && distancesR_idx3[distancesR_idx3.Count - 1].Type == "Move")
+                        {
+                            movementList3.Add(new ObservableMovement
+                            {
+                                Index = positionList3[distancesR_idx3.Count - 1].Index,
+                                ObjectId = positionList3[distancesR_idx3.Count - 1].ObjectId,
+                                Zone = positionList3[distancesR_idx3.Count - 1].Zone,
+                                StartTime = positionList3[distancesR_idx3.Count - 1].Timestamp,
+                                Type = distancesR_idx3[distancesR_idx3.Count - 1].Type,
+                                Distance = distancesR_idx3[distancesR_idx3.Count - 1].Distance
+                            });
+                        }
+
+                        if (distancesR_idx3.Count > 1)
+                        {
+                            if (distancesR_idx3[distancesR_idx3.Count - 2].Type != distancesR_idx3[distancesR_idx3.Count - 1].Type)
+                            {
+                                movementList3.Add(new ObservableMovement
+                                {
+                                    Index = positionList3[distancesR_idx3.Count - 1].Index,
+                                    ObjectId = positionList3[distancesR_idx3.Count - 1].ObjectId,
+                                    Zone = positionList3[distancesR_idx3.Count - 1].Zone,
+                                    StartTime = positionList3[distancesR_idx3.Count - 1].Timestamp,
+                                    Type = distancesR_idx3[distancesR_idx3.Count - 1].Type,
+                                    Distance = 0.0
+                                });
+
+                                if (distancesR_idx3[distancesR_idx3.Count - 1].Type == "Move")
+                                {
+                                    tempDistResult = movementList3[movementList3.Count - 1].Distance;
+                                    tempDistResult = tempDistResult + distancesR_idx3[distancesR_idx3.Count - 1].Distance;
+                                    movementList3[movementList3.Count - 1].Distance = tempDistResult;
+                                }
+                                else if (distancesR_idx3[distancesR_idx3.Count - 1].Type == "Stop")
+                                {
+                                    movementList3[movementList3.Count - 1].Distance = tempDistResult;
+                                }
+                            }
+                            else if (distancesR_idx3[distancesR_idx3.Count - 2].Type == distancesR_idx3[distancesR_idx3.Count - 1].Type)
+                            {
+                                if (distancesR_idx3[distancesR_idx3.Count - 1].Type == "Move")
+                                {
+                                    tempDistResult = movementList3[movementList3.Count - 1].Distance;
+                                    tempDistResult = tempDistResult + distancesR_idx3[distancesR_idx3.Count - 1].Distance;
+                                    movementList3[movementList3.Count - 1].Distance = tempDistResult;
+                                }
+                                else if (distancesR_idx3[distancesR_idx3.Count - 1].Type == "Stop")
+                                {
+                                    movementList3[movementList3.Count - 1].Distance = tempDistResult;
+                                }
+                            }
+                        }
                     }
                 }));
             }
@@ -474,7 +632,7 @@ namespace NewSignalR
 
         private void BtnSaveMovement_Click(object sender, RoutedEventArgs e)
         {
-            controller.SaveDataToTextFile(movementList);
+            controller.SaveDataToTextFile(movementList1);
 
             string message = "Save a acquired data!";
             MessageBox.Show(message);
@@ -582,9 +740,8 @@ namespace NewSignalR
         public SolidColorBrush FillColor { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
-}
-
-
+    }
+    
     public class ViewModel
     {
         public ObservableCollection<ObservablePosition> EllipseNodes { get; } = new ObservableCollection<ObservablePosition>();
