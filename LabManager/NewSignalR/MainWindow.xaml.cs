@@ -58,7 +58,8 @@ namespace NewSignalR
             txtServer.Text = "p184-geps-production-api.hd-rtls.com";
             txtUserName.Text = "cpal";
             txtPassword.Text = "cpal";
-            txtmax_age.Text = "1440";
+            txtmax_age.Text = "10";
+            txtMovementVelocity.Text = "1.0";
                         
             positionList1 = new ObservableCollection<ObservablePosition>();
             positionList2 = new ObservableCollection<ObservablePosition>();
@@ -90,8 +91,7 @@ namespace NewSignalR
         }
 
         public async void ConnectSignalR()
-        {
-            
+        {   
             string server = txtServer.Text;
             string userName = txtUserName.Text;
             string password = txtPassword.Text;
@@ -101,25 +101,21 @@ namespace NewSignalR
             id4require[1] = cmbTagID2.Text;
             id4require[2] = cmbTagID3.Text;
 
+            double movementVelocity = 1.0;
+            //double movementVelocity = Convert.ToDouble(txtMovementVelocity.Text); // error
+
             string Token = await login(server, userName, password);
 
             connection = new HubConnectionBuilder()
-               //.WithUrl("https://" + server + "/signalr/beaconPosition", options =>
                .WithUrl("https://" + server + "/signalr/position", options =>
                {
                    options.Headers.Add("X-Authenticate-Token", Token);
                })
                .Build();
 
-            //connection.On<pos>("onEvent", Data =>
             connection.On<pos>("onPosition", Data =>
             {
-                // Question
-                // how to set Adjustment Constant? coordinates have positive and negative both of them
-                // Does it need to set adjustment value for each position?
-                //int XvalueAdjustConstant = SetXAdjustConstant(Data); 
-                //int YvalueAdjustConstant = SetYAdjustConstant(Data);
-                Poskommer(Data, id4require);
+                Poskommer(Data, id4require, movementVelocity);
                 
             });
 
@@ -131,35 +127,12 @@ namespace NewSignalR
         public async void DisconnectSignalR()
         {
             Controller.CalculateTheLastMovement(distancesR_idx1, movementList1);
+            Controller.CalculateTheLastMovement(distancesR_idx2, movementList2);
+            Controller.CalculateTheLastMovement(distancesR_idx3, movementList3);
             await connection.StopAsync();
         }
-        /*
-        // for X
-        public int SetXAdjustConstant(pos p)
-        {
-            int xTimes = 0;
-            do
-            {
-                xTimes++;
-            } while (!((340 * (xTimes - 1)) < p.X && p.X < (340 * xTimes))); // Canvas Height
-            int XvalueAdjustConstant = xTimes;
-
-            return XvalueAdjustConstant;
-        }
-        // for Y
-        public int SetYAdjustConstant(pos p)
-        {
-            int yTimes = 0;
-            do
-            {
-                yTimes++;
-            } while (!((870 * (yTimes - 1)) < p.Y && p.Y < (870 * yTimes))); // Canvas Width
-            int YvalueAdjustConstant = yTimes;
-
-            return YvalueAdjustConstant;
-        }
-        */
-        public static void Poskommer(pos p, string[] id4require)
+        
+        public static void Poskommer(pos p, string[] id4require, double movementVelocity)
         {
             ObservablePosition inputforlist = new ObservablePosition
             {
@@ -175,7 +148,8 @@ namespace NewSignalR
             int dotsize = 3;
             double XAdjustCons = 10.0;
             double YAdjustCons = 150.0;
-            double velocityValue = 1.0; // criteria value to judge movement of tag, m/s
+            double velocityValue = movementVelocity; // criteria value to judge movement of tag, m/s
+
 
             if (inputforlist.ObjectId.ToString() == id4require[0])
             {
@@ -504,7 +478,11 @@ namespace NewSignalR
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
+            
             ConnectSignalR();
+            txtObjectID_idx1.Text = cmbTagID1.Text;
+            txtObjectID_idx2.Text = cmbTagID2.Text;
+            txtObjectID_idx3.Text = cmbTagID3.Text;
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
@@ -604,7 +582,15 @@ namespace NewSignalR
             MessageBox.Show(message);
         }
 
-        
+        private void BtnSaveMovement_Click(object sender, RoutedEventArgs e)
+        {
+            controller.SaveDataToTextFile(movementList1);
+            controller.SaveDataToTextFile(movementList2);
+            controller.SaveDataToTextFile(movementList3);
+
+            string message = "Save a acquired data!";
+            MessageBox.Show(message);
+        }
 
         // under progressing
         public static Color Rainbow(float progress)
@@ -630,13 +616,7 @@ namespace NewSignalR
             }
         }
 
-        private void BtnSaveMovement_Click(object sender, RoutedEventArgs e)
-        {
-            controller.SaveDataToTextFile(movementList1);
 
-            string message = "Save a acquired data!";
-            MessageBox.Show(message);
-        }
     }
 
 
