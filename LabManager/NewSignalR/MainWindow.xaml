@@ -32,8 +32,8 @@
                         <Label Content="ObjectID" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
                         <Label Content="Position" HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
                         <Label Content="Distance" HorizontalAlignment="Left" Margin="600,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
-                        <Label Content="Movement distinction velocity" HorizontalAlignment="Left" Margin="221,328,0,0" VerticalAlignment="Top" Width="174" Height="26" FontStyle="Italic"/>
-                        <TextBox x:Name="txtMovementVelocity" HorizontalAlignment="Left" Height="26" Margin="400,331,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="65" Text="1.0"/>
+                        <Label Content="Movement distinction velocity (m/s)" HorizontalAlignment="Left" Margin="194,328,0,0" VerticalAlignment="Top" Width="201" Height="26" FontStyle="Italic"/>
+                        <TextBox x:Name="txtMovementVelocity" HorizontalAlignment="Left" Height="26" Margin="400,331,0,0" VerticalAlignment="Top" Width="65" Text="1.0"/>
                         <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="499,331,0,0" VerticalAlignment="Top" Width="80" RenderTransformOrigin="-0.162,0.264" Click="BtnStart_Click" Height="26"/>
                         <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="600,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnStop_Click" Height="26"/>
                         <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="701,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnSave_Click" Height="26"/>
@@ -126,7 +126,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <ListBox x:Name="listboxDistanceR_idx1" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,44,0,0" VerticalAlignment="Top" Width="280">
+                        <ListBox x:Name="listboxDistanceR_idx1" ItemsSource="{Binding distancesR_idx1}" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,44,0,0" VerticalAlignment="Top" Width="280">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -148,7 +148,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <ListBox x:Name="listboxDistanceR_idx2" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,138,0,0" VerticalAlignment="Top" Width="280">
+                        <ListBox x:Name="listboxDistanceR_idx2" ItemsSource="{Binding distancesR_idx2}" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,138,0,0" VerticalAlignment="Top" Width="280">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -170,7 +170,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <ListBox x:Name="listboxDistanceR_idx3" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,231,0,0" VerticalAlignment="Top" Width="280">
+                        <ListBox x:Name="listboxDistanceR_idx3" ItemsSource="{Binding distancesR_idx3}" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,231,0,0" VerticalAlignment="Top" Width="280">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -192,24 +192,6 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                    </Grid>
-                </TabItem>
-
-                <TabItem Header="Distance (historical)">
-                    <Grid>
-                        <Button x:Name="btnDistance" Content="Distance" HorizontalAlignment="Left" Margin="403,7,0,0" VerticalAlignment="Top" Width="74" Click="BtnDistance_Click" Height="25"/>
-                        <ComboBox x:Name="cmbObjectForDistance1" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" Width="87" Height="22" Grid.RowSpan="2"/>
-                        <TextBox x:Name="txtObjectForDistance1" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,51,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455" Grid.RowSpan="2"/>
-                        <ComboBox x:Name="cmbObjectForDistance2" HorizontalAlignment="Left" Margin="10,153,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
-                        <TextBox x:Name="txtObjectForDistance2" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,154,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455"/>
-                        <ComboBox x:Name="cmbObjectForDistance3" HorizontalAlignment="Left" Margin="10,257,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
-                        <TextBox x:Name="txtObjectForDistance3" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,257,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455"/>
-                        <Label Content="max age (min)" HorizontalAlignment="Left" Margin="197,5,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
-                        <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="289,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
-                        <ComboBox x:Name="cmbAggregation" HorizontalAlignment="Left" Margin="111,9,0,0" VerticalAlignment="Top" Width="69" RenderTransformOrigin="0.048,-0.138" Height="22"/>
-                        <Label Content="Aggregation" HorizontalAlignment="Left" Margin="24,7,0,0" VerticalAlignment="Top" Width="87" Height="27"/>
-                        <Button x:Name="btnSaveDistance" Content="Save" HorizontalAlignment="Left" Margin="492,7,0,0" VerticalAlignment="Top" Width="74" Click="BtnSaveDistance_Click" Height="25"/>
-                        <Button x:Name="BtnRefreshRESTful" Content="Refresh" HorizontalAlignment="Left" Margin="581,7,0,0" VerticalAlignment="Top" Width="74" Click="BtnRefresh_Click" Height="25"/>
                     </Grid>
                 </TabItem>
 
@@ -217,10 +199,9 @@
                     <Grid>
                         <Label Content="ObjectID" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
                         <Label Content="Movement" HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
-                        <TextBox x:Name="txtObjectID_idx1" HorizontalAlignment="Left" Height="23" Margin="10,44,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85"/>
-                        <TextBox x:Name="txtObjectID_idx2" HorizontalAlignment="Left" Height="23" Margin="10,138,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85"/>
-                        <TextBox x:Name="txtObjectID_idx3" HorizontalAlignment="Left" Height="23" Margin="10,231,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85"/>
-
+                        <Label x:Name="lbObjectID_idx1" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Width="87" Height="26" HorizontalContentAlignment="Center"/>
+                        <Label x:Name="lbObjectID_idx2" HorizontalAlignment="Left" Margin="10,138,0,0" VerticalAlignment="Top" Width="87" Height="26" HorizontalContentAlignment="Center"/>
+                        <Label x:Name="lbObjectID_idx3" HorizontalAlignment="Left" Margin="10,231,0,0" VerticalAlignment="Top" Width="87" Height="26" HorizontalContentAlignment="Center"/>
                         <Button x:Name="btnStartInMovement" Content="Start" HorizontalAlignment="Left" Margin="499,331,0,0" VerticalAlignment="Top" Width="80" RenderTransformOrigin="-0.162,0.264" Click="BtnStart_Click" Height="26"/>
                         <Button x:Name="btnStopInMovement" Content="Stop" HorizontalAlignment="Left" Margin="600,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnStop_Click" Height="26"/>
                         <Button x:Name="btnSaveMovement" Content="Save" HorizontalAlignment="Left" Margin="701,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnSaveMovement_Click" Height="26"/>
@@ -328,33 +309,66 @@
 
                 <TabItem Header="Collision">
                     <Grid>
+                        <Label Content="ObjectID" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
+                        <Label Content="Collisions" HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
+                        <Label Content="Distance" HorizontalAlignment="Left" Margin="600,10,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
+                        <Label Content="Collisions distinction distances (m)" HorizontalAlignment="Left" Margin="203,328,0,0" VerticalAlignment="Top" Width="192" Height="26" FontStyle="Italic"/>
+                        <TextBox x:Name="txtMovementVelocity1" HorizontalAlignment="Left" Height="26" Margin="400,331,0,0" VerticalAlignment="Top" Width="65" Text="1.0"/>
+                        <Button x:Name="btnStartInCollision" Content="Start" HorizontalAlignment="Left" Margin="499,331,0,0" VerticalAlignment="Top" Width="80" RenderTransformOrigin="-0.162,0.264" Click="BtnStartInCollision_Click" Height="26"/>
+                        <Button x:Name="btnStopInCollision" Content="Stop" HorizontalAlignment="Left" Margin="600,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnStopInCollision_Click" Height="26"/>
+                        <Button x:Name="btnSaveInCollision" Content="Save" HorizontalAlignment="Left" Margin="701,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnSaveInCollision_Click" Height="26"/>
+                        <Button x:Name="BtnRefreshInCollision" Content="Refresh" HorizontalAlignment="Left" Margin="800,331,0,0" VerticalAlignment="Top" Width="80" Click="BtnRefresh_Click" Height="26"/>
+                        <ComboBox x:Name="cmbinCollisionTagID1" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
+                        <ComboBox x:Name="cmbinCollisionTagID2" HorizontalAlignment="Left" Margin="10,137,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
+                        <ComboBox x:Name="cmbinCollisionTagID3" HorizontalAlignment="Left" Margin="10,231,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
+                        <ListBox x:Name="listbox1inCollision" ItemsSource="{Binding collisionList1}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,44,0,0" VerticalAlignment="Top" Width="474">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="3" Content="{Binding X}" MinWidth="50"/>
+                                        <Label Grid.Column="4" Content="{Binding Y}" MinWidth="50"/>
+                                        <Label Grid.Column="5" Content="{Binding Zone}" MinWidth="30"/>
+                                        <Label Grid.Column="6" Content="{Binding Longitude}" MinWidth="80"/>
+                                        <Label Grid.Column="7" Content="{Binding Latitude}" MinWidth="80"/>
+                                        <Label Grid.Column="8" Content="{Binding Velocity}" MinWidth="30"/>
 
-                        <ListBox ItemsSource="{Binding Path = EllipseNodes}">
-                            <ItemsControl.Resources>
-                                <DataTemplate DataType="{x:Type local:EllipseNode1}">
-                                    <Ellipse Fill="{Binding FillColor}" Height="{Binding Height}" Width="{Binding Width}"/>
+                                    </Grid>
                                 </DataTemplate>
-                                <DataTemplate DataType="{x:Type local:EllipseNode2}">
-                                    <Ellipse Fill="{Binding FillColor}" Height="{Binding Height}" Width="{Binding Width}"/>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type local:EllipseNode3}">
-                                    <Ellipse Fill="{Binding FillColor}" Height="{Binding Height}" Width="{Binding Width}"/>
-                                </DataTemplate>
-                            </ItemsControl.Resources>
-
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <Canvas x:Name="myCanvas" HorizontalAlignment="Left" VerticalAlignment="Top" Height="340" Margin="10,10,10,10" Width="870" Background="#FFE9E9E9" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-
-                            <ItemsControl.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="Canvas.Left" Value="{Binding Path = Left}" />
-                                    <Setter Property="Canvas.Top" Value="{Binding Path = Top}" />
-                                </Style>
-                            </ItemsControl.ItemContainerStyle>
+                            </ListBox.ItemTemplate>
                         </ListBox>
+
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Distance (historical)">
+                    <Grid>
+                        <Button x:Name="btnDistance" Content="Distance" HorizontalAlignment="Left" Margin="403,7,0,0" VerticalAlignment="Top" Width="74" Click="BtnDistance_Click" Height="25"/>
+                        <ComboBox x:Name="cmbObjectForDistance1" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" Width="87" Height="22" Grid.RowSpan="2"/>
+                        <TextBox x:Name="txtObjectForDistance1" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,51,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455" Grid.RowSpan="2"/>
+                        <ComboBox x:Name="cmbObjectForDistance2" HorizontalAlignment="Left" Margin="10,153,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
+                        <TextBox x:Name="txtObjectForDistance2" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,154,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455"/>
+                        <ComboBox x:Name="cmbObjectForDistance3" HorizontalAlignment="Left" Margin="10,257,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
+                        <TextBox x:Name="txtObjectForDistance3" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Height="91" Margin="111,257,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="455"/>
+                        <Label Content="max age (min)" HorizontalAlignment="Left" Margin="197,5,0,0" VerticalAlignment="Top" Width="87" Height="26"/>
+                        <TextBox x:Name="txtmax_age" HorizontalAlignment="Left" Height="23" Margin="289,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="87" TextDecorations="{x:Null}"/>
+                        <ComboBox x:Name="cmbAggregation" HorizontalAlignment="Left" Margin="111,9,0,0" VerticalAlignment="Top" Width="69" RenderTransformOrigin="0.048,-0.138" Height="22"/>
+                        <Label Content="Aggregation" HorizontalAlignment="Left" Margin="24,7,0,0" VerticalAlignment="Top" Width="87" Height="27"/>
+                        <Button x:Name="btnSaveDistance" Content="Save" HorizontalAlignment="Left" Margin="492,7,0,0" VerticalAlignment="Top" Width="74" Click="BtnSaveDistance_Click" Height="25"/>
+                        <Button x:Name="BtnRefreshRESTful" Content="Refresh" HorizontalAlignment="Left" Margin="581,7,0,0" VerticalAlignment="Top" Width="74" Click="BtnRefresh_Click" Height="25"/>
                     </Grid>
                 </TabItem>
 

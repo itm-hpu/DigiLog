@@ -185,6 +185,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Distance.cs" />
+    <Compile Include="ObservableCollision.cs" />
     <Compile Include="ObservableDistance.cs" />
     <Compile Include="ListBoxBehavior.cs" />
     <Compile Include="ObservableMovement.cs" />

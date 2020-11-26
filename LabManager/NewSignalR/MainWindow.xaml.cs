@@ -32,62 +32,21 @@ namespace NewSignalR
         public static System.Net.Http.HttpClient client;
         public HubConnection connection;
         Controller controller = new Controller();
-        
-        public static ObservableCollection<ObservablePosition> positionList1;
-        public static ObservableCollection<ObservablePosition> positionList2;
-        public static ObservableCollection<ObservablePosition> positionList3;
-
-        public static ObservableCollection<ObservableDistance> distancesR_idx1;
-        public static ObservableCollection<ObservableDistance> distancesR_idx2;
-        public static ObservableCollection<ObservableDistance> distancesR_idx3;
-
-        public List<Distance> distances1;
-        public List<Distance> distances2;
-        public List<Distance> distances3;
-
-        public static ObservableCollection<ObservableMovement> movementList1;
-        public static ObservableCollection<ObservableMovement> movementList2;
-        public static ObservableCollection<ObservableMovement> movementList3;
-
+       
         public static ViewModel vm;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            vm = new ViewModel();
+            DataContext = vm;
+
             txtServer.Text = "p184-geps-production-api.hd-rtls.com";
             txtUserName.Text = "cpal";
             txtPassword.Text = "cpal";
             txtmax_age.Text = "10";
             txtMovementVelocity.Text = "1.0";
-                        
-            positionList1 = new ObservableCollection<ObservablePosition>();
-            positionList2 = new ObservableCollection<ObservablePosition>();
-            positionList3 = new ObservableCollection<ObservablePosition>();
-            listbox1.ItemsSource = positionList1; //binding data + need to bind as well in xaml
-            listbox2.ItemsSource = positionList2;
-            listbox3.ItemsSource = positionList3;
-
-            distancesR_idx1 = new ObservableCollection<ObservableDistance>();
-            distancesR_idx2 = new ObservableCollection<ObservableDistance>();
-            distancesR_idx3 = new ObservableCollection<ObservableDistance>();
-            listboxDistanceR_idx1.ItemsSource = distancesR_idx1;
-            listboxDistanceR_idx2.ItemsSource = distancesR_idx2;
-            listboxDistanceR_idx3.ItemsSource = distancesR_idx3;
-            
-            distances1 = new List<Distance>();
-            distances2 = new List<Distance>();
-            distances3 = new List<Distance>();
-
-            movementList1 = new ObservableCollection<ObservableMovement>();
-            movementList2 = new ObservableCollection<ObservableMovement>();
-            movementList3 = new ObservableCollection<ObservableMovement>();
-            MovementListBox1.ItemsSource = movementList1;
-            MovementListBox2.ItemsSource = movementList2;
-            MovementListBox3.ItemsSource = movementList3;
-
-            vm = new ViewModel();
-            DataContext = vm;
         }
 
         public async void ConnectSignalR()
@@ -101,8 +60,8 @@ namespace NewSignalR
             id4require[1] = cmbTagID2.Text;
             id4require[2] = cmbTagID3.Text;
 
-            double movementVelocity = 1.0;
-            //double movementVelocity = Convert.ToDouble(txtMovementVelocity.Text); // error
+            //double movementVelocity = 1.0;
+            double movementVelocity = Double.Parse(txtMovementVelocity.Text, CultureInfo.InvariantCulture.NumberFormat); // why "CultureInfo.InvariantCulture.NumberFormat"?
 
             string Token = await login(server, userName, password);
 
@@ -126,9 +85,9 @@ namespace NewSignalR
 
         public async void DisconnectSignalR()
         {
-            Controller.CalculateTheLastMovement(distancesR_idx1, movementList1);
-            Controller.CalculateTheLastMovement(distancesR_idx2, movementList2);
-            Controller.CalculateTheLastMovement(distancesR_idx3, movementList3);
+            Controller.CalculateTheLastMovement(vm.distancesR_idx1, vm.movementList1);
+            Controller.CalculateTheLastMovement(vm.distancesR_idx2, vm.movementList2);
+            Controller.CalculateTheLastMovement(vm.distancesR_idx3, vm.movementList3);
             await connection.StopAsync();
         }
         
@@ -155,98 +114,98 @@ namespace NewSignalR
             {
                 Application.Current.Dispatcher.Invoke(new Action(delegate 
                 {
-                    inputforlist.Index = positionList1.Count();
-                    positionList1.Add(inputforlist);
+                    inputforlist.Index = vm.positionList1.Count();
+                    vm.positionList1.Add(inputforlist);
                     // distance in real-time
-                    if (positionList1.Count > 1)
+                    if (vm.positionList1.Count > 1)
                     {
-                        double dist = Controller.CalculateDistances(id4require[0], positionList1); 
-                        double velocity = Controller.CalculateVelocity(id4require[0], positionList1);
-                        string type = Controller.CheckMovementType(id4require[0], positionList1, velocityValue); 
-                        ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[0], Timestamp = positionList1[positionList1.Count - 1].Timestamp, Distance = dist, Velocity = velocity , Type = type};
-                        inputfordistlist.Index = positionList1[positionList1.Count - 2].Index;
-                        distancesR_idx1.Add(inputfordistlist);
+                        double dist = Controller.CalculateDistances(id4require[0], vm.positionList1); 
+                        double velocity = Controller.CalculateVelocity(id4require[0], vm.positionList1);
+                        string type = Controller.CheckMovementType(id4require[0], vm.positionList1, velocityValue); 
+                        ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[0], Timestamp = vm.positionList1[vm.positionList1.Count - 1].Timestamp, Distance = dist, Velocity = velocity , Type = type};
+                        inputfordistlist.Index = vm.positionList1[vm.positionList1.Count - 2].Index;
+                        vm.distancesR_idx1.Add(inputfordistlist);
                     }
                     // visualization in real-time
-                    if (positionList1.Count > 0)
+                    if (vm.positionList1.Count > 0)
                     {
                         SolidColorBrush FillColor1 = new SolidColorBrush(Colors.Red); //FillColor1
                         vm.EllipseNodes.Add(new EllipseNode1
                         {
-                            Left = (positionList1[positionList1.Count - 1].X + 435) / XAdjustCons, // normal (+) x axis
-                            Top = (positionList1[positionList1.Count - 1].Y + 170) / YAdjustCons, // normal (-) y axis
+                            Left = (vm.positionList1[vm.positionList1.Count - 1].X + 435) / XAdjustCons, // normal (+) x axis
+                            Top = (vm.positionList1[vm.positionList1.Count - 1].Y + 170) / YAdjustCons, // normal (-) y axis
                             FillColor = FillColor1,
                             Height = dotsize,
                             Width = dotsize
                         });
                     }
 
-                    // movement in real-time: need to modify velocity criteria, define data when "distancesR_idx1.Count == 1"
+                    // movement in real-time: need to modify velocity criteria, define data when "vm.distancesR_idx1.Count == 1"
                     double tempDistResult = 0.0;
 
-                    if (positionList1.Count > 1)
+                    if (vm.positionList1.Count > 1)
                     {
-                        if (distancesR_idx1.Count == 1 && distancesR_idx1[distancesR_idx1.Count - 1].Type == "Stop")
+                        if (vm.distancesR_idx1.Count == 1 && vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Type == "Stop")
                         {
-                            movementList1.Add(new ObservableMovement
+                            vm.movementList1.Add(new ObservableMovement
                             {
-                                Index = positionList1[distancesR_idx1.Count - 1].Index,
-                                ObjectId = positionList1[distancesR_idx1.Count - 1].ObjectId,
-                                Zone = positionList1[distancesR_idx1.Count - 1].Zone,
-                                StartTime = positionList1[distancesR_idx1.Count - 1].Timestamp,
-                                Type = distancesR_idx1[distancesR_idx1.Count - 1].Type,
+                                Index = vm.positionList1[vm.distancesR_idx1.Count - 1].Index,
+                                ObjectId = vm.positionList1[vm.distancesR_idx1.Count - 1].ObjectId,
+                                Zone = vm.positionList1[vm.distancesR_idx1.Count - 1].Zone,
+                                StartTime = vm.positionList1[vm.distancesR_idx1.Count - 1].Timestamp,
+                                Type = vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Type,
                                 Distance = 0.0
                             });
                         }
-                        else if (distancesR_idx1.Count == 1 && distancesR_idx1[distancesR_idx1.Count - 1].Type == "Move")
+                        else if (vm.distancesR_idx1.Count == 1 && vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Type == "Move")
                         {
-                            movementList1.Add(new ObservableMovement
+                            vm.movementList1.Add(new ObservableMovement
                             {
-                                Index = positionList1[distancesR_idx1.Count - 1].Index,
-                                ObjectId = positionList1[distancesR_idx1.Count - 1].ObjectId,
-                                Zone = positionList1[distancesR_idx1.Count - 1].Zone,
-                                StartTime = positionList1[distancesR_idx1.Count - 1].Timestamp,
-                                Type = distancesR_idx1[distancesR_idx1.Count - 1].Type,
-                                Distance = distancesR_idx1[distancesR_idx1.Count - 1].Distance
+                                Index = vm.positionList1[vm.distancesR_idx1.Count - 1].Index,
+                                ObjectId = vm.positionList1[vm.distancesR_idx1.Count - 1].ObjectId,
+                                Zone = vm.positionList1[vm.distancesR_idx1.Count - 1].Zone,
+                                StartTime = vm.positionList1[vm.distancesR_idx1.Count - 1].Timestamp,
+                                Type = vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Type,
+                                Distance = vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Distance
                             });
                         }
                         
-                        if (distancesR_idx1.Count > 1)
+                        if (vm.distancesR_idx1.Count > 1)
                         {
-                            if (distancesR_idx1[distancesR_idx1.Count - 2].Type != distancesR_idx1[distancesR_idx1.Count - 1].Type)
+                            if (vm.distancesR_idx1[vm.distancesR_idx1.Count - 2].Type != vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Type)
                             {
-                                movementList1.Add(new ObservableMovement
+                                vm.movementList1.Add(new ObservableMovement
                                 {
-                                    Index = positionList1[distancesR_idx1.Count - 1].Index,
-                                    ObjectId = positionList1[distancesR_idx1.Count - 1].ObjectId,
-                                    Zone = positionList1[distancesR_idx1.Count - 1].Zone,
-                                    StartTime = positionList1[distancesR_idx1.Count - 1].Timestamp,
-                                    Type = distancesR_idx1[distancesR_idx1.Count - 1].Type,
+                                    Index = vm.positionList1[vm.distancesR_idx1.Count - 1].Index,
+                                    ObjectId = vm.positionList1[vm.distancesR_idx1.Count - 1].ObjectId,
+                                    Zone = vm.positionList1[vm.distancesR_idx1.Count - 1].Zone,
+                                    StartTime = vm.positionList1[vm.distancesR_idx1.Count - 1].Timestamp,
+                                    Type = vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Type,
                                     Distance = 0.0
                                 });
 
-                                if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Move")
+                                if (vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Type == "Move")
                                 {
-                                    tempDistResult = movementList1[movementList1.Count - 1].Distance;
-                                    tempDistResult = tempDistResult + distancesR_idx1[distancesR_idx1.Count - 1].Distance;
-                                    movementList1[movementList1.Count - 1].Distance = tempDistResult;
+                                    tempDistResult = vm.movementList1[vm.movementList1.Count - 1].Distance;
+                                    tempDistResult = tempDistResult + vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Distance;
+                                    vm.movementList1[vm.movementList1.Count - 1].Distance = tempDistResult;
                                 }
-                                else if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Stop")
+                                else if (vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Type == "Stop")
                                 {
-                                    movementList1[movementList1.Count - 1].Distance = tempDistResult;
+                                    vm.movementList1[vm.movementList1.Count - 1].Distance = tempDistResult;
                                 }
                             }
-                            else if (distancesR_idx1[distancesR_idx1.Count - 2].Type == distancesR_idx1[distancesR_idx1.Count - 1].Type)
+                            else if (vm.distancesR_idx1[vm.distancesR_idx1.Count - 2].Type == vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Type)
                             {
-                                if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Move")
+                                if (vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Type == "Move")
                                 {
-                                    tempDistResult = movementList1[movementList1.Count - 1].Distance;
-                                    tempDistResult = tempDistResult + distancesR_idx1[distancesR_idx1.Count - 1].Distance;
-                                    movementList1[movementList1.Count - 1].Distance = tempDistResult;
+                                    tempDistResult = vm.movementList1[vm.movementList1.Count - 1].Distance;
+                                    tempDistResult = tempDistResult + vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Distance;
+                                    vm.movementList1[vm.movementList1.Count - 1].Distance = tempDistResult;
                                 }
-                                else if (distancesR_idx1[distancesR_idx1.Count - 1].Type == "Stop")
+                                else if (vm.distancesR_idx1[vm.distancesR_idx1.Count - 1].Type == "Stop")
                                 {
-                                    movementList1[movementList1.Count - 1].Distance = tempDistResult;
+                                    vm.movementList1[vm.movementList1.Count - 1].Distance = tempDistResult;
                                 }
                             }
                         }
@@ -257,98 +216,98 @@ namespace NewSignalR
             {
                 Application.Current.Dispatcher.Invoke(new Action(delegate
                 {
-                    inputforlist.Index = positionList2.Count();
-                    positionList2.Add(inputforlist);
+                    inputforlist.Index = vm.positionList2.Count();
+                    vm.positionList2.Add(inputforlist);
                     // distance in real-time
-                    if (positionList2.Count > 1)
+                    if (vm.positionList2.Count > 1)
                     {
-                        double dist = Controller.CalculateDistances(id4require[1], positionList2);
-                        double velocity = Controller.CalculateVelocity(id4require[1], positionList2);
-                        string type = Controller.CheckMovementType(id4require[1], positionList2, velocityValue);
-                        ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[1], Timestamp = positionList2[positionList2.Count - 1].Timestamp, Distance = dist, Velocity = velocity, Type = type };
-                        inputfordistlist.Index = positionList2[positionList2.Count - 2].Index;
-                        distancesR_idx2.Add(inputfordistlist);
+                        double dist = Controller.CalculateDistances(id4require[1], vm.positionList2);
+                        double velocity = Controller.CalculateVelocity(id4require[1], vm.positionList2);
+                        string type = Controller.CheckMovementType(id4require[1], vm.positionList2, velocityValue);
+                        ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[1], Timestamp = vm.positionList2[vm.positionList2.Count - 1].Timestamp, Distance = dist, Velocity = velocity, Type = type };
+                        inputfordistlist.Index = vm.positionList2[vm.positionList2.Count - 2].Index;
+                        vm.distancesR_idx2.Add(inputfordistlist);
                     }
                     // visualization in real-time
-                    if (positionList2.Count > 0)
+                    if (vm.positionList2.Count > 0)
                     {
                         SolidColorBrush FillColor2 = new SolidColorBrush(Colors.Blue); //FillColor2
                         vm.EllipseNodes.Add(new EllipseNode2
                         {
-                            Left = (positionList2[positionList2.Count - 1].X + 435) / XAdjustCons, // normal (+) x axis
-                            Top = (positionList2[positionList2.Count - 1].Y + 170) / YAdjustCons, // normal (-) y axis
+                            Left = (vm.positionList2[vm.positionList2.Count - 1].X + 435) / XAdjustCons, // normal (+) x axis
+                            Top = (vm.positionList2[vm.positionList2.Count - 1].Y + 170) / YAdjustCons, // normal (-) y axis
                             FillColor = FillColor2,
                             Height = dotsize,
                             Width = dotsize
                         });
                     }
 
-                    // movement in real-time: need to modify velocity criteria, define data when "distancesR_idx2.Count == 1"
+                    // movement in real-time: need to modify velocity criteria, define data when "vm.distancesR_idx2.Count == 1"
                     double tempDistResult = 0.0;
 
-                    if (positionList2.Count > 1)
+                    if (vm.positionList2.Count > 1)
                     {
-                        if (distancesR_idx2.Count == 1 && distancesR_idx2[distancesR_idx2.Count - 1].Type == "Stop")
+                        if (vm.distancesR_idx2.Count == 1 && vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Type == "Stop")
                         {
-                            movementList2.Add(new ObservableMovement
+                            vm.movementList2.Add(new ObservableMovement
                             {
-                                Index = positionList2[distancesR_idx2.Count - 1].Index,
-                                ObjectId = positionList2[distancesR_idx2.Count - 1].ObjectId,
-                                Zone = positionList2[distancesR_idx2.Count - 1].Zone,
-                                StartTime = positionList2[distancesR_idx2.Count - 1].Timestamp,
-                                Type = distancesR_idx2[distancesR_idx2.Count - 1].Type,
+                                Index = vm.positionList2[vm.distancesR_idx2.Count - 1].Index,
+                                ObjectId = vm.positionList2[vm.distancesR_idx2.Count - 1].ObjectId,
+                                Zone = vm.positionList2[vm.distancesR_idx2.Count - 1].Zone,
+                                StartTime = vm.positionList2[vm.distancesR_idx2.Count - 1].Timestamp,
+                                Type = vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Type,
                                 Distance = 0.0
                             });
                         }
-                        else if (distancesR_idx2.Count == 1 && distancesR_idx2[distancesR_idx2.Count - 1].Type == "Move")
+                        else if (vm.distancesR_idx2.Count == 1 && vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Type == "Move")
                         {
-                            movementList2.Add(new ObservableMovement
+                            vm.movementList2.Add(new ObservableMovement
                             {
-                                Index = positionList2[distancesR_idx2.Count - 1].Index,
-                                ObjectId = positionList2[distancesR_idx2.Count - 1].ObjectId,
-                                Zone = positionList2[distancesR_idx2.Count - 1].Zone,
-                                StartTime = positionList2[distancesR_idx2.Count - 1].Timestamp,
-                                Type = distancesR_idx2[distancesR_idx2.Count - 1].Type,
-                                Distance = distancesR_idx2[distancesR_idx2.Count - 1].Distance
+                                Index = vm.positionList2[vm.distancesR_idx2.Count - 1].Index,
+                                ObjectId = vm.positionList2[vm.distancesR_idx2.Count - 1].ObjectId,
+                                Zone = vm.positionList2[vm.distancesR_idx2.Count - 1].Zone,
+                                StartTime = vm.positionList2[vm.distancesR_idx2.Count - 1].Timestamp,
+                                Type = vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Type,
+                                Distance = vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Distance
                             });
                         }
 
-                        if (distancesR_idx2.Count > 1)
+                        if (vm.distancesR_idx2.Count > 1)
                         {
-                            if (distancesR_idx2[distancesR_idx2.Count - 2].Type != distancesR_idx2[distancesR_idx2.Count - 1].Type)
+                            if (vm.distancesR_idx2[vm.distancesR_idx2.Count - 2].Type != vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Type)
                             {
-                                movementList2.Add(new ObservableMovement
+                                vm.movementList2.Add(new ObservableMovement
                                 {
-                                    Index = positionList2[distancesR_idx2.Count - 1].Index,
-                                    ObjectId = positionList2[distancesR_idx2.Count - 1].ObjectId,
-                                    Zone = positionList2[distancesR_idx2.Count - 1].Zone,
-                                    StartTime = positionList2[distancesR_idx2.Count - 1].Timestamp,
-                                    Type = distancesR_idx2[distancesR_idx2.Count - 1].Type,
+                                    Index = vm.positionList2[vm.distancesR_idx2.Count - 1].Index,
+                                    ObjectId = vm.positionList2[vm.distancesR_idx2.Count - 1].ObjectId,
+                                    Zone = vm.positionList2[vm.distancesR_idx2.Count - 1].Zone,
+                                    StartTime = vm.positionList2[vm.distancesR_idx2.Count - 1].Timestamp,
+                                    Type = vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Type,
                                     Distance = 0.0
                                 });
 
-                                if (distancesR_idx2[distancesR_idx2.Count - 1].Type == "Move")
+                                if (vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Type == "Move")
                                 {
-                                    tempDistResult = movementList2[movementList2.Count - 1].Distance;
-                                    tempDistResult = tempDistResult + distancesR_idx2[distancesR_idx2.Count - 1].Distance;
-                                    movementList2[movementList2.Count - 1].Distance = tempDistResult;
+                                    tempDistResult = vm.movementList2[vm.movementList2.Count - 1].Distance;
+                                    tempDistResult = tempDistResult + vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Distance;
+                                    vm.movementList2[vm.movementList2.Count - 1].Distance = tempDistResult;
                                 }
-                                else if (distancesR_idx2[distancesR_idx2.Count - 1].Type == "Stop")
+                                else if (vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Type == "Stop")
                                 {
-                                    movementList2[movementList2.Count - 1].Distance = tempDistResult;
+                                    vm.movementList2[vm.movementList2.Count - 1].Distance = tempDistResult;
                                 }
                             }
-                            else if (distancesR_idx2[distancesR_idx2.Count - 2].Type == distancesR_idx2[distancesR_idx2.Count - 1].Type)
+                            else if (vm.distancesR_idx2[vm.distancesR_idx2.Count - 2].Type == vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Type)
                             {
-                                if (distancesR_idx2[distancesR_idx2.Count - 1].Type == "Move")
+                                if (vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Type == "Move")
                                 {
-                                    tempDistResult = movementList2[movementList2.Count - 1].Distance;
-                                    tempDistResult = tempDistResult + distancesR_idx2[distancesR_idx2.Count - 1].Distance;
-                                    movementList2[movementList2.Count - 1].Distance = tempDistResult;
+                                    tempDistResult = vm.movementList2[vm.movementList2.Count - 1].Distance;
+                                    tempDistResult = tempDistResult + vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Distance;
+                                    vm.movementList2[vm.movementList2.Count - 1].Distance = tempDistResult;
                                 }
-                                else if (distancesR_idx2[distancesR_idx2.Count - 1].Type == "Stop")
+                                else if (vm.distancesR_idx2[vm.distancesR_idx2.Count - 1].Type == "Stop")
                                 {
-                                    movementList2[movementList2.Count - 1].Distance = tempDistResult;
+                                    vm.movementList2[vm.movementList2.Count - 1].Distance = tempDistResult;
                                 }
                             }
                         }
@@ -359,98 +318,98 @@ namespace NewSignalR
             {
                 Application.Current.Dispatcher.Invoke(new Action(delegate
                 {
-                    inputforlist.Index = positionList3.Count();
-                    positionList3.Add(inputforlist);
+                    inputforlist.Index = vm.positionList3.Count();
+                    vm.positionList3.Add(inputforlist);
                     // distance in real-time
-                    if (positionList3.Count > 1)
+                    if (vm.positionList3.Count > 1)
                     {
-                        double dist = Controller.CalculateDistances(id4require[2], positionList3);
-                        double velocity = Controller.CalculateVelocity(id4require[2], positionList3);
-                        string type = Controller.CheckMovementType(id4require[2], positionList3, velocityValue);
-                        ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[2], Timestamp = positionList3[positionList3.Count - 1].Timestamp, Distance = dist, Velocity = velocity, Type = type };
-                        inputfordistlist.Index = positionList3[positionList3.Count - 2].Index;
-                        distancesR_idx3.Add(inputfordistlist);
+                        double dist = Controller.CalculateDistances(id4require[2], vm.positionList3);
+                        double velocity = Controller.CalculateVelocity(id4require[2], vm.positionList3);
+                        string type = Controller.CheckMovementType(id4require[2], vm.positionList3, velocityValue);
+                        ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[2], Timestamp = vm.positionList3[vm.positionList3.Count - 1].Timestamp, Distance = dist, Velocity = velocity, Type = type };
+                        inputfordistlist.Index = vm.positionList3[vm.positionList3.Count - 2].Index;
+                        vm.distancesR_idx3.Add(inputfordistlist);
                     }
                     // visualization in real-time
-                    if (positionList3.Count > 0)
+                    if (vm.positionList3.Count > 0)
                     {
                         SolidColorBrush FillColor3 = new SolidColorBrush(Colors.Green); //FillColor2
                         vm.EllipseNodes.Add(new EllipseNode3
                         {
-                            Left = (positionList3[positionList3.Count - 1].X + 435) / XAdjustCons, // normal (+) x axis
-                            Top = (positionList3[positionList3.Count - 1].Y + 170) / YAdjustCons, // normal (-) y axis
+                            Left = (vm.positionList3[vm.positionList3.Count - 1].X + 435) / XAdjustCons, // normal (+) x axis
+                            Top = (vm.positionList3[vm.positionList3.Count - 1].Y + 170) / YAdjustCons, // normal (-) y axis
                             FillColor = FillColor3,
                             Height = dotsize,
                             Width = dotsize
                         });
                     }
 
-                    // movement in real-time: need to modify velocity criteria, define data when "distancesR_idx2.Count == 1"
+                    // movement in real-time: need to modify velocity criteria, define data when "vm.distancesR_idx2.Count == 1"
                     double tempDistResult = 0.0;
 
-                    if (positionList3.Count > 1)
+                    if (vm.positionList3.Count > 1)
                     {
-                        if (distancesR_idx3.Count == 1 && distancesR_idx3[distancesR_idx3.Count - 1].Type == "Stop")
+                        if (vm.distancesR_idx3.Count == 1 && vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Type == "Stop")
                         {
-                            movementList3.Add(new ObservableMovement
+                            vm.movementList3.Add(new ObservableMovement
                             {
-                                Index = positionList3[distancesR_idx3.Count - 1].Index,
-                                ObjectId = positionList3[distancesR_idx3.Count - 1].ObjectId,
-                                Zone = positionList3[distancesR_idx3.Count - 1].Zone,
-                                StartTime = positionList3[distancesR_idx3.Count - 1].Timestamp,
-                                Type = distancesR_idx3[distancesR_idx3.Count - 1].Type,
+                                Index = vm.positionList3[vm.distancesR_idx3.Count - 1].Index,
+                                ObjectId = vm.positionList3[vm.distancesR_idx3.Count - 1].ObjectId,
+                                Zone = vm.positionList3[vm.distancesR_idx3.Count - 1].Zone,
+                                StartTime = vm.positionList3[vm.distancesR_idx3.Count - 1].Timestamp,
+                                Type = vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Type,
                                 Distance = 0.0
                             });
                         }
-                        else if (distancesR_idx3.Count == 1 && distancesR_idx3[distancesR_idx3.Count - 1].Type == "Move")
+                        else if (vm.distancesR_idx3.Count == 1 && vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Type == "Move")
                         {
-                            movementList3.Add(new ObservableMovement
+                            vm.movementList3.Add(new ObservableMovement
                             {
-                                Index = positionList3[distancesR_idx3.Count - 1].Index,
-                                ObjectId = positionList3[distancesR_idx3.Count - 1].ObjectId,
-                                Zone = positionList3[distancesR_idx3.Count - 1].Zone,
-                                StartTime = positionList3[distancesR_idx3.Count - 1].Timestamp,
-                                Type = distancesR_idx3[distancesR_idx3.Count - 1].Type,
-                                Distance = distancesR_idx3[distancesR_idx3.Count - 1].Distance
+                                Index = vm.positionList3[vm.distancesR_idx3.Count - 1].Index,
+                                ObjectId = vm.positionList3[vm.distancesR_idx3.Count - 1].ObjectId,
+                                Zone = vm.positionList3[vm.distancesR_idx3.Count - 1].Zone,
+                                StartTime = vm.positionList3[vm.distancesR_idx3.Count - 1].Timestamp,
+                                Type = vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Type,
+                                Distance = vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Distance
                             });
                         }
 
-                        if (distancesR_idx3.Count > 1)
+                        if (vm.distancesR_idx3.Count > 1)
                         {
-                            if (distancesR_idx3[distancesR_idx3.Count - 2].Type != distancesR_idx3[distancesR_idx3.Count - 1].Type)
+                            if (vm.distancesR_idx3[vm.distancesR_idx3.Count - 2].Type != vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Type)
                             {
-                                movementList3.Add(new ObservableMovement
+                                vm.movementList3.Add(new ObservableMovement
                                 {
-                                    Index = positionList3[distancesR_idx3.Count - 1].Index,
-                                    ObjectId = positionList3[distancesR_idx3.Count - 1].ObjectId,
-                                    Zone = positionList3[distancesR_idx3.Count - 1].Zone,
-                                    StartTime = positionList3[distancesR_idx3.Count - 1].Timestamp,
-                                    Type = distancesR_idx3[distancesR_idx3.Count - 1].Type,
+                                    Index = vm.positionList3[vm.distancesR_idx3.Count - 1].Index,
+                                    ObjectId = vm.positionList3[vm.distancesR_idx3.Count - 1].ObjectId,
+                                    Zone = vm.positionList3[vm.distancesR_idx3.Count - 1].Zone,
+                                    StartTime = vm.positionList3[vm.distancesR_idx3.Count - 1].Timestamp,
+                                    Type = vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Type,
                                     Distance = 0.0
                                 });
 
-                                if (distancesR_idx3[distancesR_idx3.Count - 1].Type == "Move")
+                                if (vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Type == "Move")
                                 {
-                                    tempDistResult = movementList3[movementList3.Count - 1].Distance;
-                                    tempDistResult = tempDistResult + distancesR_idx3[distancesR_idx3.Count - 1].Distance;
-                                    movementList3[movementList3.Count - 1].Distance = tempDistResult;
+                                    tempDistResult = vm.movementList3[vm.movementList3.Count - 1].Distance;
+                                    tempDistResult = tempDistResult + vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Distance;
+                                    vm.movementList3[vm.movementList3.Count - 1].Distance = tempDistResult;
                                 }
-                                else if (distancesR_idx3[distancesR_idx3.Count - 1].Type == "Stop")
+                                else if (vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Type == "Stop")
                                 {
-                                    movementList3[movementList3.Count - 1].Distance = tempDistResult;
+                                    vm.movementList3[vm.movementList3.Count - 1].Distance = tempDistResult;
                                 }
                             }
-                            else if (distancesR_idx3[distancesR_idx3.Count - 2].Type == distancesR_idx3[distancesR_idx3.Count - 1].Type)
+                            else if (vm.distancesR_idx3[vm.distancesR_idx3.Count - 2].Type == vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Type)
                             {
-                                if (distancesR_idx3[distancesR_idx3.Count - 1].Type == "Move")
+                                if (vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Type == "Move")
                                 {
-                                    tempDistResult = movementList3[movementList3.Count - 1].Distance;
-                                    tempDistResult = tempDistResult + distancesR_idx3[distancesR_idx3.Count - 1].Distance;
-                                    movementList3[movementList3.Count - 1].Distance = tempDistResult;
+                                    tempDistResult = vm.movementList3[vm.movementList3.Count - 1].Distance;
+                                    tempDistResult = tempDistResult + vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Distance;
+                                    vm.movementList3[vm.movementList3.Count - 1].Distance = tempDistResult;
                                 }
-                                else if (distancesR_idx3[distancesR_idx3.Count - 1].Type == "Stop")
+                                else if (vm.distancesR_idx3[vm.distancesR_idx3.Count - 1].Type == "Stop")
                                 {
-                                    movementList3[movementList3.Count - 1].Distance = tempDistResult;
+                                    vm.movementList3[vm.movementList3.Count - 1].Distance = tempDistResult;
                                 }
                             }
                         }
@@ -478,11 +437,10 @@ namespace NewSignalR
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            
             ConnectSignalR();
-            txtObjectID_idx1.Text = cmbTagID1.Text;
-            txtObjectID_idx2.Text = cmbTagID2.Text;
-            txtObjectID_idx3.Text = cmbTagID3.Text;
+            lbObjectID_idx1.Content = cmbTagID1.Text;
+            lbObjectID_idx2.Content = cmbTagID2.Text;
+            lbObjectID_idx3.Content = cmbTagID3.Text;
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
@@ -506,12 +464,12 @@ namespace NewSignalR
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            controller.SaveDataToTextFile(positionList1);
-            controller.SaveDataToTextFile(positionList2);
-            controller.SaveDataToTextFile(positionList3);
-            controller.SaveDataToTextFile(distancesR_idx1);
-            controller.SaveDataToTextFile(distancesR_idx2);
-            controller.SaveDataToTextFile(distancesR_idx3);
+            controller.SaveDataToTextFile(vm.positionList1);
+            controller.SaveDataToTextFile(vm.positionList2);
+            controller.SaveDataToTextFile(vm.positionList3);
+            controller.SaveDataToTextFile(vm.distancesR_idx1);
+            controller.SaveDataToTextFile(vm.distancesR_idx2);
+            controller.SaveDataToTextFile(vm.distancesR_idx3);
 
             string message = "Save a acquired data!";
             MessageBox.Show(message);
@@ -531,6 +489,10 @@ namespace NewSignalR
             cmbObjectForDistance2.ItemsSource = objectIDs;
             cmbObjectForDistance3.ItemsSource = objectIDs;
             cmbAggregation.ItemsSource = new string[] { "None", "Sum" };
+
+            cmbinCollisionTagID1.ItemsSource = objectIDs;
+            cmbinCollisionTagID2.ItemsSource = objectIDs;
+            cmbinCollisionTagID3.ItemsSource = objectIDs;
         }
 
         //-----------------------------
@@ -547,36 +509,36 @@ namespace NewSignalR
             string objectID1 = cmbObjectForDistance1.Text;
             string objectID2 = cmbObjectForDistance2.Text;
             string objectID3 = cmbObjectForDistance3.Text;
-            distances1 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID1, max_age, aggregation);
-            distances2 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID2, max_age, aggregation);
-            distances3 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID3, max_age, aggregation);
+            vm.distances1 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID1, max_age, aggregation);
+            vm.distances2 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID2, max_age, aggregation);
+            vm.distances3 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID3, max_age, aggregation);
 
             txtObjectForDistance1.Text = "Object, Timestamp, Distance" + "\n";
             txtObjectForDistance2.Text = "Object, Timestamp, Distance" + "\n";
             txtObjectForDistance3.Text = "Object, Timestamp, Distance" + "\n";
 
-            for (int i = 0; i < distances1.Count(); i++)
+            for (int i = 0; i < vm.distances1.Count(); i++)
             {
-                txtObjectForDistance1.Text = txtObjectForDistance1.Text + distances1[i].ObjectId + ", " + distances1[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances1[i].Value + "\n";
+                txtObjectForDistance1.Text = txtObjectForDistance1.Text + vm.distances1[i].ObjectId + ", " + vm.distances1[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + vm.distances1[i].Value + "\n";
                 txtObjectForDistance1.ScrollToEnd();
             }
-            for (int i = 0; i < distances2.Count(); i++)
+            for (int i = 0; i < vm.distances2.Count(); i++)
             {
-                txtObjectForDistance2.Text = txtObjectForDistance2.Text + distances2[i].ObjectId + ", " + distances2[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances2[i].Value + "\n";
+                txtObjectForDistance2.Text = txtObjectForDistance2.Text + vm.distances2[i].ObjectId + ", " + vm.distances2[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + vm.distances2[i].Value + "\n";
                 txtObjectForDistance2.ScrollToEnd();
             }
-            for (int i = 0; i < distances3.Count(); i++)
+            for (int i = 0; i < vm.distances3.Count(); i++)
             {
-                txtObjectForDistance3.Text = txtObjectForDistance3.Text + distances3[i].ObjectId + ", " + distances3[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + distances3[i].Value + "\n";
+                txtObjectForDistance3.Text = txtObjectForDistance3.Text + vm.distances3[i].ObjectId + ", " + vm.distances3[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + vm.distances3[i].Value + "\n";
                 txtObjectForDistance3.ScrollToEnd();
             }
         }
 
         private void BtnSaveDistance_Click(object sender, RoutedEventArgs e)
         {
-            controller.SaveDataToTextFile(distances1);
-            controller.SaveDataToTextFile(distances2);
-            controller.SaveDataToTextFile(distances3);
+            controller.SaveDataToTextFile(vm.distances1);
+            controller.SaveDataToTextFile(vm.distances2);
+            controller.SaveDataToTextFile(vm.distances3);
 
             string message = "Save a acquired data!";
             MessageBox.Show(message);
@@ -584,13 +546,40 @@ namespace NewSignalR
 
         private void BtnSaveMovement_Click(object sender, RoutedEventArgs e)
         {
-            controller.SaveDataToTextFile(movementList1);
-            controller.SaveDataToTextFile(movementList2);
-            controller.SaveDataToTextFile(movementList3);
+            controller.SaveDataToTextFile(vm.movementList1);
+            controller.SaveDataToTextFile(vm.movementList2);
+            controller.SaveDataToTextFile(vm.movementList3);
 
             string message = "Save a acquired data!";
             MessageBox.Show(message);
         }
+
+        //-----------------------------
+        // # Collisions
+        //-----------------------------
+        public static void DetectCollisions(string objectID)
+        {
+
+        }
+        
+        private void BtnStartInCollision_Click(object sender, RoutedEventArgs e)
+        {
+            string targetID = cmbinCollisionTagID1.Text;
+
+            DetectCollisions(targetID);
+        }
+
+        private void BtnStopInCollision_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnSaveInCollision_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
 
         // under progressing
         public static Color Rainbow(float progress)
@@ -615,7 +604,6 @@ namespace NewSignalR
                     return Color.FromArgb(255, 255, 0, Convert.ToByte(descending));
             }
         }
-
 
     }
 
@@ -724,6 +712,24 @@ namespace NewSignalR
     
     public class ViewModel
     {
-        public ObservableCollection<ObservablePosition> EllipseNodes { get; } = new ObservableCollection<ObservablePosition>();
+        public ObservableCollection<ObservablePosition> EllipseNodes { get; set; } = new ObservableCollection<ObservablePosition>();
+
+        public ObservableCollection<ObservablePosition> positionList1 { get; set; } = new ObservableCollection<ObservablePosition>();
+        public ObservableCollection<ObservablePosition> positionList2 { get; set; } = new ObservableCollection<ObservablePosition>();
+        public ObservableCollection<ObservablePosition> positionList3 { get; set; } = new ObservableCollection<ObservablePosition>();
+
+        public ObservableCollection<ObservableDistance> distancesR_idx1 { get; set; } = new ObservableCollection<ObservableDistance>();
+        public ObservableCollection<ObservableDistance> distancesR_idx2 { get; set; } = new ObservableCollection<ObservableDistance>();
+        public ObservableCollection<ObservableDistance> distancesR_idx3 { get; set; } = new ObservableCollection<ObservableDistance>();
+
+        public List<Distance> distances1 { get; set; } = new List<Distance>();
+        public List<Distance> distances2 { get; set; } = new List<Distance>();
+        public List<Distance> distances3 { get; set; } = new List<Distance>();
+
+        public ObservableCollection<ObservableMovement> movementList1 { get; set; } = new ObservableCollection<ObservableMovement>();
+        public ObservableCollection<ObservableMovement> movementList2 { get; set; } = new ObservableCollection<ObservableMovement>();
+        public ObservableCollection<ObservableMovement> movementList3 { get; set; } = new ObservableCollection<ObservableMovement>();
+
+        public ObservableCollection<ObservableCollision> collisionList1 { get; set; } = new ObservableCollection<ObservableCollision>();
     }
 }

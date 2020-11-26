@@ -318,6 +318,6 @@ namespace NewSignalR
             {
                 return tempDistResult;
             }
-        }        
+        }
     }
 }
