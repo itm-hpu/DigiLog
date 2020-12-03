@@ -23,6 +23,7 @@ namespace NewSignalR
     class Controller
     {
         RESTfulClient rClient = new RESTfulClient();
+
         public string GetID(string uriAddress, string userName, string password)
         {
             string result_IDs = "";
@@ -318,6 +319,30 @@ namespace NewSignalR
             {
                 return tempDistResult;
             }
+        }
+
+        public List<ZoneInfo> GetZoneInfo(string uriAddress, string userName, string password)
+        {
+            rClient.uriAddress = uriAddress;
+            rClient.userName = userName;
+            rClient.userPassword = password;
+
+            List<string[]> responseResult = rClient.GetZoneInfo();
+
+            List<ZoneInfo> zoneInfos = new List<ZoneInfo>(responseResult.Count);
+            
+            for (int i = 0; i < responseResult.Count; i++)
+            {
+                zoneInfos.Add
+                    (
+                    new ZoneInfo()
+                    {
+                        zoneId = Convert.ToInt32(responseResult[i][0]),
+                        zoneName = responseResult[i][1]
+                    });
+            }
+
+            return zoneInfos;
         }
     }
 }

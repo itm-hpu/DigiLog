@@ -150,5 +150,71 @@ namespace NewSignalR
             }
             return result;
         }
+
+
+        public List<string[]> GetZoneInfo()
+        {
+            string strResponseValue = string.Empty;
+            List<string[]> tempResult = new List<string[]>();
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uriAddress);
+
+            request.Accept = "application/json";
+            request.Headers.Add("X-Authenticate-User", userName);
+            request.Headers.Add("X-Authenticate-Password", userPassword);
+            request.Method = httpMethod.ToString();
+
+            HttpWebResponse response = null;
+
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                var statuscode = response.StatusCode;
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    if (responseStream != null)
+                    {
+                        using (StreamReader reader = new StreamReader(responseStream))
+                        {
+                            strResponseValue = reader.ReadToEnd();
+                            tempResult = ReadZoneInfoJson(strResponseValue, "RootObject");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                strResponseValue = "{\"errorMessages\":[\"" + ex.Message.ToString() + "\"],\"errors\":{}}";
+            }
+            finally
+            {
+                if (response != null)
+                {
+                    ((IDisposable)response).Dispose();
+                }
+            }
+            return tempResult;
+        }
+
+        public List<string[]> ReadZoneInfoJson(string jsonStr, string keyNameParent)
+        {
+            JArray jarray = JArray.Parse(jsonStr);
+
+            List<string[]> result = new List<string[]>(0);
+            string zoneID = "";
+            string zoneName = "";
+            string[] returnValue = new string[2];
+
+            for (int i = 0; i < jarray.Count; i++)
+            {
+                var json = jarray[i];
+
+                zoneID = (string)json.SelectToken("Id");
+                zoneName = (string)json.SelectToken("Name");
+
+                result.Add(new string[2] { zoneID, zoneName });
+            }
+            return result;
+        }
     }
 }

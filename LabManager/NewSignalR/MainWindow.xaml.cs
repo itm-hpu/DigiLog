@@ -49,7 +49,7 @@ namespace NewSignalR
             txtMovementVelocity.Text = "1.0";
         }
 
-        public async void ConnectSignalR()
+        public async void ConnectSignalR(string option)
         {   
             string server = txtServer.Text;
             string userName = txtUserName.Text;
@@ -85,14 +85,25 @@ namespace NewSignalR
 
         public async void DisconnectSignalR()
         {
-            Controller.CalculateTheLastMovement(vm.distancesR_idx1, vm.movementList1);
-            Controller.CalculateTheLastMovement(vm.distancesR_idx2, vm.movementList2);
-            Controller.CalculateTheLastMovement(vm.distancesR_idx3, vm.movementList3);
+            if (vm.movementList1.Count > 1)
+            {
+                Controller.CalculateTheLastMovement(vm.distancesR_idx1, vm.movementList1);
+            }
+            if (vm.movementList2.Count > 1)
+            {
+                Controller.CalculateTheLastMovement(vm.distancesR_idx2, vm.movementList2);
+            }
+            if (vm.movementList3.Count > 1)
+            {
+                Controller.CalculateTheLastMovement(vm.distancesR_idx3, vm.movementList3);
+            }
+            
             await connection.StopAsync();
         }
         
         public static void Poskommer(pos p, string[] id4require, double movementVelocity)
         {
+            int index = vm.zoneInfoList.FindIndex(a => a.zoneId == p.Zone);
             ObservablePosition inputforlist = new ObservablePosition
             {
                 ObjectId = p.Object,
@@ -101,7 +112,8 @@ namespace NewSignalR
                 Latitude = p.Latitude,
                 Longitude = p.Longitude,
                 Timestamp = Convert.ToDateTime(p.Timestamp),
-                Zone = p.Zone
+                Zone = p.Zone,
+                ZoneName = (index == (-1)) ? "Transfer" : vm.zoneInfoList[index].zoneName
             };
 
             int dotsize = 3;
@@ -134,6 +146,8 @@ namespace NewSignalR
                         {
                             Left = (vm.positionList1[vm.positionList1.Count - 1].X + 435) / XAdjustCons, // normal (+) x axis
                             Top = (vm.positionList1[vm.positionList1.Count - 1].Y + 170) / YAdjustCons, // normal (-) y axis
+                            LeftGPS = (vm.positionList1[vm.positionList1.Count - 1].Longitude - 17.633f) * 50000, // normal (+) x axis 
+                            TopGPS = (vm.positionList1[vm.positionList1.Count - 1].Latitude - 59.175f) * 50000, // normal (-) y axis
                             FillColor = FillColor1,
                             Height = dotsize,
                             Width = dotsize
@@ -236,6 +250,8 @@ namespace NewSignalR
                         {
                             Left = (vm.positionList2[vm.positionList2.Count - 1].X + 435) / XAdjustCons, // normal (+) x axis
                             Top = (vm.positionList2[vm.positionList2.Count - 1].Y + 170) / YAdjustCons, // normal (-) y axis
+                            LeftGPS = (vm.positionList2[vm.positionList2.Count - 1].Longitude - 17.633f) * 50000, // normal (+) x axis 
+                            TopGPS = (vm.positionList2[vm.positionList2.Count - 1].Latitude - 59.175f) * 50000, // normal (-) y axis
                             FillColor = FillColor2,
                             Height = dotsize,
                             Width = dotsize
@@ -338,6 +354,8 @@ namespace NewSignalR
                         {
                             Left = (vm.positionList3[vm.positionList3.Count - 1].X + 435) / XAdjustCons, // normal (+) x axis
                             Top = (vm.positionList3[vm.positionList3.Count - 1].Y + 170) / YAdjustCons, // normal (-) y axis
+                            LeftGPS = (vm.positionList3[vm.positionList3.Count - 1].Longitude - 17.633f) * 50000, // normal (+) x axis 
+                            TopGPS = (vm.positionList3[vm.positionList3.Count - 1].Latitude - 59.175f) * 50000, // normal (-) y axis
                             FillColor = FillColor3,
                             Height = dotsize,
                             Width = dotsize
@@ -431,13 +449,48 @@ namespace NewSignalR
             return result.AuthenticateToken;
         }
 
+
+        private void btnCheck_Click(object sender, RoutedEventArgs e)
+        {
+            string objectIDsAddress = "https://" + txtServer.Text + "/objects";
+            txtTagID.Text = controller.GetID(objectIDsAddress, txtUserName.Text, txtPassword.Text);
+
+            string[] objectIDs = controller.DivideIDs(txtTagID.Text);
+            cmbTagID1.ItemsSource = objectIDs;
+            cmbTagID2.ItemsSource = objectIDs;
+            cmbTagID3.ItemsSource = objectIDs;
+
+            cmbObjectForDistance1.ItemsSource = objectIDs;
+            cmbObjectForDistance2.ItemsSource = objectIDs;
+            cmbObjectForDistance3.ItemsSource = objectIDs;
+            cmbAggregation.ItemsSource = new string[] { "None", "Sum" };
+
+            cmbinCollisionTagID1.ItemsSource = objectIDs;
+            cmbinCollisionTagID2.ItemsSource = objectIDs;
+            cmbinCollisionTagID3.ItemsSource = objectIDs;
+
+            string zoneIDsAddress = "https://" + txtServer.Text + "/locations/zones";
+            List<ZoneInfo> zoneInfos = controller.GetZoneInfo(zoneIDsAddress, txtUserName.Text, txtPassword.Text);
+            for (int i = 0; i < zoneInfos.Count; i++)
+            {
+                vm.zoneInfoList.Add(new ZoneInfo
+                {
+                    zoneId = zoneInfos[i].zoneId,
+                    zoneName = zoneInfos[i].zoneName
+                });
+            };
+
+            string message = "Complete to check \"" + txtServer.Text +"\" server infos!";
+            MessageBox.Show(message);
+        }
+
         //-----------------------------
         // # TabSignalR
         //-----------------------------
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            ConnectSignalR();
+            ConnectSignalR("subscribe");
             lbObjectID_idx1.Content = cmbTagID1.Text;
             lbObjectID_idx2.Content = cmbTagID2.Text;
             lbObjectID_idx3.Content = cmbTagID3.Text;
@@ -473,26 +526,6 @@ namespace NewSignalR
 
             string message = "Save a acquired data!";
             MessageBox.Show(message);
-        }
-
-        private void btnCheck_Click(object sender, RoutedEventArgs e)
-        {
-            string objectIDsAddress = "https://" + txtServer.Text + "/objects";
-            txtTagID.Text = controller.GetID(objectIDsAddress, txtUserName.Text, txtPassword.Text);
-
-            string[] objectIDs = controller.DivideIDs(txtTagID.Text);
-            cmbTagID1.ItemsSource = objectIDs;
-            cmbTagID2.ItemsSource = objectIDs;
-            cmbTagID3.ItemsSource = objectIDs;
-
-            cmbObjectForDistance1.ItemsSource = objectIDs;
-            cmbObjectForDistance2.ItemsSource = objectIDs;
-            cmbObjectForDistance3.ItemsSource = objectIDs;
-            cmbAggregation.ItemsSource = new string[] { "None", "Sum" };
-
-            cmbinCollisionTagID1.ItemsSource = objectIDs;
-            cmbinCollisionTagID2.ItemsSource = objectIDs;
-            cmbinCollisionTagID3.ItemsSource = objectIDs;
         }
 
         //-----------------------------
@@ -687,6 +720,8 @@ namespace NewSignalR
     {
         public double Left { get; set; }
         public double Top { get; set; }
+        public double LeftGPS { get; set; }
+        public double TopGPS { get; set; }
         public SolidColorBrush FillColor { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
@@ -696,6 +731,8 @@ namespace NewSignalR
     {
         public double Left { get; set; }
         public double Top { get; set; }
+        public double LeftGPS { get; set; }
+        public double TopGPS { get; set; }
         public SolidColorBrush FillColor { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
@@ -705,6 +742,8 @@ namespace NewSignalR
     {
         public double Left { get; set; }
         public double Top { get; set; }
+        public double LeftGPS { get; set; }
+        public double TopGPS { get; set; }
         public SolidColorBrush FillColor { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
@@ -731,5 +770,7 @@ namespace NewSignalR
         public ObservableCollection<ObservableMovement> movementList3 { get; set; } = new ObservableCollection<ObservableMovement>();
 
         public ObservableCollection<ObservableCollision> collisionList1 { get; set; } = new ObservableCollection<ObservableCollision>();
+
+        public List<ZoneInfo> zoneInfoList { get; set; } = new List<ZoneInfo>();
     }
 }

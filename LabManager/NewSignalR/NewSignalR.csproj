@@ -192,6 +192,7 @@
     <Compile Include="ObservablePosition.cs" />
     <Compile Include="Notifier.cs" />
     <Compile Include="RESTfulClient.cs" />
+    <Compile Include="ZoneInfo.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
