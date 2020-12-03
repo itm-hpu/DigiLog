@@ -327,8 +327,7 @@ namespace NewSignalR
             rClient.userName = userName;
             rClient.userPassword = password;
 
-            List<string[]> responseResult = rClient.GetZoneInfo();
-
+            List<ZoneInfo> responseResult = rClient.GetZoneInfo();
             List<ZoneInfo> zoneInfos = new List<ZoneInfo>(responseResult.Count);
             
             for (int i = 0; i < responseResult.Count; i++)
@@ -337,8 +336,9 @@ namespace NewSignalR
                     (
                     new ZoneInfo()
                     {
-                        zoneId = Convert.ToInt32(responseResult[i][0]),
-                        zoneName = responseResult[i][1]
+                        zoneId = Convert.ToInt32(responseResult[i].zoneId),
+                        zoneName = responseResult[i].zoneName,
+                        zoneBoundary = responseResult[i].zoneBoundary
                     });
             }
 

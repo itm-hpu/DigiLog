@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
 
 namespace NewSignalR
 {
@@ -152,10 +153,10 @@ namespace NewSignalR
         }
 
 
-        public List<string[]> GetZoneInfo()
+        public List<ZoneInfo> GetZoneInfo()
         {
             string strResponseValue = string.Empty;
-            List<string[]> tempResult = new List<string[]>();
+            List<ZoneInfo> tempResult = new List<ZoneInfo>();
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uriAddress);
 
@@ -196,23 +197,44 @@ namespace NewSignalR
             return tempResult;
         }
 
-        public List<string[]> ReadZoneInfoJson(string jsonStr, string keyNameParent)
+        public List<ZoneInfo> ReadZoneInfoJson(string jsonStr, string keyNameParent)
         {
             JArray jarray = JArray.Parse(jsonStr);
 
-            List<string[]> result = new List<string[]>(0);
-            string zoneID = "";
-            string zoneName = "";
-            string[] returnValue = new string[2];
+            JArray jarrayZoneBoundary;
 
+            List<ZoneInfo> result = new List<ZoneInfo>(0);
+            int zoneID;
+            string zoneName;
+            
             for (int i = 0; i < jarray.Count; i++)
             {
                 var json = jarray[i];
 
-                zoneID = (string)json.SelectToken("Id");
+                zoneID = (int)json.SelectToken("Id");
                 zoneName = (string)json.SelectToken("Name");
 
-                result.Add(new string[2] { zoneID, zoneName });
+                jarrayZoneBoundary = (JArray)json.SelectToken("Boundary");
+
+                Point3D zoneBoundary = new Point3D();
+                double boundary_X;
+                double boundary_Y;
+                double boundary_Z;
+
+                for (int j = 0; j < jarrayZoneBoundary.Count; j++)
+                {
+                    var tempArray = jarrayZoneBoundary[j];
+
+                    boundary_X = (double)tempArray.SelectToken("X");
+                    boundary_Y = (double)tempArray.SelectToken("Y");
+                    boundary_Z = (double)tempArray.SelectToken("Z");
+
+                    zoneBoundary.X = boundary_X;
+                    zoneBoundary.Y = boundary_Y;
+                    zoneBoundary.Z = boundary_Z;
+                }
+
+                result.Add(new ZoneInfo { zoneId = zoneID, zoneName = zoneName, zoneBoundary = zoneBoundary });
             }
             return result;
         }

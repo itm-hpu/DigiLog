@@ -476,7 +476,8 @@ namespace NewSignalR
                 vm.zoneInfoList.Add(new ZoneInfo
                 {
                     zoneId = zoneInfos[i].zoneId,
-                    zoneName = zoneInfos[i].zoneName
+                    zoneName = zoneInfos[i].zoneName,
+                    zoneBoundary = zoneInfos[i].zoneBoundary
                 });
             };
 

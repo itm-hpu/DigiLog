@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Media3D;
 
 namespace NewSignalR
 {
@@ -11,6 +12,6 @@ namespace NewSignalR
     {
         public int zoneId { get; set; }
         public string zoneName { get; set; }
-        //public Point[] boundary { get; set; }
+        public Point3D zoneBoundary { get; set; }
     }
 }
