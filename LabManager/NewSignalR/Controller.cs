@@ -265,7 +265,7 @@ namespace NewSignalR
 
             double distX = positionlist[i].X - positionlist[i - 1].X;
             double distY = positionlist[i].Y - positionlist[i - 1].Y;
-            double dist = Math.Sqrt(distX * distX + distY * distY) / 100.0;
+            double dist = Math.Sqrt(distX * distX + distY * distY) / 1000.0; // to change scale of distance (after division dist scale = m)
 
             return dist;
         }

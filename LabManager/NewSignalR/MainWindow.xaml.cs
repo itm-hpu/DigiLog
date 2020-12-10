@@ -121,7 +121,7 @@ namespace NewSignalR
             double YAdjustCons = 150.0;
             double velocityValue = movementVelocity; // criteria value to judge movement of tag, m/s
 
-
+            
             if (inputforlist.ObjectId.ToString() == id4require[0])
             {
                 Application.Current.Dispatcher.Invoke(new Action(delegate 
@@ -137,6 +137,8 @@ namespace NewSignalR
                         ObservableDistance inputfordistlist = new ObservableDistance { ObjectId = id4require[0], Timestamp = vm.positionList1[vm.positionList1.Count - 1].Timestamp, Distance = dist, Velocity = velocity , Type = type};
                         inputfordistlist.Index = vm.positionList1[vm.positionList1.Count - 2].Index;
                         vm.distancesR_idx1.Add(inputfordistlist);
+
+                        //for (vm.EllipseNodes.)
                     }
                     // visualization in real-time
                     if (vm.positionList1.Count > 0)
@@ -150,8 +152,10 @@ namespace NewSignalR
                             TopGPS = (vm.positionList1[vm.positionList1.Count - 1].Latitude - 59.175f) * 50000, // normal (-) y axis
                             FillColor = FillColor1,
                             Height = dotsize,
-                            Width = dotsize
+                            Width = dotsize,
+                            Opacity = 1.0
                         });
+
                     }
 
                     // movement in real-time: need to modify velocity criteria, define data when "vm.distancesR_idx1.Count == 1"
@@ -254,7 +258,8 @@ namespace NewSignalR
                             TopGPS = (vm.positionList2[vm.positionList2.Count - 1].Latitude - 59.175f) * 50000, // normal (-) y axis
                             FillColor = FillColor2,
                             Height = dotsize,
-                            Width = dotsize
+                            Width = dotsize,
+                            Opacity = 1.0
                         });
                     }
 
@@ -358,7 +363,8 @@ namespace NewSignalR
                             TopGPS = (vm.positionList3[vm.positionList3.Count - 1].Latitude - 59.175f) * 50000, // normal (-) y axis
                             FillColor = FillColor3,
                             Height = dotsize,
-                            Width = dotsize
+                            Width = dotsize,
+                            Opacity = 1.0
                         });
                     }
 
@@ -726,6 +732,7 @@ namespace NewSignalR
         public SolidColorBrush FillColor { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
+        public double Opacity { get; set; }
     }
 
     public class EllipseNode2 : ObservablePosition
@@ -737,6 +744,7 @@ namespace NewSignalR
         public SolidColorBrush FillColor { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
+        public double Opacity { get; set; }
     }
 
     public class EllipseNode3 : ObservablePosition
@@ -748,8 +756,10 @@ namespace NewSignalR
         public SolidColorBrush FillColor { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
+        public double Opacity { get; set; }
     }
-    
+
+
     public class ViewModel
     {
         public ObservableCollection<ObservablePosition> EllipseNodes { get; set; } = new ObservableCollection<ObservablePosition>();
