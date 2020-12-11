@@ -106,13 +106,13 @@ namespace NewSignalR
             }
         }
 
-        public void SaveDataToTextFile(ObservableCollection<ObservableDistance> distanceList)
+        public void SaveDataToTextFile(ObservableCollection<ObservableMovementType> distanceList)
         {
             string timeStamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
 
             PropertyInfo[] propertyInfos;
-            propertyInfos = typeof(ObservableDistance).GetProperties();
-            string[] propertyNames = new string[typeof(ObservableDistance).GetProperties().Count()];
+            propertyInfos = typeof(ObservableMovementType).GetProperties();
+            string[] propertyNames = new string[typeof(ObservableMovementType).GetProperties().Count()];
             int propertyIndex = 0;
             foreach (PropertyInfo p in propertyInfos)
             {
@@ -121,7 +121,7 @@ namespace NewSignalR
             }
 
             int iLength = distanceList.Count();
-            int jLength = typeof(ObservableDistance).GetProperties().Count();
+            int jLength = typeof(ObservableMovementType).GetProperties().Count();
 
             if (iLength > 0)
             {
@@ -259,7 +259,7 @@ namespace NewSignalR
             return distances;
         }
 
-        public static double CalculateDistances(string objectID, ObservableCollection<ObservablePosition> positionlist) // m
+        public static double CalculateDistances(ObservableCollection<ObservablePosition> positionlist) // m
         {
             int i = positionlist.Count - 1;
 
@@ -270,28 +270,50 @@ namespace NewSignalR
             return dist;
         }
 
-        public static double CalculateVelocity(string objectID, ObservableCollection<ObservablePosition> positionlist) // second
+        public static double ConvertToUnixTimestamp(DateTime date)
+        {
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            TimeSpan diff = date.ToUniversalTime() - origin;
+            return Math.Floor(diff.TotalSeconds);
+        }
+
+        public static double CalculateMovementTime(ObservableCollection<ObservablePosition> positionlist)
+        {
+            int i = positionlist.Count - 1;
+
+            DateTime startTime = positionlist[i - 1].Timestamp;
+            DateTime endTime = positionlist[i].Timestamp;
+
+            double startTimeSecond = ConvertToUnixTimestamp(startTime);
+            double endTimeSecond = ConvertToUnixTimestamp(endTime);
+
+            double timeSpan = endTimeSecond - startTimeSecond;
+
+            return timeSpan;
+        }
+
+        public static double CalculateVelocity(ObservableCollection<ObservablePosition> positionlist) // second
         {
             int i = positionlist.Count - 1;
 
             DateTime startTimeSpan = positionlist[i - 1].Timestamp;
             DateTime endTimeSpan = positionlist[i].Timestamp;
 
-            double startTimeSecond = startTimeSpan.Hour * 10000 + startTimeSpan.Minute * 100 + startTimeSpan.Second;
-            double endTimeSecond = endTimeSpan.Hour * 10000 + endTimeSpan.Minute * 100 + endTimeSpan.Second;
+            double startTimeSecond = ConvertToUnixTimestamp(startTimeSpan);
+            double endTimeSecond = ConvertToUnixTimestamp(endTimeSpan);
 
             double timeSpan = endTimeSecond - startTimeSecond;
 
-            double dist = CalculateDistances(objectID, positionlist);
+            double dist = CalculateDistances(positionlist);
 
             double velocity = dist / timeSpan;
 
             return velocity;
         }
 
-        public static string CheckMovementType(string objectID, ObservableCollection<ObservablePosition> positionlist, double velocityValue) // m/s
+        public static string CheckMovementType(ObservableCollection<ObservablePosition> positionlist, double velocityValue) // m/s
         {
-            double velocity = CalculateVelocity(objectID, positionlist);
+            double velocity = CalculateVelocity(positionlist);
 
             if (velocity < velocityValue) // Velocity criteria (m/s)
             {
@@ -303,7 +325,7 @@ namespace NewSignalR
             }
         }
         
-        public static double CalculateTheLastMovement(ObservableCollection<ObservableDistance> distanceList, ObservableCollection<ObservableMovement> movementList)
+        public static double CalculateTheLastMovement(ObservableCollection<ObservableMovementType> distanceList, ObservableCollection<ObservableMovement> movementList)
         {
             double tempDistResult = 0.0;
 
@@ -343,6 +365,142 @@ namespace NewSignalR
             }
 
             return zoneInfos;
+        }
+        /*
+        /// <summary>
+        /// Calculate percentile of a sorted data set (Q1, Q3, etc.)
+        /// </summary>
+        /// <param name="sortedData"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        internal static double Percentile(double[] sortedData, double p)
+        {
+            // algo derived from Aczel pg 15 bottom
+            if (p >= 100.0d) return sortedData[sortedData.Length - 1];
+
+            double position = (sortedData.Length + 1) * p / 100.0;
+            double leftNumber = 0.0d, rightNumber = 0.0d;
+
+            double n = p / 100.0d * (sortedData.Length - 1) + 1.0d;
+
+            if (position >= 1)
+            {
+                leftNumber = sortedData[(int)Math.Floor(n) - 1];
+                rightNumber = sortedData[(int)Math.Floor(n)];
+            }
+            else
+            {
+                leftNumber = sortedData[0]; // first data
+                rightNumber = sortedData[1]; // first data
+            }
+
+            //if (leftNumber == rightNumber)
+            if (Equals(leftNumber, rightNumber))
+                return leftNumber;
+            double part = n - Math.Floor(n);
+            return leftNumber + part * (rightNumber - leftNumber);
+        } // end of internal function percentile
+        */
+        public double Percentile(double[] sequence, double excelPercentile)
+        {
+            Array.Sort(sequence);
+            int N = sequence.Length;
+            double n = (N - 1) * excelPercentile / 100.0 + 1;
+            // Another method: double n = (N + 1) * excelPercentile;
+            if (n == 1d) return sequence[0];
+            else if (n == N) return sequence[N - 1];
+            else
+            {
+                int k = (int)n;
+                double d = n - k;
+                return sequence[k - 1] + d * (sequence[k] - sequence[k - 1]);
+            }
+        }
+
+        public List<VelocityOyZone> CalcPercentileVelocityOfZones(ObservableCollection<ObservableMovementType> listOfMovementType, double percentage)
+        {
+            int zoneCount = listOfMovementType.Select(t => t.Zone).Distinct().Count();
+            int[] zoneId = listOfMovementType.Select(t => t.Zone).Distinct().ToArray();
+            string[] zoneName = listOfMovementType.Select(t => t.ZoneName).Distinct().ToArray();
+
+            List<VelocityOyZone> velocityOfZones = new List<VelocityOyZone>();
+
+            foreach (int zone in zoneId)
+            {
+                double[] velocityOfZone = listOfMovementType.Where(t => t.Zone == zone).Select(t => t.Velocity).ToArray();
+
+                int i = zoneId.findIndex(zone);
+                velocityOfZones.Add(new VelocityOyZone
+                {
+                    Zone = zoneId[i],
+                    ZoneName = zoneName[i],
+                    Velocity = Percentile(velocityOfZone, percentage)
+                });
+            }
+
+            return velocityOfZones;
+        }
+
+        public ObservableCollection<ObservableMovementRedefinedType> CreateRedefinedMovementList(ObservableCollection<ObservableMovementType> listOfMovementType, List<VelocityOyZone> listOfVelocityByZone, double percentage)
+        {
+            ObservableCollection<ObservableMovementRedefinedType> redefinedMovement = new ObservableCollection<ObservableMovementRedefinedType>();
+
+            double averageVelocityInFactory = 0.0;
+            if (listOfVelocityByZone.Count == 1 && listOfVelocityByZone[listOfVelocityByZone.Count - 1].Zone == 0)
+            {
+                double[] velocityInZoneZero = listOfVelocityByZone.Where(t => t.Zone == 0).Select(t => t.Velocity).ToArray();
+                averageVelocityInFactory = Percentile(velocityInZoneZero, percentage);
+
+            }
+            else if (listOfVelocityByZone.Count == 1 && listOfVelocityByZone[listOfVelocityByZone.Count - 1].Zone != 0)
+            {
+                double[] velocityExceptZoneZero = listOfVelocityByZone.Where(t => t.Zone != 0).Select(t => t.Velocity).ToArray();
+                averageVelocityInFactory = Percentile(velocityExceptZoneZero, percentage);
+            }
+            else if (listOfVelocityByZone.Count > 1)
+            {
+                double[] velocityExceptZoneZero = listOfVelocityByZone.Where(t => t.Zone != 0).Select(t => t.Velocity).ToArray();
+                averageVelocityInFactory = Percentile(velocityExceptZoneZero, percentage);
+            }
+            
+            for (int i = 0; i < listOfMovementType.Count; i++)
+            {
+                string redefinedType;
+                if (listOfMovementType[i].Velocity < averageVelocityInFactory)
+                {
+                    redefinedType = "Stop";
+                }
+                else
+                {
+                    redefinedType = "Move";
+                }
+
+                redefinedMovement.Add(new ObservableMovementRedefinedType
+                {
+                    Index = listOfMovementType[i].Index,
+                    ObjectId = listOfMovementType[i].ObjectId,
+                    StartTime = listOfMovementType[i].StartTime,
+                    EndTime = listOfMovementType[i].EndTime,
+                    MovementTime = listOfMovementType[i].MovementTime,
+                    Type = listOfMovementType[i].Type,
+                    Distance = listOfMovementType[i].Distance,
+                    Velocity = listOfMovementType[i].Velocity,
+                    Zone = listOfMovementType[i].Zone,
+                    ZoneName = listOfMovementType[i].ZoneName,
+                    RedefinedType = redefinedType
+                });
+            }
+
+            return redefinedMovement;
+        }
+        
+    }
+
+    public static class Extensions
+    {
+        public static int findIndex<T>(this T[] array, T item)
+        {
+            return Array.IndexOf(array, item);
         }
     }
 }

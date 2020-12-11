@@ -186,11 +186,12 @@
     </ApplicationDefinition>
     <Compile Include="Distance.cs" />
     <Compile Include="ObservableCollision.cs" />
-    <Compile Include="ObservableDistance.cs" />
+    <Compile Include="ObservableMovementType.cs" />
     <Compile Include="ListBoxBehavior.cs" />
     <Compile Include="ObservableMovement.cs" />
     <Compile Include="ObservablePosition.cs" />
     <Compile Include="Notifier.cs" />
+    <Compile Include="ObservableMovementRedefinedType.cs" />
     <Compile Include="RESTfulClient.cs" />
     <Compile Include="ZoneInfo.cs" />
     <Page Include="MainWindow.xaml">

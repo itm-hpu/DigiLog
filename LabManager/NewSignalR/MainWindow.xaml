@@ -32,14 +32,14 @@
                         <Label Content="ObjectID" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
                         <Label Content="Position" HorizontalAlignment="Left" Margin="105,47,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
                         <Label Content="Distance" HorizontalAlignment="Left" Margin="600,47,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
-                        
+
                         <Label Content="Movement distinction velocity (m/s)" HorizontalAlignment="Left" Margin="194,7,0,0" VerticalAlignment="Top" Width="201" Height="26" FontStyle="Italic"/>
                         <TextBox x:Name="txtMovementVelocity" HorizontalAlignment="Left" Height="26" Margin="400,10,0,0" VerticalAlignment="Top" Width="65" Text="1.0"/>
                         <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="499,10,0,0" VerticalAlignment="Top" Width="80" RenderTransformOrigin="-0.162,0.264" Click="BtnStart_Click" Height="26"/>
                         <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="600,10,0,0" VerticalAlignment="Top" Width="80" Click="BtnStop_Click" Height="26"/>
                         <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="701,10,0,0" VerticalAlignment="Top" Width="80" Click="BtnSave_Click" Height="26"/>
                         <Button x:Name="BtnRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="800,10,0,0" VerticalAlignment="Top" Width="80" Click="BtnRefresh_Click" Height="26"/>
-                        
+
                         <ComboBox x:Name="cmbTagID1" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
                         <ComboBox x:Name="cmbTagID2" HorizontalAlignment="Left" Margin="10,174,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
                         <ComboBox x:Name="cmbTagID3" HorizontalAlignment="Left" Margin="10,268,0,0" VerticalAlignment="Top" Width="87" Height="22"/>
@@ -127,7 +127,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <ListBox x:Name="listboxDistanceR_idx1" ItemsSource="{Binding distancesR_idx1}" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,81,0,0" VerticalAlignment="Top" Width="280">
+                        <ListBox x:Name="listboxDistanceR_idx1" ItemsSource="{Binding movementType1}" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,81,0,0" VerticalAlignment="Top" Width="280">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -138,18 +138,22 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
                                         <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
-                                        <Label Grid.Column="2" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
-                                        <Label Grid.Column="3" Content="{Binding Distance}" MinWidth="30"/>
-                                        <Label Grid.Column="4" Content="{Binding Velocity}" MinWidth="30"/>
-                                        <Label Grid.Column="5" Content="{Binding Type}" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding StartTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="3" Content="{Binding EndTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="4" Content="{Binding MovementTime}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Distance}" MinWidth="30"/>
+                                        <Label Grid.Column="6" Content="{Binding Velocity}" MinWidth="30"/>
+                                        <Label Grid.Column="7" Content="{Binding Type}" MinWidth="30"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <ListBox x:Name="listboxDistanceR_idx2" ItemsSource="{Binding distancesR_idx2}" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,175,0,0" VerticalAlignment="Top" Width="280">
+                        <ListBox x:Name="listboxDistanceR_idx2" ItemsSource="{Binding movementType2}" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,175,0,0" VerticalAlignment="Top" Width="280">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -160,18 +164,22 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
                                         <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
-                                        <Label Grid.Column="2" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
-                                        <Label Grid.Column="3" Content="{Binding Distance}" MinWidth="30"/>
-                                        <Label Grid.Column="4" Content="{Binding Velocity}" MinWidth="30"/>
-                                        <Label Grid.Column="5" Content="{Binding Type}" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding StartTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="3" Content="{Binding EndTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="4" Content="{Binding MovementTime}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Distance}" MinWidth="30"/>
+                                        <Label Grid.Column="6" Content="{Binding Velocity}" MinWidth="30"/>
+                                        <Label Grid.Column="7" Content="{Binding Type}" MinWidth="30"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <ListBox x:Name="listboxDistanceR_idx3" ItemsSource="{Binding distancesR_idx3}" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,268,0,0" VerticalAlignment="Top" Width="280">
+                        <ListBox x:Name="listboxDistanceR_idx3" ItemsSource="{Binding movementType3}" HorizontalAlignment="Left" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="89" Margin="600,268,0,0" VerticalAlignment="Top" Width="280">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -182,13 +190,17 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
                                         <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
-                                        <Label Grid.Column="2" Content="{Binding Timestamp}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
-                                        <Label Grid.Column="3" Content="{Binding Distance}" MinWidth="30"/>
-                                        <Label Grid.Column="4" Content="{Binding Velocity}" MinWidth="30"/>
-                                        <Label Grid.Column="5" Content="{Binding Type}" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding StartTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="3" Content="{Binding EndTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="4" Content="{Binding MovementTime}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Distance}" MinWidth="30"/>
+                                        <Label Grid.Column="6" Content="{Binding Velocity}" MinWidth="30"/>
+                                        <Label Grid.Column="7" Content="{Binding Type}" MinWidth="30"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -205,7 +217,7 @@
                         <Label x:Name="lbObjectID_idx3" HorizontalAlignment="Left" Margin="10,268,0,0" VerticalAlignment="Top" Width="87" Height="26" HorizontalContentAlignment="Center"/>
                         <Button x:Name="btnStartInMovement" Content="Start" HorizontalAlignment="Left" Margin="499,10,0,0" VerticalAlignment="Top" Width="80" RenderTransformOrigin="-0.162,0.264" Click="BtnStart_Click" Height="26"/>
                         <Button x:Name="btnStopInMovement" Content="Stop" HorizontalAlignment="Left" Margin="600,10,0,0" VerticalAlignment="Top" Width="80" Click="BtnStop_Click" Height="26"/>
-                        <Button x:Name="btnSaveMovement" Content="Save" HorizontalAlignment="Left" Margin="701,10,0,0" VerticalAlignment="Top" Width="80" Click="BtnSaveMovement_Click" Height="26"/>
+                        <Button x:Name="btnSaveInMovement" Content="Save" HorizontalAlignment="Left" Margin="701,10,0,0" VerticalAlignment="Top" Width="80" Click="BtnSaveInMovement_Click" Height="26"/>
                         <Button x:Name="BtnRefreshInMovement" Content="Refresh" HorizontalAlignment="Left" Margin="800,10,0,0" VerticalAlignment="Top" Width="80" Click="BtnRefresh_Click" Height="26"/>
                         <ListBox x:Name="MovementListBox1" ItemsSource="{Binding movementList1}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,81,0,0" VerticalAlignment="Top" Width="474">
                             <ListBox.ItemTemplate>
@@ -269,6 +281,102 @@
                                         <Label Grid.Column="3" Content="{Binding Type}" MinWidth="50"/>
                                         <Label Grid.Column="4" Content="{Binding Zone}" MinWidth="30"/>
                                         <Label Grid.Column="5" Content="{Binding Distance}" MinWidth="30"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Redefined Movement">
+                    <Grid>
+                        <Label Content="ObjectID" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
+                        <Label Content="Movement" HorizontalAlignment="Left" Margin="105,47,0,0" VerticalAlignment="Top" Width="87" Height="26" FontWeight="Bold"/>
+                        <Label x:Name="lbObjectIDinRM_idx1" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="87" Height="26" HorizontalContentAlignment="Center"/>
+                        <Label x:Name="lbObjectIDinRM_idx2" HorizontalAlignment="Left" Margin="10,175,0,0" VerticalAlignment="Top" Width="87" Height="26" HorizontalContentAlignment="Center"/>
+                        <Label x:Name="lbObjectIDinRM_idx3" HorizontalAlignment="Left" Margin="10,268,0,0" VerticalAlignment="Top" Width="87" Height="26" HorizontalContentAlignment="Center"/>
+
+                        <Label Content="Percentage(%) for criteria velocity to re-define movement" HorizontalAlignment="Left" Margin="105,7,0,0" VerticalAlignment="Top" Width="315" Height="26" FontStyle="Italic"/>
+                        <TextBox x:Name="txtPercentage" HorizontalAlignment="Left" Height="26" Margin="420,10,0,0" VerticalAlignment="Top" Width="65" Text="80.0" SpellCheck.IsEnabled="True"/>
+
+                        <Button x:Name="btnAnalyzeInRedefinedMovement" Content="Analyze" HorizontalAlignment="Left" Margin="499,10,0,0" VerticalAlignment="Top" Width="80" RenderTransformOrigin="-0.162,0.264" Height="26" Click="BtnAnalyzeInRedefinedMovement_Click"/>
+                        <Button x:Name="btnStopInRedefinedMovement" Content="Stop" HorizontalAlignment="Left" Margin="600,10,0,0" VerticalAlignment="Top" Width="80" Click="BtnStop_Click" Height="26"/>
+                        <Button x:Name="btnSaveInRedefinedMovement" Content="Save" HorizontalAlignment="Left" Margin="701,10,0,0" VerticalAlignment="Top" Width="80" Click="BtnSaveInRedefinedMovement_Click" Height="26"/>
+                        <Button x:Name="BtnRefreshInRedefinedMovement" Content="Refresh" HorizontalAlignment="Left" Margin="800,10,0,0" VerticalAlignment="Top" Width="80" Click="BtnRefresh_Click" Height="26"/>
+                        <ListBox x:Name="RedefinedMovementListBox1" ItemsSource="{Binding redefinedMovementType1}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,81,0,0" VerticalAlignment="Top" Width="474">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding StartTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="3" Content="{Binding EndTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="4" Content="{Binding MovementTime}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Distance}" MinWidth="30"/>
+                                        <Label Grid.Column="6" Content="{Binding Velocity}" MinWidth="30"/>
+                                        <Label Grid.Column="7" Content="{Binding RedefinedType}" MinWidth="30"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <ListBox x:Name="RedefinedMovementListBox2" ItemsSource="{Binding redefinedMovementType2}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,175,0,0" VerticalAlignment="Top" Width="474">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding StartTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="3" Content="{Binding EndTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="4" Content="{Binding MovementTime}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Distance}" MinWidth="30"/>
+                                        <Label Grid.Column="6" Content="{Binding Velocity}" MinWidth="30"/>
+                                        <Label Grid.Column="7" Content="{Binding RedefinedType}" MinWidth="30"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <ListBox x:Name="RedefinedMovementListBox3" ItemsSource="{Binding redefinedMovementType3}" local:ListBoxBehavior.ScrollOnNewItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="89" Margin="105,268,0,0" VerticalAlignment="Top" Width="474">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Content="{Binding Index}" MinWidth="30"/>
+                                        <Label Grid.Column="1" Content="{Binding ObjectId}" MinWidth="30"/>
+                                        <Label Grid.Column="2" Content="{Binding StartTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="3" Content="{Binding EndTime}" ContentStringFormat="yyyy-MM-dd HH:mm:ss" MinWidth="30"/>
+                                        <Label Grid.Column="4" Content="{Binding MovementTime}" MinWidth="30"/>
+                                        <Label Grid.Column="5" Content="{Binding Distance}" MinWidth="30"/>
+                                        <Label Grid.Column="6" Content="{Binding Velocity}" MinWidth="30"/>
+                                        <Label Grid.Column="7" Content="{Binding RedefinedType}" MinWidth="30"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
