@@ -631,19 +631,28 @@ namespace NewSignalR
 
         private void BtnAnalyzeInRedefinedMovement_Click(object sender, RoutedEventArgs e)
         {
-            double p = Double.Parse(txtPercentage.Text, CultureInfo.InvariantCulture.NumberFormat);
+            if (connection.State == 0) // Disconnected
+            {
+                double p = Double.Parse(txtPercentage.Text, CultureInfo.InvariantCulture.NumberFormat);
 
-            vm.velocityOfZones1 = controller.CalcPercentileVelocityOfZones(vm.movementType1, p);
-            vm.velocityOfZones2 = controller.CalcPercentileVelocityOfZones(vm.movementType2, p);
-            vm.velocityOfZones3 = controller.CalcPercentileVelocityOfZones(vm.movementType3, p);
+                vm.velocityOfZones1 = controller.CalcPercentileVelocityOfZones(vm.movementType1, p);
+                vm.velocityOfZones2 = controller.CalcPercentileVelocityOfZones(vm.movementType2, p);
+                vm.velocityOfZones3 = controller.CalcPercentileVelocityOfZones(vm.movementType3, p);
 
-            vm.redefinedMovementType1 = controller.CreateRedefinedMovementList(vm.movementType1, vm.velocityOfZones1, p);
-            vm.redefinedMovementType2 = controller.CreateRedefinedMovementList(vm.movementType2, vm.velocityOfZones2, p);
-            vm.redefinedMovementType3 = controller.CreateRedefinedMovementList(vm.movementType3, vm.velocityOfZones3, p);
+                vm.redefinedMovementType1 = controller.CreateRedefinedMovementList(vm.movementType1, vm.velocityOfZones1, p);
+                vm.redefinedMovementType2 = controller.CreateRedefinedMovementList(vm.movementType2, vm.velocityOfZones2, p);
+                vm.redefinedMovementType3 = controller.CreateRedefinedMovementList(vm.movementType3, vm.velocityOfZones3, p);
 
-            RedefinedMovementListBox1.ItemsSource = vm.redefinedMovementType1;
-            RedefinedMovementListBox2.ItemsSource = vm.redefinedMovementType2;
-            RedefinedMovementListBox3.ItemsSource = vm.redefinedMovementType3;
+                RedefinedMovementListBox1.ItemsSource = vm.redefinedMovementType1;
+                RedefinedMovementListBox2.ItemsSource = vm.redefinedMovementType2;
+                RedefinedMovementListBox3.ItemsSource = vm.redefinedMovementType3;
+            }
+            else
+            {
+                string message = "Please disconnect signalR first";
+                MessageBox.Show(message);
+            }
+
         }
 
         private void BtnSaveInRedefinedMovement_Click(object sender, RoutedEventArgs e)
