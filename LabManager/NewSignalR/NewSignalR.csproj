@@ -191,7 +191,8 @@
     <Compile Include="ObservableMovement.cs" />
     <Compile Include="ObservablePosition.cs" />
     <Compile Include="Notifier.cs" />
-    <Compile Include="ObservableMovementRedefinedType.cs" />
+    <Compile Include="ObservableRedefinedMovementType.cs" />
+    <Compile Include="ObservableRedefinedMovement.cs" />
     <Compile Include="RESTfulClient.cs" />
     <Compile Include="ZoneInfo.cs" />
     <Page Include="MainWindow.xaml">

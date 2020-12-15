@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NewSignalR
 {
-    public class ObservableMovementType : Notifier
+    public class ObservableRedefinedMovementType : Notifier
     {
         private int index;
         private object objectId;
@@ -18,8 +17,7 @@ namespace NewSignalR
         private double movementTime;
         private double distance;
         private double velocity;
-        private string type;
-
+        private string redefinedType;
 
         public int Index
         {
@@ -129,16 +127,16 @@ namespace NewSignalR
                 OnPropertyChanged("Velocity");
             }
         }
-        public string Type
+        public string RedefinedType
         {
             get
             {
-                return type;
+                return redefinedType;
             }
             set
             {
-                type = value;
-                OnPropertyChanged("Type");
+                redefinedType = value;
+                OnPropertyChanged("RedefinedType");
             }
         }
     }

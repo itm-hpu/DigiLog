@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NewSignalR
 {
-    public class ObservableMovementType : Notifier
+    public class ObservableRedefinedMovement : ObservableMovement
     {
         private int index;
         private object objectId;
-        private int zone;
-        private string zoneName;
         private DateTime startTime;
-        private DateTime endTime;
-        private double movementTime;
+        //private DateTime endTime;
+        //private double movementTime;
+        private string redefinedType;
+        private int zone;
         private double distance;
-        private double velocity;
-        private string type;
-
+        //private DateTime endTime;
+        //private DateTime timespan;
 
         public int Index
         {
@@ -33,6 +31,7 @@ namespace NewSignalR
                 OnPropertyChanged("Index");
             }
         }
+
         public object ObjectId
         {
             get
@@ -45,30 +44,7 @@ namespace NewSignalR
                 OnPropertyChanged("ObjectId");
             }
         }
-        public int Zone
-        {
-            get
-            {
-                return zone;
-            }
-            set
-            {
-                zone = value;
-                OnPropertyChanged("Zone");
-            }
-        }
-        public string ZoneName
-        {
-            get
-            {
-                return zoneName;
-            }
-            set
-            {
-                zoneName = value;
-                OnPropertyChanged("ZoneName");
-            }
-        }
+
         public DateTime StartTime
         {
             get
@@ -81,6 +57,7 @@ namespace NewSignalR
                 OnPropertyChanged("StartTime");
             }
         }
+        /*
         public DateTime EndTime
         {
             get
@@ -93,6 +70,7 @@ namespace NewSignalR
                 OnPropertyChanged("EndTime");
             }
         }
+
         public double MovementTime
         {
             get
@@ -105,6 +83,33 @@ namespace NewSignalR
                 OnPropertyChanged("MovementTime");
             }
         }
+        */
+        public string RedefinedType
+        {
+            get
+            {
+                return redefinedType;
+            }
+            set
+            {
+                redefinedType = value;
+                OnPropertyChanged("RedefinedType");
+            }
+        }
+
+        public int Zone
+        {
+            get
+            {
+                return zone;
+            }
+            set
+            {
+                zone = value;
+                OnPropertyChanged("Zone");
+            }
+        }
+
         public double Distance
         {
             get
@@ -117,29 +122,32 @@ namespace NewSignalR
                 OnPropertyChanged("Distance");
             }
         }
-        public double Velocity
+
+        /*
+        public DateTime EndTime
         {
             get
             {
-                return velocity;
+                return endTime;
             }
             set
             {
-                velocity = value;
-                OnPropertyChanged("Velocity");
+                endTime = value;
+                OnPropertyChanged("EndTime");
             }
         }
-        public string Type
+        public DateTime Timespan
         {
             get
             {
-                return type;
+                return timespan;
             }
             set
             {
-                type = value;
-                OnPropertyChanged("Type");
+                timespan = value;
+                OnPropertyChanged("Timespan");
             }
         }
+        */
     }
 }

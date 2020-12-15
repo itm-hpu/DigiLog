@@ -363,7 +363,6 @@ namespace NewSignalR
                         zoneBoundary = responseResult[i].zoneBoundary
                     });
             }
-
             return zoneInfos;
         }
         /*
@@ -441,9 +440,9 @@ namespace NewSignalR
             return velocityOfZones;
         }
 
-        public ObservableCollection<ObservableMovementRedefinedType> CreateRedefinedMovementList(ObservableCollection<ObservableMovementType> listOfMovementType, List<VelocityOyZone> listOfVelocityByZone, double percentage)
+        public ObservableCollection<ObservableRedefinedMovementType> CreateRedefinedMovementList(ObservableCollection<ObservableMovementType> listOfMovementType, List<VelocityOyZone> listOfVelocityByZone, double percentage)
         {
-            ObservableCollection<ObservableMovementRedefinedType> redefinedMovement = new ObservableCollection<ObservableMovementRedefinedType>();
+            ObservableCollection<ObservableRedefinedMovementType> redefinedMovement = new ObservableCollection<ObservableRedefinedMovementType>();
 
             double averageVelocityInFactory = 0.0;
             if (listOfVelocityByZone.Count == 1 && listOfVelocityByZone[listOfVelocityByZone.Count - 1].Zone == 0)
@@ -475,7 +474,7 @@ namespace NewSignalR
                     redefinedType = "Move";
                 }
 
-                redefinedMovement.Add(new ObservableMovementRedefinedType
+                redefinedMovement.Add(new ObservableRedefinedMovementType
                 {
                     Index = listOfMovementType[i].Index,
                     ObjectId = listOfMovementType[i].ObjectId,

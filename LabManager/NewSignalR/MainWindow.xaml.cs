@@ -380,8 +380,8 @@ namespace NewSignalR
                             MovementTime = movementTime,
                             Velocity = velocity,
                             Type = type,
-                            Zone = vm.positionList1[vm.positionList1.Count - 1].Zone,
-                            ZoneName = vm.positionList1[vm.positionList1.Count - 1].ZoneName
+                            Zone = vm.positionList3[vm.positionList3.Count - 1].Zone,
+                            ZoneName = vm.positionList3[vm.positionList3.Count - 1].ZoneName
                         };
                         inputfordistlist.Index = vm.positionList3[vm.positionList3.Count - 2].Index;
                         vm.movementType3.Add(inputfordistlist);
@@ -526,16 +526,24 @@ namespace NewSignalR
             MessageBox.Show(message);
         }
 
+        private void BtnDebbug_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         //-----------------------------
-        // # TabSignalR
+        // # Tab Position
         //-----------------------------
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             ConnectSignalR("subscribe");
-            lbObjectID_idx1.Content = cmbTagID1.Text;
-            lbObjectID_idx2.Content = cmbTagID2.Text;
-            lbObjectID_idx3.Content = cmbTagID3.Text;
+            lbObjectID1.Content = cmbTagID1.Text;
+            lbObjectID2.Content = cmbTagID2.Text;
+            lbObjectID3.Content = cmbTagID3.Text;
+            lbObjectIDinRM1.Content = cmbTagID1.Text;
+            lbObjectIDinRM2.Content = cmbTagID2.Text;
+            lbObjectIDinRM3.Content = cmbTagID3.Text;
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
@@ -545,12 +553,7 @@ namespace NewSignalR
             string message = "Stop acquiring data!";
             MessageBox.Show(message);
         }
-
-        private void BtnDebbug_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+        
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)
         {
             Process.Start(Application.ResourceAssembly.Location);
@@ -571,53 +574,8 @@ namespace NewSignalR
         }
 
         //-----------------------------
-        // # RESTful 
+        // # Tab Real-time Movement
         //-----------------------------
-
-        private void BtnDistance_Click(object sender, RoutedEventArgs e)
-        {
-            string distanceAddress = "https://" + txtServer.Text + "/time-series/distance/points?order_by=Id&order=Ascending";
-
-            int max_age = Convert.ToInt32(txtmax_age.Text);
-            string aggregation = cmbAggregation.Text;
-
-            string objectID1 = cmbObjectForDistance1.Text;
-            string objectID2 = cmbObjectForDistance2.Text;
-            string objectID3 = cmbObjectForDistance3.Text;
-            vm.distances1 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID1, max_age, aggregation);
-            vm.distances2 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID2, max_age, aggregation);
-            vm.distances3 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID3, max_age, aggregation);
-
-            txtObjectForDistance1.Text = "Object, Timestamp, Distance" + "\n";
-            txtObjectForDistance2.Text = "Object, Timestamp, Distance" + "\n";
-            txtObjectForDistance3.Text = "Object, Timestamp, Distance" + "\n";
-
-            for (int i = 0; i < vm.distances1.Count(); i++)
-            {
-                txtObjectForDistance1.Text = txtObjectForDistance1.Text + vm.distances1[i].ObjectId + ", " + vm.distances1[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + vm.distances1[i].Value + "\n";
-                txtObjectForDistance1.ScrollToEnd();
-            }
-            for (int i = 0; i < vm.distances2.Count(); i++)
-            {
-                txtObjectForDistance2.Text = txtObjectForDistance2.Text + vm.distances2[i].ObjectId + ", " + vm.distances2[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + vm.distances2[i].Value + "\n";
-                txtObjectForDistance2.ScrollToEnd();
-            }
-            for (int i = 0; i < vm.distances3.Count(); i++)
-            {
-                txtObjectForDistance3.Text = txtObjectForDistance3.Text + vm.distances3[i].ObjectId + ", " + vm.distances3[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + vm.distances3[i].Value + "\n";
-                txtObjectForDistance3.ScrollToEnd();
-            }
-        }
-
-        private void BtnSaveDistance_Click(object sender, RoutedEventArgs e)
-        {
-            controller.SaveDataToTextFile(vm.distances1);
-            controller.SaveDataToTextFile(vm.distances2);
-            controller.SaveDataToTextFile(vm.distances3);
-
-            string message = "Save a acquired data!";
-            MessageBox.Show(message);
-        }
 
         private void BtnSaveInMovement_Click(object sender, RoutedEventArgs e)
         {
@@ -628,6 +586,10 @@ namespace NewSignalR
             string message = "Save a acquired data!";
             MessageBox.Show(message);
         }
+
+        //-----------------------------
+        // # Tab Refined Movement
+        //-----------------------------
 
         private void BtnAnalyzeInRedefinedMovement_Click(object sender, RoutedEventArgs e)
         {
@@ -643,9 +605,9 @@ namespace NewSignalR
                 vm.redefinedMovementType2 = controller.CreateRedefinedMovementList(vm.movementType2, vm.velocityOfZones2, p);
                 vm.redefinedMovementType3 = controller.CreateRedefinedMovementList(vm.movementType3, vm.velocityOfZones3, p);
 
-                RedefinedMovementListBox1.ItemsSource = vm.redefinedMovementType1;
-                RedefinedMovementListBox2.ItemsSource = vm.redefinedMovementType2;
-                RedefinedMovementListBox3.ItemsSource = vm.redefinedMovementType3;
+                lbxRedefinedMovementType1.ItemsSource = vm.redefinedMovementType1;
+                lbxRedefinedMovementType2.ItemsSource = vm.redefinedMovementType2;
+                lbxRedefinedMovementType3.ItemsSource = vm.redefinedMovementType3;
             }
             else
             {
@@ -685,6 +647,55 @@ namespace NewSignalR
 
         }
 
+        //-----------------------------
+        // # RESTful 
+        //-----------------------------
+
+        private void BtnDistance_Click(object sender, RoutedEventArgs e)
+        {
+            string distanceAddress = "https://" + txtServer.Text + "/time-series/distance/points?order_by=Id&order=Ascending";
+
+            int max_age = Convert.ToInt32(txtmax_age.Text);
+            string aggregation = cmbAggregation.Text;
+
+            string objectID1 = cmbObjectForDistance1.Text;
+            string objectID2 = cmbObjectForDistance2.Text;
+            string objectID3 = cmbObjectForDistance3.Text;
+
+            vm.distances1 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID1, max_age, aggregation);
+            vm.distances2 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID2, max_age, aggregation);
+            vm.distances3 = controller.GetDistance(distanceAddress, txtUserName.Text, txtPassword.Text, objectID3, max_age, aggregation);
+
+            txtObjectForDistance1.Text = "Object, Timestamp, Distance" + "\n";
+            txtObjectForDistance2.Text = "Object, Timestamp, Distance" + "\n";
+            txtObjectForDistance3.Text = "Object, Timestamp, Distance" + "\n";
+
+            for (int i = 0; i < vm.distances1.Count(); i++)
+            {
+                txtObjectForDistance1.Text = txtObjectForDistance1.Text + vm.distances1[i].ObjectId + ", " + vm.distances1[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + vm.distances1[i].Value + "\n";
+                txtObjectForDistance1.ScrollToEnd();
+            }
+            for (int i = 0; i < vm.distances2.Count(); i++)
+            {
+                txtObjectForDistance2.Text = txtObjectForDistance2.Text + vm.distances2[i].ObjectId + ", " + vm.distances2[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + vm.distances2[i].Value + "\n";
+                txtObjectForDistance2.ScrollToEnd();
+            }
+            for (int i = 0; i < vm.distances3.Count(); i++)
+            {
+                txtObjectForDistance3.Text = txtObjectForDistance3.Text + vm.distances3[i].ObjectId + ", " + vm.distances3[i].Timestamp.ToString("yyyy-MM-dd HH:mm:ss") + ", " + vm.distances3[i].Value + "\n";
+                txtObjectForDistance3.ScrollToEnd();
+            }
+        }
+
+        private void BtnSaveDistance_Click(object sender, RoutedEventArgs e)
+        {
+            controller.SaveDataToTextFile(vm.distances1);
+            controller.SaveDataToTextFile(vm.distances2);
+            controller.SaveDataToTextFile(vm.distances3);
+
+            string message = "Save a acquired data!";
+            MessageBox.Show(message);
+        }
 
 
         // under progressing
@@ -836,8 +847,6 @@ namespace NewSignalR
 
     public class ViewModel
     {
-        public ObservableCollection<ObservablePosition> EllipseNodes { get; set; } = new ObservableCollection<ObservablePosition>();
-
         public ObservableCollection<ObservablePosition> positionList1 { get; set; } = new ObservableCollection<ObservablePosition>();
         public ObservableCollection<ObservablePosition> positionList2 { get; set; } = new ObservableCollection<ObservablePosition>();
         public ObservableCollection<ObservablePosition> positionList3 { get; set; } = new ObservableCollection<ObservablePosition>();
@@ -846,24 +855,30 @@ namespace NewSignalR
         public ObservableCollection<ObservableMovementType> movementType2 { get; set; } = new ObservableCollection<ObservableMovementType>();
         public ObservableCollection<ObservableMovementType> movementType3 { get; set; } = new ObservableCollection<ObservableMovementType>();
 
-        public List<Distance> distances1 { get; set; } = new List<Distance>();
-        public List<Distance> distances2 { get; set; } = new List<Distance>();
-        public List<Distance> distances3 { get; set; } = new List<Distance>();
-
         public ObservableCollection<ObservableMovement> movementList1 { get; set; } = new ObservableCollection<ObservableMovement>();
         public ObservableCollection<ObservableMovement> movementList2 { get; set; } = new ObservableCollection<ObservableMovement>();
         public ObservableCollection<ObservableMovement> movementList3 { get; set; } = new ObservableCollection<ObservableMovement>();
-
-        public ObservableCollection<ObservableCollision> collisionList1 { get; set; } = new ObservableCollection<ObservableCollision>();
-
+        
         public List<ZoneInfo> zoneInfoList { get; set; } = new List<ZoneInfo>();
 
         public List<VelocityOyZone> velocityOfZones1 { get; set; } = new List<VelocityOyZone>();
         public List<VelocityOyZone> velocityOfZones2 { get; set; } = new List<VelocityOyZone>();
         public List<VelocityOyZone> velocityOfZones3 { get; set; } = new List<VelocityOyZone>();
 
-        public ObservableCollection<ObservableMovementRedefinedType> redefinedMovementType1 { get; set; } = new ObservableCollection<ObservableMovementRedefinedType>();
-        public ObservableCollection<ObservableMovementRedefinedType> redefinedMovementType2 { get; set; } = new ObservableCollection<ObservableMovementRedefinedType>();
-        public ObservableCollection<ObservableMovementRedefinedType> redefinedMovementType3 { get; set; } = new ObservableCollection<ObservableMovementRedefinedType>();
+        public ObservableCollection<ObservableRedefinedMovementType> redefinedMovementType1 { get; set; } = new ObservableCollection<ObservableRedefinedMovementType>();
+        public ObservableCollection<ObservableRedefinedMovementType> redefinedMovementType2 { get; set; } = new ObservableCollection<ObservableRedefinedMovementType>();
+        public ObservableCollection<ObservableRedefinedMovementType> redefinedMovementType3 { get; set; } = new ObservableCollection<ObservableRedefinedMovementType>();
+
+        public ObservableCollection<ObservableRedefinedMovement> redefinedMovement1 { get; set; } = new ObservableCollection<ObservableRedefinedMovement>();
+        public ObservableCollection<ObservableRedefinedMovement> redefinedMovement2 { get; set; } = new ObservableCollection<ObservableRedefinedMovement>();
+        public ObservableCollection<ObservableRedefinedMovement> redefinedMovement3 { get; set; } = new ObservableCollection<ObservableRedefinedMovement>();
+
+        public ObservableCollection<ObservablePosition> EllipseNodes { get; set; } = new ObservableCollection<ObservablePosition>();
+
+        public ObservableCollection<ObservableCollision> collisionList1 { get; set; } = new ObservableCollection<ObservableCollision>();
+
+        public List<Distance> distances1 { get; set; } = new List<Distance>();
+        public List<Distance> distances2 { get; set; } = new List<Distance>();
+        public List<Distance> distances3 { get; set; } = new List<Distance>();
     }
 }
