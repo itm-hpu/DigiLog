@@ -61,8 +61,7 @@ namespace NewSignalR
             id4require[1] = cmbTagID2.Text;
             id4require[2] = cmbTagID3.Text;
 
-            //double movementVelocity = 1.0;
-            double movementVelocity = Double.Parse(txtMovementVelocity.Text, CultureInfo.InvariantCulture.NumberFormat); // why "CultureInfo.InvariantCulture.NumberFormat"?
+            double movementVelocity = Double.Parse(txtMovementVelocity.Text, CultureInfo.InvariantCulture.NumberFormat); 
 
             string Token = await login(server, userName, password);
 
@@ -149,8 +148,6 @@ namespace NewSignalR
                         };
                         inputfordistlist.Index = vm.positionList1[vm.positionList1.Count - 2].Index;
                         vm.movementType1.Add(inputfordistlist);
-
-                        //for (vm.EllipseNodes.)
                     }
                     // visualization in real-time
                     if (vm.positionList1.Count > 0)
@@ -623,7 +620,7 @@ namespace NewSignalR
         }
 
         //-----------------------------
-        // # Collisions
+        // # Collisions - under progressing
         //-----------------------------
         public static void DetectCollisions(string objectID)
         {
@@ -648,7 +645,7 @@ namespace NewSignalR
         }
 
         //-----------------------------
-        // # RESTful 
+        // # Distance (historical) 
         //-----------------------------
 
         private void BtnDistance_Click(object sender, RoutedEventArgs e)
@@ -698,7 +695,7 @@ namespace NewSignalR
         }
 
 
-        // under progressing
+        // under progressing for visualization
         public static Color Rainbow(float progress)
         {
             float div = (Math.Abs(progress % 1) * 6);

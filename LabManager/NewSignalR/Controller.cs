@@ -27,7 +27,6 @@ namespace NewSignalR
         public string GetID(string uriAddress, string userName, string password)
         {
             string result_IDs = "";
-            //RESTfulClient rClient = new RESTfulClient();
             rClient.uriAddress = uriAddress;
             rClient.userName = userName;
             rClient.userPassword = password;
@@ -365,47 +364,12 @@ namespace NewSignalR
             }
             return zoneInfos;
         }
-        /*
-        /// <summary>
-        /// Calculate percentile of a sorted data set (Q1, Q3, etc.)
-        /// </summary>
-        /// <param name="sortedData"></param>
-        /// <param name="p"></param>
-        /// <returns></returns>
-        internal static double Percentile(double[] sortedData, double p)
-        {
-            // algo derived from Aczel pg 15 bottom
-            if (p >= 100.0d) return sortedData[sortedData.Length - 1];
 
-            double position = (sortedData.Length + 1) * p / 100.0;
-            double leftNumber = 0.0d, rightNumber = 0.0d;
-
-            double n = p / 100.0d * (sortedData.Length - 1) + 1.0d;
-
-            if (position >= 1)
-            {
-                leftNumber = sortedData[(int)Math.Floor(n) - 1];
-                rightNumber = sortedData[(int)Math.Floor(n)];
-            }
-            else
-            {
-                leftNumber = sortedData[0]; // first data
-                rightNumber = sortedData[1]; // first data
-            }
-
-            //if (leftNumber == rightNumber)
-            if (Equals(leftNumber, rightNumber))
-                return leftNumber;
-            double part = n - Math.Floor(n);
-            return leftNumber + part * (rightNumber - leftNumber);
-        } // end of internal function percentile
-        */
         public double Percentile(double[] sequence, double excelPercentile)
         {
             Array.Sort(sequence);
             int N = sequence.Length;
             double n = (N - 1) * excelPercentile / 100.0 + 1;
-            // Another method: double n = (N + 1) * excelPercentile;
             if (n == 1d) return sequence[0];
             else if (n == N) return sequence[N - 1];
             else
@@ -481,7 +445,6 @@ namespace NewSignalR
                     StartTime = listOfMovementType[i].StartTime,
                     EndTime = listOfMovementType[i].EndTime,
                     MovementTime = listOfMovementType[i].MovementTime,
-                    Type = listOfMovementType[i].Type,
                     Distance = listOfMovementType[i].Distance,
                     Velocity = listOfMovementType[i].Velocity,
                     Zone = listOfMovementType[i].Zone,
